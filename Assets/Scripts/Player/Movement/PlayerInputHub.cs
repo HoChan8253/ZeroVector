@@ -6,6 +6,7 @@ public class PlayerInputHub : MonoBehaviour
     public Vector2 Move { get; private set; }
     public Vector2 Look { get; private set; }
     public bool FireHeld { get; private set; }
+    public bool FirePressedThisFrame { get; private set; }
     public bool ReloadPressedThisFrame { get; private set; }
 
     private PlayerControls _input;
@@ -49,6 +50,7 @@ public class PlayerInputHub : MonoBehaviour
 
     private void LateUpdate()
     {
+        FirePressedThisFrame = false;
         ReloadPressedThisFrame = false;
     }
 
@@ -57,8 +59,14 @@ public class PlayerInputHub : MonoBehaviour
 
     private void OnFire(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed) FireHeld = true;
-        if (ctx.canceled) FireHeld = false;
+        if (ctx.performed)
+        {
+            FireHeld = true;
+            FirePressedThisFrame = true;
+        }
+
+        if (ctx.canceled)
+            FireHeld = false;
     }
 
     private void OnReload(InputAction.CallbackContext ctx)
