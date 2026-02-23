@@ -12,27 +12,12 @@ public class PlayerLook : MonoBehaviour
     public float _pitchMin = -85f;
     public float _pitchMax = 85f;
 
-    private PlayerControls _input;
-    private Vector2 _look;
+    private PlayerInputHub _input;
     private float _pitch;
 
     void Awake()
     {
-        _input = new PlayerControls();
-    }
-
-    void OnEnable()
-    {
-        _input.Enable();
-        _input.Player.Look.performed += OnLook;
-        _input.Player.Look.canceled += OnLook;
-    }
-
-    void OnDisable()
-    {
-        _input.Player.Look.performed -= OnLook;
-        _input.Player.Look.canceled -= OnLook;
-        _input.Disable();
+        _input = GetComponent<PlayerInputHub>();
     }
 
     void Start()
@@ -42,13 +27,10 @@ public class PlayerLook : MonoBehaviour
         Cursor.visible = false;
     }
 
-    void OnLook(InputAction.CallbackContext ctx)
-    {
-        _look = ctx.ReadValue<Vector2>();
-    }
-
     void Update()
     {
+        Vector2 _look = _input.Look; 
+
         // 1) 좌우(yaw) : Player 회전
         float yaw = _look.x * _sensitivity;
         transform.Rotate(Vector3.up * yaw);
