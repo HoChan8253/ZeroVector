@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class GunController : MonoBehaviour
 {
@@ -26,6 +27,13 @@ public class GunController : MonoBehaviour
 
     private float _nextFireTime;
 
+    [Header("Ammo")]
+    public int _magSize = 30;          // 탄창 용량
+    public int _ammoInMag = 30;        // 현재 탄창 탄 수
+    public int _reserveAmmo = 90;      // 예비탄
+
+    public event Action<int, int> OnAmmoChanged;
+
     [Header("Reload")]
     public float _reloadDuration = 4.583f;
     private bool _isReloading;
@@ -49,10 +57,19 @@ public class GunController : MonoBehaviour
     private void Update()
     {
         // 연사 조건
-        if (!_isReloading && _input.FireHeld && Time.time >= _nextFireTime)
+        if (!_isReloading && _ammoInMag > 0 && _input.FireHeld && Time.time >= _nextFireTime)
         {
             _nextFireTime = Time.time + (1f / _fireRate);
+
+            _ammoInMag--;
+            NotifyAmmo();
+
             Fire();
+        }
+
+        if (!_isReloading && _ammoInMag <= 0 && _input.FireHeld)
+        {
+            // _anim.SetTrigger("NoAmmo");
         }
 
         if (_input.ReloadPressedThisFrame && !_isReloading)
@@ -62,7 +79,8 @@ public class GunController : MonoBehaviour
 
         if (_isReloading && Time.time >= _reloadEndTime)
         {
-            _isReloading = false;
+            //_isReloading = false;
+            FinishReload();
         }
 
         _currentSpread = Mathf.Lerp(_currentSpread, 0f, _spreadRecoverSpeed * Time.deltaTime);
@@ -75,7 +93,7 @@ public class GunController : MonoBehaviour
     {
         _anim.SetTrigger("Shoot");
 
-        float randomYaw = Random.Range(-_recoilYawAmount, _recoilYawAmount);
+        float randomYaw = UnityEngine.Random.Range(-_recoilYawAmount, _recoilYawAmount);
         _look.AddRecoil(_recoilPitchAmount, randomYaw);
 
         // 단발 리셋
@@ -92,8 +110,8 @@ public class GunController : MonoBehaviour
 
         Vector3 direction = _cam.transform.forward;
 
-        direction += _cam.transform.right * Random.Range(-_currentSpread, _currentSpread);
-        direction += _cam.transform.up * Random.Range(-_currentSpread, _currentSpread);
+        direction += _cam.transform.right * UnityEngine.Random.Range(-_currentSpread, _currentSpread);
+        direction += _cam.transform.up * UnityEngine.Random.Range(-_currentSpread, _currentSpread);
         direction.Normalize();
 
         Ray ray = new Ray(_cam.transform.position, direction);
@@ -110,10 +128,36 @@ public class GunController : MonoBehaviour
 
     private void StartReload()
     {
+        if (_isReloading) return;
+        if (_ammoInMag >= _magSize) return;
+        if (_reserveAmmo <= 0) return;
+
         _isReloading = true;
         _reloadEndTime = Time.time + _reloadDuration;
         _anim.SetTrigger("Reload");
+    }
 
-        _nextFireTime = Time.time + 0.05f;
+    private void FinishReload()
+    {
+        _isReloading = false;
+
+        int need = _magSize - _ammoInMag;
+        if (need <= 0) return;
+
+        int take = Mathf.Min(need, _reserveAmmo);
+        _reserveAmmo -= take;
+        _ammoInMag += take;
+
+        NotifyAmmo();
+    }
+
+    private void NotifyAmmo()
+    {
+        OnAmmoChanged?.Invoke(_ammoInMag, _reserveAmmo);
+    }
+
+    private void Start()
+    {
+        NotifyAmmo(); // 시작 시 UI 갱신
     }
 }
