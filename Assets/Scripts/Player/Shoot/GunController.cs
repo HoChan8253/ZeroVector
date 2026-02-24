@@ -7,6 +7,9 @@ public class GunController : MonoBehaviour
     public Animator _anim;
     public PlayerInputHub _input;
 
+    [Header("Animation")]
+    public float _moveThreshold = 0.1f;
+
     [Header("Gun Settings")]
     public float _fireRate = 10f;
     public float _range = 100f;
@@ -22,6 +25,11 @@ public class GunController : MonoBehaviour
     private float _currentSpread;
 
     private float _nextFireTime;
+
+    [Header("Reload")]
+    public float _reloadDuration = 4.583f;
+    private bool _isReloading;
+    private float _reloadEndTime;
 
     public PlayerLook _look;
     public float _recoilPitchAmount = 2f;
@@ -41,18 +49,26 @@ public class GunController : MonoBehaviour
     private void Update()
     {
         // 연사 조건
-        if (_input.FireHeld && Time.time >= _nextFireTime)
+        if (!_isReloading && _input.FireHeld && Time.time >= _nextFireTime)
         {
             _nextFireTime = Time.time + (1f / _fireRate);
             Fire();
         }
 
-        if (_input.ReloadPressedThisFrame)
+        if (_input.ReloadPressedThisFrame && !_isReloading)
         {
-            _anim.SetTrigger("Reload");
+            StartReload();
+        }
+
+        if (_isReloading && Time.time >= _reloadEndTime)
+        {
+            _isReloading = false;
         }
 
         _currentSpread = Mathf.Lerp(_currentSpread, 0f, _spreadRecoverSpeed * Time.deltaTime);
+
+        bool isMoving = _input.Move.sqrMagnitude > (_moveThreshold * _moveThreshold);
+        _anim.SetBool("IsMoving", isMoving);
     }
 
     private void Fire()
@@ -90,5 +106,14 @@ public class GunController : MonoBehaviour
             if (h != null)
                 h.TakeDamage(_damage);
         }
+    }
+
+    private void StartReload()
+    {
+        _isReloading = true;
+        _reloadEndTime = Time.time + _reloadDuration;
+        _anim.SetTrigger("Reload");
+
+        _nextFireTime = Time.time + 0.05f;
     }
 }

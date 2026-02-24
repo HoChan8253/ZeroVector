@@ -1607,6 +1607,7 @@ MonoBehaviour:
   _cam: {fileID: 737592884}
   _anim: {fileID: 2090770182}
   _input: {fileID: 667159475}
+  _moveThreshold: 0.1
   _fireRate: 10
   _range: 100
   _damage: 25
@@ -1614,6 +1615,7 @@ MonoBehaviour:
   _maxSpread: 0.08
   _spreadRecoverSpeed: 8
   _tapResetTime: 0.15
+  _reloadDuration: 4.583
   _look: {fileID: 667159476}
   _recoilPitchAmount: 2
   _recoilYawAmount: 1
