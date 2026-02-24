@@ -5,7 +5,6 @@ public class AmmoUI : MonoBehaviour
 {
     public GunController _gun;
     public TMP_Text _ammoText;
-    public TMP_Text _reserveText;
 
     private void OnEnable()
     {
@@ -17,9 +16,13 @@ public class AmmoUI : MonoBehaviour
         _gun.OnAmmoChanged -= UpdateUI;
     }
 
-    private void UpdateUI(int ammoInMag, int reserveAmmo)
+    private void UpdateUI(int mag, int reserve)
     {
-        _ammoText.text = ammoInMag.ToString();
-        _reserveText.text = reserveAmmo.ToString();
+        _ammoText.text = $"{mag} / {reserve}";
+
+        if (mag == 0)
+            _ammoText.color = Color.red;
+        else
+            _ammoText.color = Color.white;
     }
 }
