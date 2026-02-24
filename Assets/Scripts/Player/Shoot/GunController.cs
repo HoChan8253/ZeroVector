@@ -15,7 +15,8 @@ public class GunController : MonoBehaviour
     private float _nextFireTime;
 
     public PlayerLook _look;
-    public float _recoilAmount = 2f;
+    public float _recoilPitchAmount = 2f;
+    public float _recoilYawAmount = 1f;
 
     void Awake()
     {
@@ -45,7 +46,8 @@ public class GunController : MonoBehaviour
     {
         _anim.SetTrigger("Shoot");
 
-        _look.AddRecoil(_recoilAmount);
+        float randomYaw = Random.Range(-_recoilYawAmount, _recoilYawAmount);
+        _look.AddRecoil(_recoilPitchAmount, randomYaw);
 
         Ray ray = new Ray(_cam.transform.position, _cam.transform.forward);
 

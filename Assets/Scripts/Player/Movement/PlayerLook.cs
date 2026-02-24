@@ -14,47 +14,48 @@ public class PlayerLook : MonoBehaviour
 
     [Header("Recoil")]
     public float _recoilReturnSpeed = 2f;
-    private float _recoilOffset;
+    private float _recoilPitch; // 수직
+    private float _recoilYaw; // 수평
 
     private PlayerInputHub _input;
     private float _pitch;
 
-    void Awake()
+    private void Awake()
     {
         _input = GetComponent<PlayerInputHub>();
     }
 
-    void Start()
+    private void Start()
     {
         // 마우스 화면 중앙에 고정
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
-    void Update()
+    private void Update()
     {
-        Vector2 _look = _input.Look; 
+        Vector2 look = _input.Look;
 
-        // 좌우(yaw) : Player 회전
-        float yaw = _look.x * _sensitivity;
-        transform.Rotate(Vector3.up * yaw);
-        
-        // 마우스 입력 반영
-        _pitch -= _look.y * _sensitivity;
+        // 좌우 입력은 플레이어 바디 회전
+        float yawInput = look.x * _sensitivity;
+        transform.Rotate(Vector3.up * yawInput);
 
-        // 반동 복귀 처리 (부드럽게 0으로)
-        _recoilOffset = Mathf.Lerp(_recoilOffset, 0f, _recoilReturnSpeed * Time.deltaTime);
+        // 상하 입력은 카메라 상하
+        _pitch -= look.y * _sensitivity;
 
-        // 최종 pitch에 반동 더하기
-        float finalPitch = _pitch + _recoilOffset;
+        // 반동 복귀
+        _recoilPitch = Mathf.Lerp(_recoilPitch, 0f, _recoilReturnSpeed * Time.deltaTime);
+        _recoilYaw = Mathf.Lerp(_recoilYaw, 0f, _recoilReturnSpeed * Time.deltaTime);
 
-        finalPitch = Mathf.Clamp(finalPitch, _pitchMin, _pitchMax);
+        // 최종 카메라 회전 = pitch + 수직반동, yaw반동은 카메라 local Y에만
+        float finalPitch = Mathf.Clamp(_pitch + _recoilPitch, _pitchMin, _pitchMax);
 
-        _cam.localRotation = Quaternion.Euler(finalPitch, 0f, 0f);
+        _cam.localRotation = Quaternion.Euler(finalPitch, _recoilYaw, 0f);
     }
 
-    public void AddRecoil(float amount)
+    public void AddRecoil(float pitchAmount, float yawAmount)
     {
-        _recoilOffset -= amount;
+        _recoilPitch -= pitchAmount;  // 위로 튀게
+        _recoilYaw += yawAmount;    // 좌우 랜덤
     }
 }
