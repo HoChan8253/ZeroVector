@@ -15,6 +15,10 @@ public class GunController : MonoBehaviour
     [Header("Spread")]
     public float _spreadAmount = 0.02f;   // 기본 퍼짐
     public float _maxSpread = 0.08f;      // 최대 퍼짐
+    public float _spreadRecoverSpeed = 8f;   // 퍼짐 복구 속도
+    public float _tapResetTime = 0.15f;      // 이 시간 이상 쉬면 단발로 간주
+    private float _lastShotTime;
+
     private float _currentSpread;
 
     private float _nextFireTime;
@@ -30,6 +34,8 @@ public class GunController : MonoBehaviour
 
         if (_look == null)
             _look = GetComponentInParent<PlayerLook>();
+
+        _lastShotTime = -999f; // 첫 발사는 항상 리셋
     }
 
     private void Update()
@@ -45,6 +51,8 @@ public class GunController : MonoBehaviour
         {
             _anim.SetTrigger("Reload");
         }
+
+        _currentSpread = Mathf.Lerp(_currentSpread, 0f, _spreadRecoverSpeed * Time.deltaTime);
     }
 
     private void Fire()
@@ -54,11 +62,20 @@ public class GunController : MonoBehaviour
         float randomYaw = Random.Range(-_recoilYawAmount, _recoilYawAmount);
         _look.AddRecoil(_recoilPitchAmount, randomYaw);
 
+        // 단발 리셋
+        if (Time.time - _lastShotTime > _tapResetTime)
+        {
+            _currentSpread = 0f;
+        }
+
+        _lastShotTime = Time.time;
+
+        // 퍼짐 증가
         _currentSpread += _spreadAmount;
         _currentSpread = Mathf.Clamp(_currentSpread, 0f, _maxSpread);
 
         Vector3 direction = _cam.transform.forward;
-        // 랜덤 탄퍼짐 추가
+
         direction += _cam.transform.right * Random.Range(-_currentSpread, _currentSpread);
         direction += _cam.transform.up * Random.Range(-_currentSpread, _currentSpread);
         direction.Normalize();
