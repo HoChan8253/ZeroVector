@@ -12,6 +12,10 @@ public class PlayerLook : MonoBehaviour
     public float _pitchMin = -85f;
     public float _pitchMax = 85f;
 
+    [Header("Recoil")]
+    public float _recoilReturnSpeed = 2f;
+    private float _recoilOffset;
+
     private PlayerInputHub _input;
     private float _pitch;
 
@@ -31,14 +35,26 @@ public class PlayerLook : MonoBehaviour
     {
         Vector2 _look = _input.Look; 
 
-        // 1) 좌우(yaw) : Player 회전
+        // 좌우(yaw) : Player 회전
         float yaw = _look.x * _sensitivity;
         transform.Rotate(Vector3.up * yaw);
-
-        // 2) 상하(pitch) : Camera 로컬 회전
+        
+        // 마우스 입력 반영
         _pitch -= _look.y * _sensitivity;
-        _pitch = Mathf.Clamp(_pitch, _pitchMin, _pitchMax);
 
-        _cam.localRotation = Quaternion.Euler(_pitch, 0f, 0f);
+        // 반동 복귀 처리 (부드럽게 0으로)
+        _recoilOffset = Mathf.Lerp(_recoilOffset, 0f, _recoilReturnSpeed * Time.deltaTime);
+
+        // 최종 pitch에 반동 더하기
+        float finalPitch = _pitch + _recoilOffset;
+
+        finalPitch = Mathf.Clamp(finalPitch, _pitchMin, _pitchMax);
+
+        _cam.localRotation = Quaternion.Euler(finalPitch, 0f, 0f);
+    }
+
+    public void AddRecoil(float amount)
+    {
+        _recoilOffset -= amount;
     }
 }

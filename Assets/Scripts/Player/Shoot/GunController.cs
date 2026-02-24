@@ -14,10 +14,16 @@ public class GunController : MonoBehaviour
 
     private float _nextFireTime;
 
+    public PlayerLook _look;
+    public float _recoilAmount = 2f;
+
     void Awake()
     {
         if (_input == null)
             _input = GetComponentInParent<PlayerInputHub>();
+
+        if (_look == null)
+            _look = GetComponentInParent<PlayerLook>();
     }
 
     void Update()
@@ -38,6 +44,8 @@ public class GunController : MonoBehaviour
     void Fire()
     {
         _anim.SetTrigger("Shoot");
+
+        _look.AddRecoil(_recoilAmount);
 
         Ray ray = new Ray(_cam.transform.position, _cam.transform.forward);
 
