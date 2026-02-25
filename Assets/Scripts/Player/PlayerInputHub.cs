@@ -9,6 +9,8 @@ public class PlayerInputHub : MonoBehaviour
     public bool FirePressedThisFrame { get; private set; }
     public bool ReloadPressedThisFrame { get; private set; }
 
+    public bool SprintHeld { get; private set; }
+
     private PlayerControls _input;
 
     private void Awake()
@@ -30,6 +32,9 @@ public class PlayerInputHub : MonoBehaviour
         _input.Player.Fire.canceled += OnFire;
 
         _input.Player.Reload.performed += OnReload;
+
+        _input.Player.Sprint.performed += OnSprint;
+        _input.Player.Sprint.canceled += OnSprint;
     }
 
     private void OnDisable()
@@ -44,6 +49,9 @@ public class PlayerInputHub : MonoBehaviour
         _input.Player.Fire.canceled -= OnFire;
 
         _input.Player.Reload.performed -= OnReload;
+
+        _input.Player.Sprint.performed -= OnSprint;
+        _input.Player.Sprint.canceled -= OnSprint;
 
         _input.Disable();
     }
@@ -72,5 +80,11 @@ public class PlayerInputHub : MonoBehaviour
     private void OnReload(InputAction.CallbackContext ctx)
     {
         if (ctx.performed) ReloadPressedThisFrame = true;
+    }
+
+    private void OnSprint(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed) SprintHeld = true;
+        if (ctx.canceled) SprintHeld = false;
     }
 }

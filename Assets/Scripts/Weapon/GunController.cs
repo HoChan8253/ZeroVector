@@ -40,6 +40,7 @@ public class GunController : MonoBehaviour
     private static readonly int AnimIsMoving = Animator.StringToHash("IsMoving");
     private static readonly int AnimShoot = Animator.StringToHash("Shoot");
     private static readonly int AnimReload = Animator.StringToHash("Reload");
+    private static readonly int AnimIsSprinting = Animator.StringToHash("IsSprinting");
 
     private void Awake()
     {
@@ -99,6 +100,9 @@ public class GunController : MonoBehaviour
 
     private void HandleFire()
     {
+        bool isSprinting = _input.SprintHeld && _input.Move.sqrMagnitude > 0.01f;
+        if (isSprinting) return;
+
         if (_state.isReloading) return;
 
         bool wantFire = _input.FireHeld;
@@ -156,6 +160,9 @@ public class GunController : MonoBehaviour
 
     private void HandleReload()
     {
+        bool isSprinting = _input.SprintHeld && _input.Move.sqrMagnitude > 0.01f;
+        if (isSprinting) return;            // Sprint 중 재장전 불가
+
         if (_state.isReloading) return;
         if (!_input.ReloadPressedThisFrame) return;
 
@@ -213,7 +220,10 @@ public class GunController : MonoBehaviour
     private void UpdateMovementAnim()
     {
         bool isMoving = _input.Move.sqrMagnitude > (_moveThreshold * _moveThreshold);
+        bool isSprinting = _input.SprintHeld && isMoving && !_state.isReloading;
+
         _anim.SetBool(AnimIsMoving, isMoving);
+        _anim.SetBool(AnimIsSprinting, isSprinting);
     }
 
     private void NotifyAmmo()
