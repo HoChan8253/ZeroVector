@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 625576d5e73688d459a72090be27e638, type: 3}
-  m_Name: WD_AR
+  m_Name: WD_Pistol
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
-  weaponName: AR
-  fireRate: 10
-  range: 100
-  damage: 25
-  magSize: 30
-  startAmmoInMag: 30
-  startReserveAmmo: 90
-  reloadDuration: 4.583
-  recoilPitchAmount: 2
-  recoilYawAmount: 1
-  spreadAmount: 0.02
-  maxSpread: 0.08
+  weaponName: Pistol
+  fireRate: 4
+  range: 60
+  damage: 12
+  magSize: 12
+  startAmmoInMag: 12
+  startReserveAmmo: 48
+  reloadDuration: 2.708
+  recoilPitchAmount: 2.4
+  recoilYawAmount: 0.8
+  spreadAmount: 0.005
+  maxSpread: 0.02
   spreadRecoverSpeed: 8
-  tapResetTime: 0.15
+  tapResetTime: 0.12
   moveThreshold: 0.1
-  animatorOverride: {fileID: 22100000, guid: d7e5a710ca5bf0a4f98d89ed68bcba17, type: 2}
+  animatorOverride: {fileID: 22100000, guid: 94da4ac4bdc396b4398671daa305d488, type: 2}
