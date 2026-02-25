@@ -52,6 +52,33 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Weapon1",
+                    "type": "Button",
+                    "id": "50003c18-9b18-4325-8bae-7f5080ca8d2e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Weapon2",
+                    "type": "Button",
+                    "id": "52c6d97a-cc33-4524-92fd-3048f5a1608e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Weapon3",
+                    "type": "Button",
+                    "id": "0ad117c4-db80-4a34-852e-75e98bcbf773",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Holster",
                     "type": "Button",
                     "id": "2aa024b0-ce9a-45b6-ac5f-e66fb42882c6",
@@ -189,6 +216,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "Equip",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "417b5428-f034-4c58-a42a-12bea6a2ac81",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Weapon1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "12e5d11b-f921-4e7d-b086-256dfcd8be63",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Weapon2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5163dba4-2af9-497d-8748-b27fdbc9dca3",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Weapon3",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

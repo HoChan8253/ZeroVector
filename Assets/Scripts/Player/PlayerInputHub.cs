@@ -8,6 +8,9 @@ public class PlayerInputHub : MonoBehaviour
     public bool FireHeld { get; private set; }
     public bool FirePressedThisFrame { get; private set; }
     public bool ReloadPressedThisFrame { get; private set; }
+    public bool Weapon1PressedThisFrame { get; private set; }
+    public bool Weapon2PressedThisFrame { get; private set; }
+    public bool Weapon3PressedThisFrame { get; private set; }
 
     // 테스트용
     public bool HolsterPressedThisFrame { get; private set; }

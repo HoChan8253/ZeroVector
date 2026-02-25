@@ -38,6 +38,9 @@ public class GunController : MonoBehaviour
 
     private bool _isHolstered;
 
+    public bool IsBusy => _state.isReloading || _isHolstered || _isSwapping;
+    private bool _isSwapping;
+
     // 애니메이터 파라미터 (규격 고정)
     private static readonly int AnimIsMoving = Animator.StringToHash("IsMoving");
     private static readonly int AnimShoot = Animator.StringToHash("Shoot");
@@ -289,5 +292,38 @@ public class GunController : MonoBehaviour
         {
             _anim.runtimeAnimatorController = data.animatorOverride;
         }
+    }
+
+    public void BeginHolsterForSwap()
+    {
+        if (_isSwapping) return;
+
+        // 스왑 중에는 발사/장전 막기
+        CancelReload();
+        _isHolstered = true;
+        _isSwapping = true;
+
+        _anim.ResetTrigger(AnimEquip);
+        _anim.SetTrigger(AnimHolster);
+    }
+
+    // Holster 애니 끝 프레임에 Animation Event로 호출
+    public void OnHolsterAnimEnd()
+    {
+        // 여기서는 매니저가 실제 교체를 수행
+    }
+
+    // Equip 애니 끝 프레임에 Animation Event로 호출
+    public void OnEquipAnimEnd()
+    {
+        _isHolstered = false;
+        _isSwapping = false;
+    }
+
+    public void ForceEquipData(WeaponData newData)
+    {
+        Equip(newData); // 너가 만든 Equip() (데이터 적용용)
+        _anim.ResetTrigger(AnimHolster);
+        _anim.SetTrigger(AnimEquip);
     }
 }
