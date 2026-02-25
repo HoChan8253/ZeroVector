@@ -44,9 +44,9 @@ public class PlayerInputHub : MonoBehaviour
         _input.Player.Sprint.performed += OnSprint;
         _input.Player.Sprint.canceled += OnSprint;
 
-        // 테스트용
-        _input.Player.Holster.performed += OnHolster;
-        _input.Player.Equip.performed += OnEquip;
+        _input.Player.Weapon1.performed += OnWeapon1;
+        _input.Player.Weapon2.performed += OnWeapon2;
+        _input.Player.Weapon3.performed += OnWeapon3;
     }
 
     private void OnDisable()
@@ -65,9 +65,9 @@ public class PlayerInputHub : MonoBehaviour
         _input.Player.Sprint.performed -= OnSprint;
         _input.Player.Sprint.canceled -= OnSprint;
 
-        // 테스트용
-        _input.Player.Holster.performed -= OnHolster;
-        _input.Player.Equip.performed -= OnEquip;
+        _input.Player.Weapon1.performed -= OnWeapon1;
+        _input.Player.Weapon2.performed -= OnWeapon2;
+        _input.Player.Weapon3.performed -= OnWeapon3;
 
         _input.Disable();
     }
@@ -76,6 +76,10 @@ public class PlayerInputHub : MonoBehaviour
     {
         FirePressedThisFrame = false;
         ReloadPressedThisFrame = false;
+
+        Weapon1PressedThisFrame = false;
+        Weapon2PressedThisFrame = false;
+        Weapon3PressedThisFrame = false;
 
         // 테스트용
         HolsterPressedThisFrame = false;
@@ -106,6 +110,21 @@ public class PlayerInputHub : MonoBehaviour
     {
         if (ctx.performed) SprintHeld = true;
         if (ctx.canceled) SprintHeld = false;
+    }
+
+    private void OnWeapon1(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed) Weapon1PressedThisFrame = true;
+    }
+
+    private void OnWeapon2(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed) Weapon2PressedThisFrame = true;
+    }
+
+    private void OnWeapon3(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed) Weapon3PressedThisFrame = true;
     }
 
     // 테스트용

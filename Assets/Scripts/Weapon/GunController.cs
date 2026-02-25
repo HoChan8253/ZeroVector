@@ -77,21 +77,6 @@ public class GunController : MonoBehaviour
         HandleFire();
         HandleReload();
         HandleReloadFinish();
-
-        // 테스트용
-        if (_input.HolsterPressedThisFrame)
-        {
-            _isHolstered = true;
-            _anim.ResetTrigger(AnimEquip);
-            _anim.SetTrigger(AnimHolster);
-        }
-
-        if (_input.EquipPressedThisFrame)
-        {
-            _isHolstered = false;
-            _anim.ResetTrigger(AnimHolster);
-            _anim.SetTrigger(AnimEquip);
-        }
     }
 
     public void Equip(WeaponData newData)
@@ -257,6 +242,11 @@ public class GunController : MonoBehaviour
         OnAmmoChanged?.Invoke(_state.ammoInMag, _state.reserveAmmo);
     }
 
+    public void ForceNotifyAmmo()
+    {
+        NotifyAmmo();
+    }
+
     private void ApplyWeaponData(WeaponData data)
     {
         // 세팅
@@ -302,9 +292,11 @@ public class GunController : MonoBehaviour
         CancelReload();
         _isHolstered = true;
         _isSwapping = true;
+    }
 
-        _anim.ResetTrigger(AnimEquip);
-        _anim.SetTrigger(AnimHolster);
+    public void CancelSwapState()
+    {
+        _isSwapping = false;
     }
 
     // Holster 애니 끝 프레임에 Animation Event로 호출
@@ -322,7 +314,7 @@ public class GunController : MonoBehaviour
 
     public void ForceEquipData(WeaponData newData)
     {
-        Equip(newData); // 너가 만든 Equip() (데이터 적용용)
+        Equip(newData);
         _anim.ResetTrigger(AnimHolster);
         _anim.SetTrigger(AnimEquip);
     }
