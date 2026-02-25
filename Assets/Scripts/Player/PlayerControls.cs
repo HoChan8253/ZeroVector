@@ -138,33 +138,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Weapon1"",
-                    ""type"": ""Button"",
-                    ""id"": ""50003c18-9b18-4325-8bae-7f5080ca8d2e"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Weapon2"",
-                    ""type"": ""Button"",
-                    ""id"": ""52c6d97a-cc33-4524-92fd-3048f5a1608e"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Weapon3"",
-                    ""type"": ""Button"",
-                    ""id"": ""0ad117c4-db80-4a34-852e-75e98bcbf773"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Holster"",
                     ""type"": ""Button"",
                     ""id"": ""2aa024b0-ce9a-45b6-ac5f-e66fb42882c6"",
@@ -304,39 +277,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""Equip"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""417b5428-f034-4c58-a42a-12bea6a2ac81"",
-                    ""path"": ""<Keyboard>/1"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Weapon1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""12e5d11b-f921-4e7d-b086-256dfcd8be63"",
-                    ""path"": ""<Keyboard>/2"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Weapon2"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""5163dba4-2af9-497d-8748-b27fdbc9dca3"",
-                    ""path"": ""<Keyboard>/3"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Weapon3"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -350,9 +290,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
-        m_Player_Weapon1 = m_Player.FindAction("Weapon1", throwIfNotFound: true);
-        m_Player_Weapon2 = m_Player.FindAction("Weapon2", throwIfNotFound: true);
-        m_Player_Weapon3 = m_Player.FindAction("Weapon3", throwIfNotFound: true);
         m_Player_Holster = m_Player.FindAction("Holster", throwIfNotFound: true);
         m_Player_Equip = m_Player.FindAction("Equip", throwIfNotFound: true);
     }
@@ -440,9 +377,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_Reload;
     private readonly InputAction m_Player_Sprint;
-    private readonly InputAction m_Player_Weapon1;
-    private readonly InputAction m_Player_Weapon2;
-    private readonly InputAction m_Player_Weapon3;
     private readonly InputAction m_Player_Holster;
     private readonly InputAction m_Player_Equip;
     /// <summary>
@@ -476,18 +410,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Sprint".
         /// </summary>
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/Weapon1".
-        /// </summary>
-        public InputAction @Weapon1 => m_Wrapper.m_Player_Weapon1;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/Weapon2".
-        /// </summary>
-        public InputAction @Weapon2 => m_Wrapper.m_Player_Weapon2;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/Weapon3".
-        /// </summary>
-        public InputAction @Weapon3 => m_Wrapper.m_Player_Weapon3;
         /// <summary>
         /// Provides access to the underlying input action "Player/Holster".
         /// </summary>
@@ -537,15 +459,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
-            @Weapon1.started += instance.OnWeapon1;
-            @Weapon1.performed += instance.OnWeapon1;
-            @Weapon1.canceled += instance.OnWeapon1;
-            @Weapon2.started += instance.OnWeapon2;
-            @Weapon2.performed += instance.OnWeapon2;
-            @Weapon2.canceled += instance.OnWeapon2;
-            @Weapon3.started += instance.OnWeapon3;
-            @Weapon3.performed += instance.OnWeapon3;
-            @Weapon3.canceled += instance.OnWeapon3;
             @Holster.started += instance.OnHolster;
             @Holster.performed += instance.OnHolster;
             @Holster.canceled += instance.OnHolster;
@@ -578,15 +491,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
-            @Weapon1.started -= instance.OnWeapon1;
-            @Weapon1.performed -= instance.OnWeapon1;
-            @Weapon1.canceled -= instance.OnWeapon1;
-            @Weapon2.started -= instance.OnWeapon2;
-            @Weapon2.performed -= instance.OnWeapon2;
-            @Weapon2.canceled -= instance.OnWeapon2;
-            @Weapon3.started -= instance.OnWeapon3;
-            @Weapon3.performed -= instance.OnWeapon3;
-            @Weapon3.canceled -= instance.OnWeapon3;
             @Holster.started -= instance.OnHolster;
             @Holster.performed -= instance.OnHolster;
             @Holster.canceled -= instance.OnHolster;
@@ -668,27 +572,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSprint(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Weapon1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnWeapon1(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Weapon2" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnWeapon2(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Weapon3" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnWeapon3(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Holster" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

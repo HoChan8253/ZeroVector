@@ -27,4 +27,4 @@ MonoBehaviour:
   spreadRecoverSpeed: 8
   tapResetTime: 0.15
   moveThreshold: 0.1
-  animatorOverride: {fileID: 22100000, guid: d7e5a710ca5bf0a4f98d89ed68bcba17, type: 2}
+  animatorOverride: {fileID: 0}
