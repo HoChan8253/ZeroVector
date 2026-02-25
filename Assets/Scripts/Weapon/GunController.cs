@@ -36,11 +36,15 @@ public class GunController : MonoBehaviour
 
     private float _moveThreshold;
 
+    private bool _isHolstered;
+
     // 애니메이터 파라미터 (규격 고정)
     private static readonly int AnimIsMoving = Animator.StringToHash("IsMoving");
     private static readonly int AnimShoot = Animator.StringToHash("Shoot");
     private static readonly int AnimReload = Animator.StringToHash("Reload");
     private static readonly int AnimIsSprinting = Animator.StringToHash("IsSprinting");
+    private static readonly int AnimEquip = Animator.StringToHash("Equip");
+    private static readonly int AnimHolster = Animator.StringToHash("Holster");
 
     private void Awake()
     {
@@ -70,6 +74,21 @@ public class GunController : MonoBehaviour
         HandleFire();
         HandleReload();
         HandleReloadFinish();
+
+        // 테스트용
+        if (_input.HolsterPressedThisFrame)
+        {
+            _isHolstered = true;
+            _anim.ResetTrigger(AnimEquip);
+            _anim.SetTrigger(AnimHolster);
+        }
+
+        if (_input.EquipPressedThisFrame)
+        {
+            _isHolstered = false;
+            _anim.ResetTrigger(AnimHolster);
+            _anim.SetTrigger(AnimEquip);
+        }
     }
 
     public void Equip(WeaponData newData)
@@ -84,8 +103,9 @@ public class GunController : MonoBehaviour
 
         ApplyWeaponData(_data);
         ApplyAnimatorOverride(_data);
-
         _state.ResetFromData(_data);
+
+        //_anim.SetTrigger(AnimEquip);
 
         // 시작 상태 UI 반영
         NotifyAmmo();
@@ -95,11 +115,13 @@ public class GunController : MonoBehaviour
     {
         // 여기서 트리거/상태 초기화
         CancelReload();
+        _anim.SetTrigger(AnimHolster);
         _data = null;
     }
 
     private void HandleFire()
     {
+        if (_isHolstered) return;
         bool isSprinting = _input.SprintHeld && _input.Move.sqrMagnitude > 0.01f;
         if (isSprinting) return;
 
@@ -160,8 +182,9 @@ public class GunController : MonoBehaviour
 
     private void HandleReload()
     {
+        if (_isHolstered) return;
         bool isSprinting = _input.SprintHeld && _input.Move.sqrMagnitude > 0.01f;
-        if (isSprinting) return;            // Sprint 중 재장전 불가
+        if (isSprinting) return;    // Sprint 중 재장전 불가
 
         if (_state.isReloading) return;
         if (!_input.ReloadPressedThisFrame) return;

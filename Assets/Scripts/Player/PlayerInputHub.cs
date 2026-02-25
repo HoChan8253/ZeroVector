@@ -9,6 +9,11 @@ public class PlayerInputHub : MonoBehaviour
     public bool FirePressedThisFrame { get; private set; }
     public bool ReloadPressedThisFrame { get; private set; }
 
+    // 테스트용
+    public bool HolsterPressedThisFrame { get; private set; }
+    public bool EquipPressedThisFrame { get; private set; }
+
+
     public bool SprintHeld { get; private set; }
 
     private PlayerControls _input;
@@ -35,6 +40,10 @@ public class PlayerInputHub : MonoBehaviour
 
         _input.Player.Sprint.performed += OnSprint;
         _input.Player.Sprint.canceled += OnSprint;
+
+        // 테스트용
+        _input.Player.Holster.performed += OnHolster;
+        _input.Player.Equip.performed += OnEquip;
     }
 
     private void OnDisable()
@@ -53,6 +62,10 @@ public class PlayerInputHub : MonoBehaviour
         _input.Player.Sprint.performed -= OnSprint;
         _input.Player.Sprint.canceled -= OnSprint;
 
+        // 테스트용
+        _input.Player.Holster.performed -= OnHolster;
+        _input.Player.Equip.performed -= OnEquip;
+
         _input.Disable();
     }
 
@@ -60,6 +73,10 @@ public class PlayerInputHub : MonoBehaviour
     {
         FirePressedThisFrame = false;
         ReloadPressedThisFrame = false;
+
+        // 테스트용
+        HolsterPressedThisFrame = false;
+        EquipPressedThisFrame = false;
     }
 
     private void OnMove(InputAction.CallbackContext ctx) => Move = ctx.ReadValue<Vector2>();
@@ -86,5 +103,16 @@ public class PlayerInputHub : MonoBehaviour
     {
         if (ctx.performed) SprintHeld = true;
         if (ctx.canceled) SprintHeld = false;
+    }
+
+    // 테스트용
+    private void OnHolster(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed) HolsterPressedThisFrame = true;
+    }
+
+    private void OnEquip(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed) EquipPressedThisFrame = true;
     }
 }
