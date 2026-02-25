@@ -2073,24 +2073,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bde29cee256ba24ebc2dc751c1db4b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunController
+  _data: {fileID: 11400000, guid: fee5e7a588d95c4479fe533d0575bd83, type: 2}
   _cam: {fileID: 737592884}
   _anim: {fileID: 2090770182}
   _input: {fileID: 667159475}
-  _moveThreshold: 0.1
-  _fireRate: 10
-  _range: 100
-  _damage: 25
-  _spreadAmount: 0.02
-  _maxSpread: 0.08
-  _spreadRecoverSpeed: 8
-  _tapResetTime: 0.15
-  _magSize: 30
-  _ammoInMag: 30
-  _reserveAmmo: 90
-  _reloadDuration: 4.583
   _look: {fileID: 667159476}
-  _recoilPitchAmount: 2
-  _recoilYawAmount: 1
+  _state:
+    ammoInMag: 0
+    reserveAmmo: 0
+    isReloading: 0
+    reloadEndTime: 0
+    nextFireTime: 0
+    currentSpread: 0
+    lastShotTime: 0
 --- !u!114 &2090770184
 MonoBehaviour:
   m_ObjectHideFlags: 0
