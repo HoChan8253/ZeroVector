@@ -1,6 +1,7 @@
 ﻿using System;
-using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class GunController : MonoBehaviour
 {
@@ -19,6 +20,9 @@ public class GunController : MonoBehaviour
 
     [SerializeField] private GameObject _hitSparkPrefab;
     [SerializeField] private GameObject _bulletHolePrefab;
+    [SerializeField] private int _maxBulletHoles = 50;
+
+    private readonly Queue<GameObject> _bulletHoles = new Queue<GameObject>();
 
     private Coroutine _muzzleLightCo;
 
@@ -218,7 +222,14 @@ public class GunController : MonoBehaviour
                 GameObject hole = Instantiate(_bulletHolePrefab, pos, rot);
                 hole.transform.SetParent(hit.collider.transform);
 
-                Destroy(hole, 15f);
+                _bulletHoles.Enqueue(hole);
+
+                while (_bulletHoles.Count > _maxBulletHoles)
+                {
+                    GameObject old = _bulletHoles.Dequeue();
+                    if (old != null) continue;
+                    Destroy(old);
+                }
             }
 
             Health h = hit.collider.GetComponentInParent<Health>();
