@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using System.Collections;
 
 public class GunController : MonoBehaviour
 {
@@ -11,6 +12,12 @@ public class GunController : MonoBehaviour
     [SerializeField] private Animator _anim;
     [SerializeField] private PlayerInputHub _input;
     [SerializeField] private PlayerLook _look;
+
+    [SerializeField] private ParticleSystem _muzzleFx;
+    [SerializeField] private Light _muzzleLight;
+    [SerializeField] private float _muzzleLightDuration = 0.1f;
+
+    private Coroutine _muzzleLightCo;
 
     public event Action<int, int> OnAmmoChanged;
 
@@ -57,6 +64,15 @@ public class GunController : MonoBehaviour
         if (_look == null)
             _look = GetComponentInParent<PlayerLook>();
 
+        if (_muzzleFx == null)
+            _muzzleFx = GetComponentInChildren<ParticleSystem>(true);
+
+        if (_muzzleLight == null)
+            _muzzleLight = GetComponentInChildren<Light>(true);
+
+        if (_muzzleLight != null)
+            _muzzleLight.enabled = false;
+
         // 최초 장착
         if (_data != null)
             Equip(_data);
@@ -93,8 +109,6 @@ public class GunController : MonoBehaviour
         ApplyAnimatorOverride(_data);
         _state.ResetFromData(_data);
 
-        //_anim.SetTrigger(AnimEquip);
-
         // 시작 상태 UI 반영
         NotifyAmmo();
     }
@@ -115,7 +129,9 @@ public class GunController : MonoBehaviour
 
         if (_state.isReloading) return;
 
-        bool wantFire = _input.FireHeld;
+        bool wantFire = (_data != null && _data.fireMode == FireMode.SemiAuto)
+        ? _input.FirePressedThisFrame
+        : _input.FireHeld;
         if (!wantFire) return;
 
         if (_state.ammoInMag <= 0)
@@ -137,6 +153,18 @@ public class GunController : MonoBehaviour
     private void Fire()
     {
         _anim.SetTrigger(AnimShoot);
+
+        if (_muzzleFx != null)
+        {
+            _muzzleFx.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            _muzzleFx.Play(true);
+        }
+
+        if (_muzzleLight != null)
+        {
+            if (_muzzleLightCo != null) StopCoroutine(_muzzleLightCo);
+            _muzzleLightCo = StartCoroutine(CoMuzzleLight());
+        }
 
         float randomYaw = UnityEngine.Random.Range(-_recoilYawAmount, _recoilYawAmount);
         _look.AddRecoil(_recoilPitchAmount, randomYaw);
@@ -166,6 +194,13 @@ public class GunController : MonoBehaviour
             if (h != null)
                 h.TakeDamage(_damage);
         }
+    }
+
+    private IEnumerator CoMuzzleLight()
+    {
+        _muzzleLight.enabled = true;
+        yield return new WaitForSeconds(_muzzleLightDuration);
+        _muzzleLight.enabled = false;
     }
 
     private void HandleReload()
@@ -287,6 +322,18 @@ public class GunController : MonoBehaviour
     public void BeginHolsterForSwap()
     {
         if (_isSwapping) return;
+
+        if (_muzzleFx != null)
+            _muzzleFx.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+
+        if (_muzzleLight != null)
+            _muzzleLight.enabled = false;
+
+        if (_muzzleLightCo != null)
+        {
+            StopCoroutine(_muzzleLightCo);
+            _muzzleLightCo = null;
+        }
 
         // 스왑 중에는 발사/장전 막기
         CancelReload();

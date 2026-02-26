@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: WD_Pistol
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
   weaponName: Pistol
+  fireMode: 0
   fireRate: 4
   range: 60
   damage: 12
@@ -22,8 +23,8 @@ MonoBehaviour:
   reloadDuration: 2.708
   recoilPitchAmount: 2.4
   recoilYawAmount: 0.8
-  spreadAmount: 0.005
-  maxSpread: 0.02
+  spreadAmount: 0.008
+  maxSpread: 0.05
   spreadRecoverSpeed: 8
   tapResetTime: 0.12
   moveThreshold: 0.1

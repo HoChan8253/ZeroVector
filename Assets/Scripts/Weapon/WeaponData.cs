@@ -1,10 +1,20 @@
 ﻿using UnityEngine;
 
+public enum FireMode
+{
+    SemiAuto,
+    FullAuto
+}
+
 [CreateAssetMenu(menuName = "FPS/Weapon Data", fileName = "WD_NewWeapon")]
+
 public class WeaponData : ScriptableObject
 {
     [Header("Identity")]
     public string weaponName = "AR";
+
+    [Header("Fire Mode")]
+    public FireMode fireMode = FireMode.FullAuto;
 
     [Header("Gun Settings")]
     public float fireRate = 10f;
