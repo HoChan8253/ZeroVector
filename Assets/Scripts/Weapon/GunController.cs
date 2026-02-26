@@ -17,6 +17,9 @@ public class GunController : MonoBehaviour
     [SerializeField] private Light _muzzleLight;
     [SerializeField] private float _muzzleLightDuration = 0.1f;
 
+    [SerializeField] private GameObject _hitSparkPrefab;
+    [SerializeField] private GameObject _bulletHolePrefab;
+
     private Coroutine _muzzleLightCo;
 
     public event Action<int, int> OnAmmoChanged;
@@ -189,6 +192,34 @@ public class GunController : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, _range))
         {
             Debug.DrawLine(ray.origin, hit.point, Color.red, 0.2f);
+
+            Debug.Log($"HIT: {hit.collider.name}");
+            Debug.Log($"Spark prefab: {(_hitSparkPrefab ? _hitSparkPrefab.name : "NULL")}");
+
+            // Bullet Spark
+            if (_hitSparkPrefab != null)
+            {
+                Vector3 sparkPos = hit.point + hit.normal * 0.02f;
+                Quaternion rot = Quaternion.LookRotation(hit.normal);
+
+                GameObject spark = Instantiate(_hitSparkPrefab, sparkPos, rot);
+                Destroy(spark, 1.5f);
+            }
+
+            // Bullet Hole
+            if (_bulletHolePrefab != null)
+            {
+                Vector3 pos = hit.point + hit.normal * 0.01f;
+                Quaternion rot = Quaternion.LookRotation(-hit.normal);
+
+                // 랜덤 회전 추가
+                rot *= Quaternion.Euler(0f, 0f, UnityEngine.Random.Range(0f, 360f));
+
+                GameObject hole = Instantiate(_bulletHolePrefab, pos, rot);
+                hole.transform.SetParent(hit.collider.transform);
+
+                Destroy(hole, 15f);
+            }
 
             Health h = hit.collider.GetComponentInParent<Health>();
             if (h != null)
