@@ -12,14 +12,12 @@ public class PlayerInputHub : MonoBehaviour
     public bool Weapon2PressedThisFrame { get; private set; }
     public bool Weapon3PressedThisFrame { get; private set; }
 
-    // 테스트용
-    public bool HolsterPressedThisFrame { get; private set; }
-    public bool EquipPressedThisFrame { get; private set; }
-
-
     public bool SprintHeld { get; private set; }
 
     private PlayerControls _input;
+
+    // 테스트용
+    public bool ToggleDayNightPressedThisFrame { get; private set; }
 
     private void Awake()
     {
@@ -47,6 +45,9 @@ public class PlayerInputHub : MonoBehaviour
         _input.Player.Weapon1.performed += OnWeapon1;
         _input.Player.Weapon2.performed += OnWeapon2;
         _input.Player.Weapon3.performed += OnWeapon3;
+
+        // 테스트용
+        _input.Debug.ToggleDayNight.performed += OnToggleDayNight;
     }
 
     private void OnDisable()
@@ -69,6 +70,9 @@ public class PlayerInputHub : MonoBehaviour
         _input.Player.Weapon2.performed -= OnWeapon2;
         _input.Player.Weapon3.performed -= OnWeapon3;
 
+        // 테스트용
+        _input.Debug.ToggleDayNight.performed -= OnToggleDayNight;
+
         _input.Disable();
     }
 
@@ -82,8 +86,7 @@ public class PlayerInputHub : MonoBehaviour
         Weapon3PressedThisFrame = false;
 
         // 테스트용
-        HolsterPressedThisFrame = false;
-        EquipPressedThisFrame = false;
+        ToggleDayNightPressedThisFrame = false;
     }
 
     private void OnMove(InputAction.CallbackContext ctx) => Move = ctx.ReadValue<Vector2>();
@@ -128,13 +131,8 @@ public class PlayerInputHub : MonoBehaviour
     }
 
     // 테스트용
-    private void OnHolster(InputAction.CallbackContext ctx)
+    private void OnToggleDayNight(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed) HolsterPressedThisFrame = true;
-    }
-
-    private void OnEquip(InputAction.CallbackContext ctx)
-    {
-        if (ctx.performed) EquipPressedThisFrame = true;
+        if (ctx.performed) ToggleDayNightPressedThisFrame = true;
     }
 }

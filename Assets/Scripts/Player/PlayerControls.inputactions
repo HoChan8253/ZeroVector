@@ -253,6 +253,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Debug",
+            "id": "9b926d74-9d8c-42e1-99a2-d5b2f5cbb086",
+            "actions": [
+                {
+                    "name": "ToggleDayNight",
+                    "type": "Button",
+                    "id": "9c55aaad-c0d5-4945-b1d3-faf70761a7be",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "af2cb214-83f7-45e3-89ea-9fab62f3fdda",
+                    "path": "<Keyboard>/n",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleDayNight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

@@ -232,9 +232,12 @@ public class GunController : MonoBehaviour
                 }
             }
 
-            Health h = hit.collider.GetComponentInParent<Health>();
-            if (h != null)
-                h.TakeDamage(_damage);
+            EnemyHealth enemy = hit.collider.GetComponentInParent<EnemyHealth>();
+            if (enemy != null)
+            {
+                bool headshot = hit.collider.CompareTag("EnemyHead");
+                enemy.TakeDamage((int)_damage, headshot);
+            }
         }
     }
 
