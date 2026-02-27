@@ -38,7 +38,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Start()
     {
-        EnterDayIdle();
+        StartCoroutine(CoRandomStart());
     }
 
     private void Update()
@@ -96,6 +96,12 @@ public class EnemyAI : MonoBehaviour
         UpdateAnimatorSpeed();
     }
 
+    private IEnumerator CoRandomStart()
+    {
+        yield return new WaitForSeconds(Random.Range(0f, 2f));
+        EnterDayIdle();
+    }
+
     private void UpdateDayLoop()
     {
         if (Time.time < _stateEndTime) return;
@@ -139,7 +145,10 @@ public class EnemyAI : MonoBehaviour
     private void EnterDayIdle()
     {
         _state = State.DayIdle;
-        _stateEndTime = Time.time + _dayIdleTime;
+
+        float randomIdle = Random.Range(_dayIdleTime * 0.7f, _dayIdleTime * 1.3f);
+        _stateEndTime = Time.time + randomIdle;
+
         _agent.isStopped = true;
         _agent.ResetPath();
     }
@@ -147,7 +156,10 @@ public class EnemyAI : MonoBehaviour
     private void EnterDayPatrol()
     {
         _state = State.DayPatrol;
-        _stateEndTime = Time.time + _dayWalkTime;
+
+        float randomWalk = Random.Range(_dayWalkTime * 0.7f, _dayWalkTime * 1.3f);
+        _stateEndTime = Time.time + randomWalk;
+
         _agent.isStopped = false;
 
         if (TryGetRandomPoint(transform.position, _patrolRadius, out var p))

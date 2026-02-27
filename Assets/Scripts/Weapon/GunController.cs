@@ -207,6 +207,7 @@ public class GunController : MonoBehaviour
             if (isEnemy)
             {
                 bool headshot = hit.collider.CompareTag("EnemyHead");
+                Debug.Log($"[Gun] Hit ENEMY - collider={hit.collider.name} enemy={enemy.name} headshot={headshot}");
                 enemy.TakeDamage((int)_damage, headshot, hit.point, hit.normal);
                 return;
             }

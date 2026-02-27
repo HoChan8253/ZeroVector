@@ -6,7 +6,7 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] private bool _stunnable = true;
 
     [Header("VFX")]
-    [SerializeField] private ParticleSystem _hitFx;
+    [SerializeField] private ParticleSystem _hitFxPrefab;
 
     [SerializeField] private EnemyData _data;
 
@@ -34,11 +34,20 @@ public class EnemyHealth : MonoBehaviour
             _ai.Die();
     }
 
-    private void PlayHitFx(Vector3 hitPoint, Vector3 hitNormal)
+    public void PlayHitFx(Vector3 point, Vector3 normal)
     {
-        if (_hitFx == null) return;
+        if (_hitFxPrefab == null) return;
 
-        _hitFx.transform.SetPositionAndRotation(hitPoint, Quaternion.LookRotation(hitNormal));
-        _hitFx.Play(true);
+        Quaternion rot = Quaternion.LookRotation(normal);
+
+        var fx = Instantiate(_hitFxPrefab, point + normal * 0.01f, rot);
+
+        fx.gameObject.SetActive(true);
+
+        fx.Clear(true);
+        fx.Play(true);
+
+        float life = fx.main.duration + fx.main.startLifetime.constantMax;
+        Destroy(fx.gameObject, life);
     }
 }
