@@ -200,6 +200,17 @@ public class GunController : MonoBehaviour
             Debug.Log($"HIT: {hit.collider.name}");
             Debug.Log($"Spark prefab: {(_hitSparkPrefab ? _hitSparkPrefab.name : "NULL")}");
 
+            // 히트스캔 충돌이 적인지 검증
+            EnemyHealth enemy = hit.collider.GetComponentInParent<EnemyHealth>();
+            bool isEnemy = (enemy != null);
+
+            if (isEnemy)
+            {
+                bool headshot = hit.collider.CompareTag("EnemyHead");
+                enemy.TakeDamage((int)_damage, headshot);
+                return;
+            }
+
             // Bullet Spark
             if (_hitSparkPrefab != null)
             {
@@ -227,16 +238,9 @@ public class GunController : MonoBehaviour
                 while (_bulletHoles.Count > _maxBulletHoles)
                 {
                     GameObject old = _bulletHoles.Dequeue();
-                    if (old != null) continue;
+                    if (old == null) continue;
                     Destroy(old);
                 }
-            }
-
-            EnemyHealth enemy = hit.collider.GetComponentInParent<EnemyHealth>();
-            if (enemy != null)
-            {
-                bool headshot = hit.collider.CompareTag("EnemyHead");
-                enemy.TakeDamage((int)_damage, headshot);
             }
         }
     }

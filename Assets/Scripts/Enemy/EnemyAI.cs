@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -11,7 +12,8 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private NavMeshAgent _agent;
 
     [Header("Ranges")]
-    [SerializeField] private float _aggroRange = 12f;
+    [SerializeField] private float _aggroRange = 10f;
+    [SerializeField] private float _deaggroRange = 18f;
     [SerializeField] private float _attackRange = 2.0f;
     [SerializeField] private float _attackCooldown = 1.2f;
 
@@ -43,10 +45,31 @@ public class EnemyAI : MonoBehaviour
     {
         if (_state == State.Dead) return;
 
-        if (DayNightManager.Instance.IsNight) _aggro = true;
-        else if (!_aggro && _player != null && DistanceToPlayer() <= _aggroRange) 
-        { 
-            // 낮에는 무시 
+        if (_player != null)
+        {
+            float dist = DistanceToPlayer();
+
+            if (DayNightManager.Instance.IsNight)
+            {
+                _aggro = true;
+            }
+            else
+            {
+                if (!_aggro)
+                {
+                    if (dist <= _aggroRange) _aggro = true;
+                }
+                else
+                {
+                    if (dist >= _deaggroRange)
+                    {
+                        _aggro = false;
+
+                        if (_state == State.Chase || _state == State.Attack)
+                            EnterDayIdle();
+                    }
+                }
+            }
         }
 
         switch (_state)
@@ -217,8 +240,54 @@ public class EnemyAI : MonoBehaviour
         if (_state == State.Dead) return;
 
         _state = State.Dead;
+
         _agent.isStopped = true;
         _agent.ResetPath();
+
         _anim.SetBool("Dead", true);
+
+        DisableColliders();
+
+        StartCoroutine(CoDeathRoutine());
+    }
+
+    private void DisableColliders()
+    {
+        Collider[] cols = GetComponentsInChildren<Collider>();
+        foreach (var c in cols)
+            c.enabled = false;
+    }
+
+    private IEnumerator CoDeathRoutine()
+    {
+        yield return new WaitForSeconds(2f);
+
+        float fadeTime = 1.5f;
+        float t = 0f;
+
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+
+        foreach (var r in renderers)
+        {
+            r.material = new Material(r.material);
+        }
+
+        while (t < fadeTime)
+        {
+            t += Time.deltaTime;
+            float alpha = Mathf.Lerp(1f, 0f, t / fadeTime);
+
+            foreach (var r in renderers)
+            {
+                if (r.material.HasProperty("_Color"))
+                {
+                    Color c = r.material.color;
+                    c.a = alpha;
+                    r.material.color = c;
+                }
+            }
+            yield return null;
+        }
+        Destroy(gameObject);
     }
 }
