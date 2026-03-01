@@ -16,6 +16,9 @@ public class EnemyAI : MonoBehaviour
     [Header("Ranged Refs")]
     [SerializeField] private GameObject _energyBallPrefab;
     [SerializeField] private Transform _bulletSpawner;
+    [SerializeField] private Transform _tripleSpawnerL;
+    [SerializeField] private Transform _tripleSpawnerC;
+    [SerializeField] private Transform _tripleSpawnerR;
 
     // Default Values (ScriptableObject 없이도 동작 가능)
     private float _aggroRange = 10f;
@@ -385,38 +388,39 @@ public class EnemyAI : MonoBehaviour
         if (dir.sqrMagnitude < 0.0001f) dir = transform.forward;
         dir.Normalize();
 
-        SpawnEnergyBall(dir);
+        SpawnEnergyBall(_bulletSpawner, dir);
     }
 
     // 3갈래 사격
     private void FireEnergyBallTriple()
     {
         if (_player == null) return;
-        if (_energyBallPrefab == null || _bulletSpawner == null) return;
+        if (_energyBallPrefab == null) return;
+        if (_tripleSpawnerL == null || _tripleSpawnerC == null || _tripleSpawnerR == null) return;
 
-        Vector3 baseDir = _player.position - _bulletSpawner.position;
+        Vector3 baseDir = _player.position - _tripleSpawnerC.position;
         baseDir.y = 0f;
         if (baseDir.sqrMagnitude < 0.0001f) baseDir = transform.forward;
         baseDir.Normalize();
 
-        float spread = 12f; // 좌/우 벌어짐 각도(임시)
+        float spread = 12f;
         Vector3 leftDir = Quaternion.Euler(0f, -spread, 0f) * baseDir;
         Vector3 rightDir = Quaternion.Euler(0f, spread, 0f) * baseDir;
 
-        SpawnEnergyBall(leftDir);
-        SpawnEnergyBall(baseDir);
-        SpawnEnergyBall(rightDir);
+        SpawnEnergyBall(_tripleSpawnerL, leftDir);
+        SpawnEnergyBall(_tripleSpawnerC, baseDir);
+        SpawnEnergyBall(_tripleSpawnerR, rightDir);
     }
 
     // 투사체 발사 (ObjectPooling)
-    private void SpawnEnergyBall(Vector3 dir)
+    private void SpawnEnergyBall(Transform spawner, Vector3 dir)
     {
         Quaternion rot = Quaternion.LookRotation(dir);
 
         GameObject obj =
             (ObjectPoolManager.Instance != null)
-            ? ObjectPoolManager.Instance.Spawn(_energyBallPrefab, _bulletSpawner.position, rot)
-            : Instantiate(_energyBallPrefab, _bulletSpawner.position, rot);
+            ? ObjectPoolManager.Instance.Spawn(_energyBallPrefab, spawner.position, rot)
+            : Instantiate(_energyBallPrefab, spawner.position, rot);
 
         var proj = obj.GetComponent<EnergyBall>();
         if (proj != null)

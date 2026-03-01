@@ -51,6 +51,9 @@ public class EnergyBall : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // 투사체끼리 충돌 방지
+        if (other.GetComponentInParent<EnergyBall>() != null) return;
+
         // 발사자 충돌 방지
         if (_owner != null && other.transform.IsChildOf(_owner)) return;
 
