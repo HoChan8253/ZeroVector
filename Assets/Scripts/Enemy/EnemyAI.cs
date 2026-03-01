@@ -16,7 +16,6 @@ public class EnemyAI : MonoBehaviour
     public EnemyData Data => _data;
 
     [Header("Ranged Refs")]
-    [SerializeField] private GameObject _energyBallPrefab;
     [SerializeField] private Transform _bulletSpawner;
 
     [Header("VFX")]
@@ -385,7 +384,8 @@ public class EnemyAI : MonoBehaviour
     private void FireEnergyBallSingle()
     {
         if (_player == null) return;
-        if (_energyBallPrefab == null || _bulletSpawner == null) return;
+        if (_bulletSpawner == null) return;
+        if (ObjectPoolManager.Instance == null) return;
 
         Vector3 dir = _player.position - _bulletSpawner.position;
         dir.y = 0f;
@@ -399,7 +399,8 @@ public class EnemyAI : MonoBehaviour
     private void FireEnergyBallTriple()
     {
         if (_player == null) return;
-        if (_energyBallPrefab == null || _bulletSpawner == null) return;
+        if (_bulletSpawner == null) return;
+        if (ObjectPoolManager.Instance == null) return;
 
         Vector3 baseDir = _player.position - _bulletSpawner.position;
         baseDir.y = 0f;
@@ -422,12 +423,17 @@ public class EnemyAI : MonoBehaviour
 
         GameObject obj =
             (ObjectPoolManager.Instance != null)
-            ? ObjectPoolManager.Instance.Spawn(_energyBallPrefab, spawner.position, rot)
-            : Instantiate(_energyBallPrefab, spawner.position, rot);
+            ? ObjectPoolManager.Instance.Spawn(PoolKey.EnergyBall, spawner.position, rot)
+            : null;
+
+        if (obj == null)
+        {
+            return;
+        }
 
         var proj = obj.GetComponent<EnergyBall>();
         if (proj != null)
-            proj.Init(_energyBallPrefab, transform, dir, _projectileSpeed, _projectileDamage, _projectileLifeTime);
+            proj.Init(PoolKey.EnergyBall, transform, dir, _projectileSpeed, _projectileDamage, _projectileLifeTime);
     }
 
     private void PlayMuzzleFx()

@@ -1,21 +1,40 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class EnemyHealth : MonoBehaviour
 {
-    [SerializeField] private int _maxHp = 100;
-    [SerializeField] private bool _stunnable = true;
+    [SerializeField] private bool _resetHpOnEnable = true;
 
-    [Header("VFX")]
-    [SerializeField] private ParticleSystem _hitFxPrefab;
+    [Header("Stun")]
+    [SerializeField] private bool _stunnable = true;
 
     private int _hp;
     private EnemyAI _ai;
 
+    public int Hp => _hp;
+    public int MaxHp => (_ai != null && _ai.Data != null) ? _ai.Data.maxHp : 100;
+
     private void Awake()
     {
         _ai = GetComponent<EnemyAI>();
-        var data = (_ai != null) ? _ai.Data : null;
-        _hp = (data != null) ? data.maxHp : _maxHp;
+        ResetHp();
+    }
+
+    private void OnEnable()
+    {
+        if (_resetHpOnEnable)
+            ResetHp();
+    }
+
+    private bool CanStun()
+    {
+        if (_ai != null && _ai.Data != null) return _ai.Data.canStun;
+        return _stunnable;
+    }
+
+    public void ResetHp()
+    {
+        _hp = MaxHp;
     }
 
     public void TakeDamage(int amount, bool headshot, Vector3 hitPoint, Vector3 hitNormal)
@@ -26,7 +45,7 @@ public class EnemyHealth : MonoBehaviour
 
         _hp -= amount;
 
-        bool stun = _stunnable && headshot;
+        bool stun = CanStun() && headshot;
         if (_ai != null) _ai.OnDamaged(hitPoint, stun);
 
         if (_hp <= 0 && _ai != null)
@@ -35,18 +54,37 @@ public class EnemyHealth : MonoBehaviour
 
     public void PlayHitFx(Vector3 point, Vector3 normal)
     {
-        if (_hitFxPrefab == null) return;
+        if (ObjectPoolManager.Instance == null) return;
 
         Quaternion rot = Quaternion.LookRotation(normal);
+        Vector3 pos = point + normal * 0.01f;
 
-        var fx = Instantiate(_hitFxPrefab, point + normal * 0.01f, rot);
+        GameObject obj = ObjectPoolManager.Instance.Spawn(PoolKey.HitFx_ElectricShort, pos, rot);
+        if (obj == null) return;
 
-        fx.gameObject.SetActive(true);
+        var ps = obj.GetComponent<ParticleSystem>();
+        if (ps == null) ps = obj.GetComponentInChildren<ParticleSystem>(true);
 
-        fx.Clear(true);
-        fx.Play(true);
+        if (ps != null)
+        {
+            ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            ps.Clear(true);
+            ps.Play(true);
 
-        float life = fx.main.duration + fx.main.startLifetime.constantMax;
-        Destroy(fx.gameObject, life);
+            float life = ps.main.duration + ps.main.startLifetime.constantMax;
+            StartCoroutine(CoDespawnFx(PoolKey.HitFx_ElectricShort, obj, life));
+        }
+        else
+        {
+            ObjectPoolManager.Instance.Despawn(PoolKey.HitFx_ElectricShort, obj);
+        }
+    }
+
+    private IEnumerator CoDespawnFx(PoolKey key, GameObject obj, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (ObjectPoolManager.Instance != null && obj != null)
+            ObjectPoolManager.Instance.Despawn(key, obj);
     }
 }
