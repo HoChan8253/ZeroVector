@@ -8,9 +8,11 @@ public class EnemyAI : MonoBehaviour
 
     [Header("Refs")]
     [SerializeField] private Transform _player;
-    [SerializeField] private Animator _anim;
+    [SerializeField] private EnemyAnimation _animCtrl;
     [SerializeField] private NavMeshAgent _agent;
     [SerializeField] private EnemyData _data;
+
+    public Transform Target => _player;
     public EnemyData Data => _data;
 
     [Header("Ranged Refs")]
@@ -19,6 +21,14 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private Transform _tripleSpawnerL;
     [SerializeField] private Transform _tripleSpawnerC;
     [SerializeField] private Transform _tripleSpawnerR;
+
+    public bool IsMoving =>
+    _state == State.Chase || _state == State.DayPatrol;
+
+    public bool IsAttacking =>
+        _state == State.Attack;
+
+    public bool IsDead => _state == State.Dead;
 
     // Default Values (ScriptableObject 없이도 동작 가능)
     private float _aggroRange = 10f;
@@ -47,10 +57,13 @@ public class EnemyAI : MonoBehaviour
     private bool _aggro;
     private int _lastAttackVariant;
 
+    public int LastAttackVariant => _lastAttackVariant;
+
     private void Awake()
     {
         if (_agent == null) _agent = GetComponent<NavMeshAgent>();
-        if (_anim == null) _anim = GetComponentInChildren<Animator>();
+        if (_animCtrl == null) _animCtrl = GetComponentInChildren<EnemyAnimation>();
+        if (_animCtrl == null) _animCtrl = GetComponentInChildren<EnemyAnimation>(true);
 
         ApplyData();
     }
@@ -177,7 +190,21 @@ public class EnemyAI : MonoBehaviour
         if (_player == null) { EnterDayIdle(); return; }
 
         float d = DistanceToPlayer();
-        FaceTarget(_player.position);
+
+        bool isMelee = (_data == null) || (_data.attackType == EnemyAttackType.Melee);
+        bool isRanged = !isMelee;
+
+        // 근접이면 항상 플레이어를 본다
+        if (isMelee)
+        {
+            FaceTarget(_player.position);
+        }
+        else
+        {
+            // 원거리인데 Attack1(포탑이 몸체에 달린 공격)일 때만 바디도 봄
+            if (_lastAttackVariant == 1)
+                FaceTarget(_player.position);
+        }
 
         if (d > _attackRange * 1.1f)
         {
@@ -196,20 +223,21 @@ public class EnemyAI : MonoBehaviour
                 if (useAttack1)
                 {
                     _lastAttackVariant = 1;
-                    _anim.SetTrigger("Attack1");
+                    FaceTarget(_player.position); // Attack1 시전 순간 버디도 플레이어를 봄
+                    _animCtrl?.PlayAttack1();
                     FireEnergyBallTriple(); // 3갈래 사격
                 }
                 else
                 {
                     _lastAttackVariant = 2;
-                    _anim.SetTrigger("Attack2");
+                    _animCtrl?.PlayAttack2();
                     FireEnergyBallSingle(); // 단발 사격
                 }
             }
             else
             {
                 _lastAttackVariant = 2;
-                _anim.SetTrigger("Attack");
+                _animCtrl?.PlayAttackDefault();
                 FireEnergyBallSingle();
             }
         }
@@ -261,7 +289,7 @@ public class EnemyAI : MonoBehaviour
         _stateEndTime = Time.time + _stunTime;
         _agent.isStopped = true;
         _agent.ResetPath();
-        _anim.SetTrigger("Stun");
+        _animCtrl?.PlayStun();
     }
 
     private void EnterChaseOrDay()
@@ -290,7 +318,7 @@ public class EnemyAI : MonoBehaviour
         if (!_agent.isStopped && _agent.speed > 0.01f)
             normalized = Mathf.Clamp01(_agent.velocity.magnitude / _agent.speed);
 
-        _anim.SetFloat("Speed", normalized);
+        _animCtrl?.SetMoveSpeed(normalized);
     }
 
     private bool TryGetRandomPoint(Vector3 center, float radius, out Vector3 result)
@@ -330,7 +358,7 @@ public class EnemyAI : MonoBehaviour
         _agent.isStopped = true;
         _agent.ResetPath();
 
-        _anim.SetBool("Dead", true);
+        _animCtrl?.SetDead(true);
 
         DisableColliders();
 

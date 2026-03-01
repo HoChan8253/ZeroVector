@@ -495,6 +495,7 @@ GameObject:
   - component: {fileID: 8043156812556064166}
   - component: {fileID: 5839956400315499357}
   - component: {fileID: 1107828120928630886}
+  - component: {fileID: 5786603534910889208}
   m_Layer: 0
   m_Name: Melee1
   m_TagString: Untagged
@@ -576,11 +577,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
   _player: {fileID: 0}
-  _anim: {fileID: 5782818193018466275}
+  _animCtrl: {fileID: 5786603534910889208}
   _agent: {fileID: 2574911956693449202}
   _data: {fileID: 11400000, guid: 61cad716b5f83a94c8e19ed309f1fff8, type: 2}
   _energyBallPrefab: {fileID: 0}
   _bulletSpawner: {fileID: 0}
+  _tripleSpawnerL: {fileID: 0}
+  _tripleSpawnerC: {fileID: 0}
+  _tripleSpawnerR: {fileID: 0}
 --- !u!114 &5839956400315499357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -593,7 +597,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c05de9a0d35c8b49a5a8e42eaca57f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  _maxHp: 100
+  _maxHp: 200
   _stunnable: 1
   _hitFxPrefab: {fileID: 1322362907905973061, guid: 0ce6da5f5fe638a4a8f5d8cb1dcd4ac9, type: 3}
 --- !u!136 &1107828120928630886
@@ -619,6 +623,19 @@ CapsuleCollider:
   m_Height: 1.3901782
   m_Direction: 1
   m_Center: {x: 0.0017642975, y: 0.6950891, z: 0.041940212}
+--- !u!114 &5786603534910889208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5044674385491539189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60f4b676ad0bf9a4cafa930a2e7ad5ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAnimation
+  _anim: {fileID: 5782818193018466275}
 --- !u!1 &6107313759454027229
 GameObject:
   m_ObjectHideFlags: 0
