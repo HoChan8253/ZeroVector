@@ -42,6 +42,7 @@ public class EnemyAI : MonoBehaviour
     private float _stateEndTime;
     private float _nextAttackTime;
     private bool _aggro;
+    private int _lastAttackVariant;
 
     private void Awake()
     {
@@ -185,18 +186,29 @@ public class EnemyAI : MonoBehaviour
         {
             _nextAttackTime = Time.time + _attackCooldown;
 
-            // 공격 애니메이션 트리거
             if (_useTwoAttackTriggers)
             {
-                if (Random.value < 0.5f) _anim.SetTrigger("Attack1");
-                else _anim.SetTrigger("Attack2");
+                bool useAttack1 = Random.value < 0.5f;
+
+                if (useAttack1)
+                {
+                    _lastAttackVariant = 1;
+                    _anim.SetTrigger("Attack1");
+                    FireEnergyBallTriple(); // 3갈래 사격
+                }
+                else
+                {
+                    _lastAttackVariant = 2;
+                    _anim.SetTrigger("Attack2");
+                    FireEnergyBallSingle(); // 단발 사격
+                }
             }
             else
             {
+                _lastAttackVariant = 2;
                 _anim.SetTrigger("Attack");
+                FireEnergyBallSingle();
             }
-
-            FireEnergyBall();
         }
     }
 
@@ -362,7 +374,8 @@ public class EnemyAI : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void FireEnergyBall()
+    // 단발 사격
+    private void FireEnergyBallSingle()
     {
         if (_player == null) return;
         if (_energyBallPrefab == null || _bulletSpawner == null) return;
@@ -372,6 +385,32 @@ public class EnemyAI : MonoBehaviour
         if (dir.sqrMagnitude < 0.0001f) dir = transform.forward;
         dir.Normalize();
 
+        SpawnEnergyBall(dir);
+    }
+
+    // 3갈래 사격
+    private void FireEnergyBallTriple()
+    {
+        if (_player == null) return;
+        if (_energyBallPrefab == null || _bulletSpawner == null) return;
+
+        Vector3 baseDir = _player.position - _bulletSpawner.position;
+        baseDir.y = 0f;
+        if (baseDir.sqrMagnitude < 0.0001f) baseDir = transform.forward;
+        baseDir.Normalize();
+
+        float spread = 12f; // 좌/우 벌어짐 각도(임시)
+        Vector3 leftDir = Quaternion.Euler(0f, -spread, 0f) * baseDir;
+        Vector3 rightDir = Quaternion.Euler(0f, spread, 0f) * baseDir;
+
+        SpawnEnergyBall(leftDir);
+        SpawnEnergyBall(baseDir);
+        SpawnEnergyBall(rightDir);
+    }
+
+    // 투사체 발사 (ObjectPooling)
+    private void SpawnEnergyBall(Vector3 dir)
+    {
         Quaternion rot = Quaternion.LookRotation(dir);
 
         GameObject obj =

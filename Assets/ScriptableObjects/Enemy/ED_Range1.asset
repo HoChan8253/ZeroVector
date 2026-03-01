@@ -19,7 +19,7 @@ MonoBehaviour:
   attackType: 1
   attackRange: 15
   attackCooldown: 1.5
-  projectileSpeed: 12
+  projectileSpeed: 15
   projectileLifeTime: 3
   projectileDamage: 8
   dayIdleTime: 2
