@@ -10,21 +10,34 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private Transform _player;
     [SerializeField] private Animator _anim;
     [SerializeField] private NavMeshAgent _agent;
+    [SerializeField] private EnemyData _data;
+    public EnemyData Data => _data;
 
-    [Header("Ranges")]
-    [SerializeField] private float _aggroRange = 10f;
-    [SerializeField] private float _deaggroRange = 18f;
-    [SerializeField] private float _attackRange = 2.0f;
-    [SerializeField] private float _attackCooldown = 1.2f;
+    [Header("Ranged Refs")]
+    [SerializeField] private GameObject _energyBallPrefab;
+    [SerializeField] private Transform _bulletSpawner;
 
-    [Header("Day Loop")]
-    [SerializeField] private float _dayIdleTime = 2.0f;
-    [SerializeField] private float _dayWalkTime = 3.0f;
-    [SerializeField] private float _patrolRadius = 6f;
+    // Default Values (ScriptableObject 없이도 동작 가능)
+    private float _aggroRange = 10f;
+    private float _deaggroRange = 18f;
+    private float _damageAggroHoldTime = 2.0f;
 
-    [Header("Stun")]
-    [SerializeField] private float _stunTime = 1.0f;
+    private float _attackRange = 2.0f;
+    private float _attackCooldown = 1.2f;
 
+    private float _projectileSpeed = 12f;
+    private float _projectileLifeTime = 2.0f;
+    private int _projectileDamage = 10;
+    private bool _useTwoAttackTriggers = false;
+
+    private float _dayIdleTime = 2.0f;
+    private float _dayWalkTime = 3.0f;
+    private float _patrolRadius = 6f;
+
+    private float _stunTime = 1.0f;
+
+    // Runtime
+    private float _forcedAggroUntil;
     private State _state;
     private float _stateEndTime;
     private float _nextAttackTime;
@@ -34,6 +47,8 @@ public class EnemyAI : MonoBehaviour
     {
         if (_agent == null) _agent = GetComponent<NavMeshAgent>();
         if (_anim == null) _anim = GetComponentInChildren<Animator>();
+
+        ApplyData();
     }
 
     private void Start()
@@ -55,18 +70,25 @@ public class EnemyAI : MonoBehaviour
             }
             else
             {
-                if (!_aggro)
+                if (Time.time < _forcedAggroUntil)
                 {
-                    if (dist <= _aggroRange) _aggro = true;
+                    _aggro = true;
                 }
                 else
                 {
-                    if (dist >= _deaggroRange)
+                    if (!_aggro)
                     {
-                        _aggro = false;
+                        if (dist <= _aggroRange) _aggro = true;
+                    }
+                    else
+                    {
+                        if (dist >= _deaggroRange)
+                        {
+                            _aggro = false;
 
-                        if (_state == State.Chase || _state == State.Attack)
-                            EnterDayIdle();
+                            if (_state == State.Chase || _state == State.Attack)
+                                EnterDayIdle();
+                        }
                     }
                 }
             }
@@ -100,6 +122,30 @@ public class EnemyAI : MonoBehaviour
     {
         yield return new WaitForSeconds(Random.Range(0f, 2f));
         EnterDayIdle();
+    }
+
+    private void ApplyData()
+    {
+        if (_data == null) return;
+
+        _aggroRange = _data.aggroRange;
+        _deaggroRange = _data.deaggroRange;
+        _damageAggroHoldTime = _data.damageAggroHoldTime;
+
+        _attackRange = _data.attackRange;
+        _attackCooldown = _data.attackCooldown;
+
+        _dayIdleTime = _data.dayIdleTime;
+        _dayWalkTime = _data.dayWalkTime;
+        _patrolRadius = _data.patrolRadius;
+
+        _stunTime = _data.stunTime;
+
+        _projectileSpeed = _data.projectileSpeed;
+        _projectileLifeTime = _data.projectileLifeTime;
+        _projectileDamage = _data.projectileDamage;
+
+        _useTwoAttackTriggers = _data.useTwoAttackTriggers;
     }
 
     private void UpdateDayLoop()
@@ -138,7 +184,19 @@ public class EnemyAI : MonoBehaviour
         if (Time.time >= _nextAttackTime)
         {
             _nextAttackTime = Time.time + _attackCooldown;
-            _anim.SetTrigger("Attack");
+
+            // 공격 애니메이션 트리거
+            if (_useTwoAttackTriggers)
+            {
+                if (Random.value < 0.5f) _anim.SetTrigger("Attack1");
+                else _anim.SetTrigger("Attack2");
+            }
+            else
+            {
+                _anim.SetTrigger("Attack");
+            }
+
+            FireEnergyBall();
         }
     }
 
@@ -242,6 +300,7 @@ public class EnemyAI : MonoBehaviour
         if (_state == State.Dead) return;
 
         _aggro = true;
+        _forcedAggroUntil = Time.time + _damageAggroHoldTime;
 
         if (stun) EnterStun();
         else if (_state == State.DayIdle || _state == State.DayPatrol) EnterChase();
@@ -301,5 +360,27 @@ public class EnemyAI : MonoBehaviour
             yield return null;
         }
         Destroy(gameObject);
+    }
+
+    private void FireEnergyBall()
+    {
+        if (_player == null) return;
+        if (_energyBallPrefab == null || _bulletSpawner == null) return;
+
+        Vector3 dir = _player.position - _bulletSpawner.position;
+        dir.y = 0f;
+        if (dir.sqrMagnitude < 0.0001f) dir = transform.forward;
+        dir.Normalize();
+
+        Quaternion rot = Quaternion.LookRotation(dir);
+
+        GameObject obj =
+            (ObjectPoolManager.Instance != null)
+            ? ObjectPoolManager.Instance.Spawn(_energyBallPrefab, _bulletSpawner.position, rot)
+            : Instantiate(_energyBallPrefab, _bulletSpawner.position, rot);
+
+        var proj = obj.GetComponent<EnergyBall>();
+        if (proj != null)
+            proj.Init(_energyBallPrefab, transform, dir, _projectileSpeed, _projectileDamage, _projectileLifeTime);
     }
 }

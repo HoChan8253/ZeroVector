@@ -8,15 +8,14 @@ public class EnemyHealth : MonoBehaviour
     [Header("VFX")]
     [SerializeField] private ParticleSystem _hitFxPrefab;
 
-    [SerializeField] private EnemyData _data;
-
     private int _hp;
     private EnemyAI _ai;
 
     private void Awake()
     {
-        _hp = _data != null ? _data.maxHp : _maxHp;
         _ai = GetComponent<EnemyAI>();
+        var data = (_ai != null) ? _ai.Data : null;
+        _hp = (data != null) ? data.maxHp : _maxHp;
     }
 
     public void TakeDamage(int amount, bool headshot, Vector3 hitPoint, Vector3 hitNormal)
