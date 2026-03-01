@@ -18,9 +18,10 @@ public class EnemyAI : MonoBehaviour
     [Header("Ranged Refs")]
     [SerializeField] private GameObject _energyBallPrefab;
     [SerializeField] private Transform _bulletSpawner;
-    [SerializeField] private Transform _tripleSpawnerL;
-    [SerializeField] private Transform _tripleSpawnerC;
-    [SerializeField] private Transform _tripleSpawnerR;
+
+    [Header("VFX")]
+    [SerializeField] private ParticleSystem _muzzleFxPrefab;
+    private ParticleSystem _muzzleFxInstance;
 
     public bool IsMoving =>
     _state == State.Chase || _state == State.DayPatrol;
@@ -41,7 +42,6 @@ public class EnemyAI : MonoBehaviour
     private float _projectileSpeed = 12f;
     private float _projectileLifeTime = 2.0f;
     private int _projectileDamage = 10;
-    private bool _useTwoAttackTriggers = false;
 
     private float _dayIdleTime = 2.0f;
     private float _dayWalkTime = 3.0f;
@@ -55,9 +55,6 @@ public class EnemyAI : MonoBehaviour
     private float _stateEndTime;
     private float _nextAttackTime;
     private bool _aggro;
-    private int _lastAttackVariant;
-
-    public int LastAttackVariant => _lastAttackVariant;
 
     private void Awake()
     {
@@ -66,6 +63,14 @@ public class EnemyAI : MonoBehaviour
         if (_animCtrl == null) _animCtrl = GetComponentInChildren<EnemyAnimation>(true);
 
         ApplyData();
+
+        if (_muzzleFxPrefab != null && _bulletSpawner != null)
+        {
+            _muzzleFxInstance = Instantiate(_muzzleFxPrefab, _bulletSpawner);
+            _muzzleFxInstance.transform.localPosition = Vector3.zero;
+            _muzzleFxInstance.transform.localRotation = Quaternion.identity;
+            _muzzleFxInstance.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        }
     }
 
     private void Start()
@@ -161,8 +166,6 @@ public class EnemyAI : MonoBehaviour
         _projectileSpeed = _data.projectileSpeed;
         _projectileLifeTime = _data.projectileLifeTime;
         _projectileDamage = _data.projectileDamage;
-
-        _useTwoAttackTriggers = _data.useTwoAttackTriggers;
     }
 
     private void UpdateDayLoop()
@@ -192,19 +195,9 @@ public class EnemyAI : MonoBehaviour
         float d = DistanceToPlayer();
 
         bool isMelee = (_data == null) || (_data.attackType == EnemyAttackType.Melee);
-        bool isRanged = !isMelee;
 
-        // 근접이면 항상 플레이어를 본다
         if (isMelee)
-        {
             FaceTarget(_player.position);
-        }
-        else
-        {
-            // 원거리인데 Attack1(포탑이 몸체에 달린 공격)일 때만 바디도 봄
-            if (_lastAttackVariant == 1)
-                FaceTarget(_player.position);
-        }
 
         if (d > _attackRange * 1.1f)
         {
@@ -215,31 +208,14 @@ public class EnemyAI : MonoBehaviour
         if (Time.time >= _nextAttackTime)
         {
             _nextAttackTime = Time.time + _attackCooldown;
+            _animCtrl?.PlayAttack();
 
-            if (_useTwoAttackTriggers)
+            if (_data != null && _data.attackType == EnemyAttackType.Ranged)
             {
-                bool useAttack1 = Random.value < 0.5f;
-
-                if (useAttack1)
-                {
-                    _lastAttackVariant = 1;
-                    FaceTarget(_player.position); // Attack1 시전 순간 버디도 플레이어를 봄
-                    _animCtrl?.PlayAttack1();
-                    FireEnergyBallTriple(); // 3갈래 사격
-                }
-                else
-                {
-                    _lastAttackVariant = 2;
-                    _animCtrl?.PlayAttack2();
-                    FireEnergyBallSingle(); // 단발 사격
-                }
+                PlayMuzzleFx();
             }
-            else
-            {
-                _lastAttackVariant = 2;
-                _animCtrl?.PlayAttackDefault();
-                FireEnergyBallSingle();
-            }
+            
+            FireEnergyBallTriple();
         }
     }
 
@@ -423,10 +399,9 @@ public class EnemyAI : MonoBehaviour
     private void FireEnergyBallTriple()
     {
         if (_player == null) return;
-        if (_energyBallPrefab == null) return;
-        if (_tripleSpawnerL == null || _tripleSpawnerC == null || _tripleSpawnerR == null) return;
+        if (_energyBallPrefab == null || _bulletSpawner == null) return;
 
-        Vector3 baseDir = _player.position - _tripleSpawnerC.position;
+        Vector3 baseDir = _player.position - _bulletSpawner.position;
         baseDir.y = 0f;
         if (baseDir.sqrMagnitude < 0.0001f) baseDir = transform.forward;
         baseDir.Normalize();
@@ -435,9 +410,9 @@ public class EnemyAI : MonoBehaviour
         Vector3 leftDir = Quaternion.Euler(0f, -spread, 0f) * baseDir;
         Vector3 rightDir = Quaternion.Euler(0f, spread, 0f) * baseDir;
 
-        SpawnEnergyBall(_tripleSpawnerL, leftDir);
-        SpawnEnergyBall(_tripleSpawnerC, baseDir);
-        SpawnEnergyBall(_tripleSpawnerR, rightDir);
+        SpawnEnergyBall(_bulletSpawner, leftDir);
+        SpawnEnergyBall(_bulletSpawner, baseDir);
+        SpawnEnergyBall(_bulletSpawner, rightDir);
     }
 
     // 투사체 발사 (ObjectPooling)
@@ -453,5 +428,14 @@ public class EnemyAI : MonoBehaviour
         var proj = obj.GetComponent<EnergyBall>();
         if (proj != null)
             proj.Init(_energyBallPrefab, transform, dir, _projectileSpeed, _projectileDamage, _projectileLifeTime);
+    }
+
+    private void PlayMuzzleFx()
+    {
+        var fx = _muzzleFxInstance != null ? _muzzleFxInstance : null;
+        if (fx == null) return;
+
+        fx.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        fx.Play(true);
     }
 }

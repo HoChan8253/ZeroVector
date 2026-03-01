@@ -37,6 +37,4 @@ public class EnemyData : ScriptableObject
     [Header("Stun")]
     public bool canStun = true;
     public float stunTime = 1.0f;
-
-    public bool useTwoAttackTriggers = true;
 }
