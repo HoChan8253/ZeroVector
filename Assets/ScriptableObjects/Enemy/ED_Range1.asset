@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: ED_Range1
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   maxHp: 180
+  patrolSpeed: 3
+  chaseSpeed: 6
+  angularSpeed: 360
+  acceleration: 8
   aggroRange: 12
   deaggroRange: 20
   damageAggroHoldTime: 2

@@ -238,6 +238,8 @@ public class EnemyAI : MonoBehaviour
 
         _agent.isStopped = false;
 
+        if (_data != null) ApplyMoveSettings(_data.patrolSpeed);
+
         if (TryGetRandomPoint(transform.position, _patrolRadius, out var p))
             _agent.SetDestination(p);
         else
@@ -248,6 +250,8 @@ public class EnemyAI : MonoBehaviour
     {
         _state = State.Chase;
         _agent.isStopped = false;
+
+        if (_data != null) ApplyMoveSettings(_data.chaseSpeed);
     }
 
     private void EnterAttack()
@@ -443,5 +447,18 @@ public class EnemyAI : MonoBehaviour
 
         fx.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         fx.Play(true);
+    }
+
+    private void ApplyMoveSettings(float speed)
+    {
+        if (_agent == null) return;
+
+        _agent.speed = speed;
+
+        if (_data != null)
+        {
+            _agent.angularSpeed = _data.angularSpeed;
+            _agent.acceleration = _data.acceleration;
+        }
     }
 }

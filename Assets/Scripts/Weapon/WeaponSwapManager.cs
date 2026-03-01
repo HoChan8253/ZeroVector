@@ -31,7 +31,12 @@ public class WeaponSwapManager : MonoBehaviour
         if (_input == null)
             _input = GetComponentInParent<PlayerInputHub>();
 
-        if (_weapon2 != null)
+        if (_weapon3 != null)
+        {
+            ActivateOnly(_weapon3);
+            SetCurrent(_weapon3);
+        }
+        else if (_weapon2 != null)
         {
             ActivateOnly(_weapon2);
             SetCurrent(_weapon2);

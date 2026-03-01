@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: ED_Melee1
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   maxHp: 200
+  patrolSpeed: 2
+  chaseSpeed: 5.5
+  angularSpeed: 360
+  acceleration: 8
   aggroRange: 12
   deaggroRange: 18
   damageAggroHoldTime: 2
@@ -27,4 +31,3 @@ MonoBehaviour:
   patrolRadius: 6
   canStun: 1
   stunTime: 1
-  useTwoAttackTriggers: 1

@@ -12,6 +12,12 @@ public class EnemyData : ScriptableObject
     [Header("Core")]
     public int maxHp = 100;
 
+    [Header("Movement")]
+    public float patrolSpeed = 1.6f;
+    public float chaseSpeed = 3.5f;
+    public float angularSpeed = 360f;
+    public float acceleration = 8f;
+
     [Header("Aggro Ranges")]
     public float aggroRange = 12f;
     public float deaggroRange = 18f;
