@@ -20,7 +20,6 @@ public class EnemyAI : MonoBehaviour
 
     [Header("AoE Prefabs")]
     [SerializeField] private AoEIndicator _aoeIndicatorPrefab;
-    [SerializeField] private AoEZone _aoeZonePrefab;
     [SerializeField] private StraightFxProjectile _aoeLaunchFxPrefab;
     [SerializeField] private DropProjectile _aoeDropPrefab;
 
@@ -456,12 +455,9 @@ public class EnemyAI : MonoBehaviour
 
     private void ThrowAoeTwoPhase()
     {
-        Debug.Log($"AOE start player={_player != null} spawner={_bulletSpawner != null} ind={_aoeIndicatorPrefab != null} zone={_aoeZonePrefab != null} drop={_aoeDropPrefab != null} launchFx={_aoeLaunchFxPrefab != null}");
-
         if (_player == null) return;
         if (_bulletSpawner == null) return;
         if (_aoeIndicatorPrefab == null) return;
-        if (_aoeZonePrefab == null) return;
         if (_aoeDropPrefab == null) return;
 
         StartCoroutine(CoAoeTwoPhase());
@@ -507,7 +503,6 @@ public class EnemyAI : MonoBehaviour
             if (indicator != null) Destroy(indicator.gameObject);
 
             DealImpactDamage(target);
-            SpawnAoeZone(target);
         });
     }
 
@@ -525,17 +520,6 @@ public class EnemyAI : MonoBehaviour
             if (d != null)
                 d.TakeDamage(dmg);
         }
-    }
-
-    private void SpawnAoeZone(Vector3 pos)
-    {
-        float radius = _data != null ? _data.aoeRadius : 2.5f;
-        float life = _data != null ? _data.aoeLifeTime : 3f;
-        float tick = _data != null ? _data.aoeTickInterval : 0.5f;
-        int tickDmg = _data != null ? _data.aoeTickDamage : 5;
-
-        var zone = Instantiate(_aoeZonePrefab, pos, Quaternion.identity);
-        zone.Init(radius, tickDmg, tick, life);
     }
 
     private void PlayMuzzleFx()

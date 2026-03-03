@@ -43,9 +43,6 @@ public class EnemyData : ScriptableObject
 
     [Header("AoE Zone")]
     public float aoeRadius = 2.5f; // 장판 반경
-    public float aoeLifeTime = 3.0f;
-    public float aoeTickInterval = 0.5f;
-    public int aoeTickDamage = 5;
 
     [Header("AoE Impact")]
     public int aoeImpactDamage = 15; // 착탄 피해

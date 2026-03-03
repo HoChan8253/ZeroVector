@@ -10,7 +10,7 @@ public class AoEIndicator : MonoBehaviour
         if (_visual == null) _visual = transform;
 
         float d = radius * 2f;
-        _visual.localScale = new Vector3(d, 1f, d);
+        _visual.localScale = new Vector3(d, d, 1f);
     }
 
     public void SetPosition(Vector3 groundPoint)
