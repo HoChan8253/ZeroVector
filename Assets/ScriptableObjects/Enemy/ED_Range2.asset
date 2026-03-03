@@ -10,22 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 89a754f6ca96bd24a89f2999bc053ef6, type: 3}
-  m_Name: ED_Melee1
+  m_Name: ED_Range2
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  maxHp: 260
-  patrolSpeed: 3
-  chaseSpeed: 5.5
-  angularSpeed: 360
-  acceleration: 8
-  aggroRange: 12
-  deaggroRange: 18
-  damageAggroHoldTime: 2
-  attackType: 0
-  attackRange: 2
-  attackCooldown: 1.2
-  projectileSpeed: 15
-  projectileLifeTime: 3
-  projectileDamage: 10
+  maxHp: 180
+  patrolSpeed: 1.6
+  chaseSpeed: 2.2
+  angularSpeed: 240
+  acceleration: 6
+  aggroRange: 26
+  deaggroRange: 28
+  damageAggroHoldTime: 1
+  attackType: 2
+  attackRange: 22
+  attackCooldown: 5
+  projectileSpeed: 0
+  projectileLifeTime: 0
+  projectileDamage: 0
+  aoeWarnTime: 1.5
+  aoeDropHeight: 12
+  aoeDropTime: 0.55
+  aoeRadius: 3
+  aoeLifeTime: 3.5
+  aoeTickInterval: 0.5
+  aoeTickDamage: 6
+  aoeImpactDamage: 18
   dayIdleTime: 2
   dayWalkTime: 3
   patrolRadius: 6

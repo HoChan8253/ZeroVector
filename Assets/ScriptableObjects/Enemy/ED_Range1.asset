@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a754f6ca96bd24a89f2999bc053ef6, type: 3}
   m_Name: ED_Range1
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  maxHp: 180
-  patrolSpeed: 3
+  maxHp: 200
+  patrolSpeed: 3.5
   chaseSpeed: 6
   angularSpeed: 360
   acceleration: 8

@@ -954,7 +954,7 @@ GameObject:
   - component: {fileID: 7542423310402389041}
   - component: {fileID: 775876018345267050}
   - component: {fileID: 3999942781644579977}
-  - component: {fileID: 4901081210333227281}
+  - component: {fileID: 6114539114375309480}
   m_Layer: 0
   m_Name: Range1
   m_TagString: Untagged
@@ -1040,8 +1040,14 @@ MonoBehaviour:
   _animCtrl: {fileID: 3999942781644579977}
   _agent: {fileID: 7542423310402389041}
   _data: {fileID: 11400000, guid: 0d3bd1e886875d0498c2e350bd251dbd, type: 2}
-  _energyBallPrefab: {fileID: 687852883692985861, guid: 5c09f4222494b8b4da5d69f6a7ee6a8a, type: 3}
   _bulletSpawner: {fileID: 4399156766920098865}
+  _aoeIndicatorPrefab: {fileID: 0}
+  _aoeZonePrefab: {fileID: 0}
+  _aoeLaunchFxPrefab: {fileID: 0}
+  _aoeDropPrefab: {fileID: 0}
+  _groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
   _muzzleFxPrefab: {fileID: 4146887271406582440, guid: b8d3b28da51b23248b4b5d5afb4d2c75, type: 3}
 --- !u!195 &7542423310402389041
 NavMeshAgent:
@@ -1079,7 +1085,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   _resetHpOnEnable: 1
   _stunnable: 1
-  _hitFxPrefab: {fileID: 1322362907905973061, guid: 0ce6da5f5fe638a4a8f5d8cb1dcd4ac9, type: 3}
 --- !u!114 &3999942781644579977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1093,7 +1098,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAnimation
   _anim: {fileID: 389222693357070590}
---- !u!114 &4901081210333227281
+--- !u!114 &6114539114375309480
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1102,15 +1107,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6465718177912725889}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec567b48330c62240be243228eccde63, type: 3}
+  m_Script: {fileID: 11500000, guid: 1b38136539f7db44882d4e49bea151c3, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyTurretAim
+  m_EditorClassIdentifier: Assembly-CSharp::TurretAimAtTarget
   _ai: {fileID: 2618707189916012156}
   _turret: {fileID: 6596813513689686513}
-  _turnSpeed: 12
-  _onlyWhileAttacking: 1
-  _minPitch: -45
-  _maxPitch: 90
+  _turnSpeed: 360
 --- !u!1 &6896513012458087264
 GameObject:
   m_ObjectHideFlags: 0

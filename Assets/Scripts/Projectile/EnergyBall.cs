@@ -1,10 +1,5 @@
 ﻿using UnityEngine;
 
-public interface IDamageable
-{
-    void TakeDamage(int amount);
-}
-
 public class EnergyBall : MonoBehaviour
 {
     [SerializeField] private Rigidbody _rb;

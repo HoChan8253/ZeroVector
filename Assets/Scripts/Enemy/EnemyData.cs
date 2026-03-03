@@ -3,7 +3,8 @@
 public enum EnemyAttackType
 {
     Melee,
-    Ranged
+    Ranged,
+    RangedAoe
 }
 
 [CreateAssetMenu(menuName = "FPS/Enemy Data", fileName = "ED_NewEnemy")]
@@ -34,6 +35,20 @@ public class EnemyData : ScriptableObject
     public float projectileSpeed = 15f;
     public float projectileLifeTime = 3.0f;
     public int projectileDamage = 10;
+
+    [Header("AoE Timing")]
+    public float aoeWarnTime = 1.2f; // 범위 표시 시간
+    public float aoeDropHeight = 10f; // 낙하 시작 높이
+    public float aoeDropTime = 0.35f; // 떨어지는 시간
+
+    [Header("AoE Zone")]
+    public float aoeRadius = 2.5f; // 장판 반경
+    public float aoeLifeTime = 3.0f;
+    public float aoeTickInterval = 0.5f;
+    public int aoeTickDamage = 5;
+
+    [Header("AoE Impact")]
+    public int aoeImpactDamage = 15; // 착탄 피해
 
     [Header("Day Loop")]
     public float dayIdleTime = 2.0f;
