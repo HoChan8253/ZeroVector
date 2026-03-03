@@ -26,9 +26,9 @@ MonoBehaviour:
   projectileSpeed: 0
   projectileLifeTime: 0
   projectileDamage: 0
-  aoeWarnTime: 1.5
-  aoeDropHeight: 12
-  aoeDropTime: 0.55
+  aoeWarnTime: 2
+  aoeDropHeight: 15
+  aoeDropTime: 2
   aoeRadius: 3
   aoeLifeTime: 3.5
   aoeTickInterval: 0.5

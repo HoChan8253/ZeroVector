@@ -456,6 +456,8 @@ public class EnemyAI : MonoBehaviour
 
     private void ThrowAoeTwoPhase()
     {
+        Debug.Log($"AOE start player={_player != null} spawner={_bulletSpawner != null} ind={_aoeIndicatorPrefab != null} zone={_aoeZonePrefab != null} drop={_aoeDropPrefab != null} launchFx={_aoeLaunchFxPrefab != null}");
+
         if (_player == null) return;
         if (_bulletSpawner == null) return;
         if (_aoeIndicatorPrefab == null) return;
@@ -467,43 +469,41 @@ public class EnemyAI : MonoBehaviour
 
     private IEnumerator CoAoeTwoPhase()
     {
-        // 1) 타겟 확정(현재 플레이어 위치를 지면으로 스냅)
+        // 타겟 확정
         Vector3 target = _player.position + Vector3.up * 10f;
         if (Physics.Raycast(target, Vector3.down, out var hit, 50f, _groundMask))
             target = hit.point;
         else
             target = _player.position;
 
-        // 2) 상향 발사 연출
+        // 상향 발사 연출
         if (_aoeLaunchFxPrefab != null)
         {
-            float pitch = Random.Range(45f, 60f);
-            Quaternion q = Quaternion.Euler(-pitch, transform.eulerAngles.y, 0f);
-            Vector3 dir = q * Vector3.forward;
+            Vector3 dir = Vector3.up;
 
             var fx = Instantiate(_aoeLaunchFxPrefab, _bulletSpawner.position, Quaternion.LookRotation(dir));
-            fx.Init(dir, 25f, 0.5f);
+            fx.Init(dir, 15f, 2f);
         }
 
-        // 3) 경고 링 표시
+        // 경고 링 표시
         var indicator = Instantiate(_aoeIndicatorPrefab);
         indicator.SetRadius(_data != null ? _data.aoeRadius : 2.5f);
         indicator.SetPosition(target);
         indicator.gameObject.SetActive(true);
 
-        float warn = _data != null ? _data.aoeWarnTime : 1.2f;
+        float warn = _data != null ? _data.aoeWarnTime : 3f;
         yield return new WaitForSeconds(warn);
 
-        // 4) 낙하 투사체 생성
-        float height = _data != null ? _data.aoeDropHeight : 10f;
-        float dropTime = _data != null ? _data.aoeDropTime : 0.35f;
+        // 낙하 투사체 생성
+        float height = _data != null ? _data.aoeDropHeight : 15f;
+        float dropTime = _data != null ? _data.aoeDropTime : 2f;
 
         Vector3 start = target + Vector3.up * height;
 
         var drop = Instantiate(_aoeDropPrefab, start, Quaternion.identity);
         drop.Init(start, target, dropTime, () =>
         {
-            // 5) 착탄 순간: 링 끄고, 폭발(1회) + 장판 생성
+            // 착탄 순간 링 끄고, 폭발
             if (indicator != null) Destroy(indicator.gameObject);
 
             DealImpactDamage(target);
