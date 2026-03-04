@@ -395,6 +395,66 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6596813513689686513}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3989660397622520802
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8195133869576394577}
+  - component: {fileID: 7580056914673584037}
+  m_Layer: 0
+  m_Name: Shadow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8195133869576394577
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3989660397622520802}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0.1, z: -0.31}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7433270362865927013}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!114 &7580056914673584037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3989660397622520802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0777d029ed3dffa4692f417d4aba19ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.DecalProjector
+  m_Material: {fileID: 2100000, guid: b83b9343b026f16428bfd69344c0b82c, type: 2}
+  m_DrawDistance: 1000
+  m_FadeScale: 0.9
+  m_StartAngleFade: 180
+  m_EndAngleFade: 180
+  m_UVScale: {x: 1, y: 1}
+  m_UVBias: {x: 0, y: 0}
+  m_RenderingLayerMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ScaleMode: 0
+  m_Offset: {x: 0, y: 0, z: 1.5}
+  m_Size: {x: 1.5, y: 1.5, z: 3}
+  m_FadeFactor: 1
+  version: 1
+  m_DecalLayerMask: 1
 --- !u!1 &4000880522322642537
 GameObject:
   m_ObjectHideFlags: 0
@@ -970,13 +1030,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6465718177912725889}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 33.39, y: 0.585, z: -31.49}
   m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7364612420711886412}
   - {fileID: 1281833357670102216}
+  - {fileID: 8195133869576394577}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &389222693357070590
@@ -1020,10 +1081,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2.4462082
+  m_Radius: 2.8108764
   m_Height: 8.535314
   m_Direction: 1
-  m_Center: {x: 0, y: 3.7676563, z: -0.3889215}
+  m_Center: {x: 0, y: 3.7676563, z: -0.75358945}
 --- !u!114 &2618707189916012156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1042,13 +1103,14 @@ MonoBehaviour:
   _data: {fileID: 11400000, guid: 0d3bd1e886875d0498c2e350bd251dbd, type: 2}
   _bulletSpawner: {fileID: 4399156766920098865}
   _aoeIndicatorPrefab: {fileID: 0}
-  _aoeZonePrefab: {fileID: 0}
   _aoeLaunchFxPrefab: {fileID: 0}
   _aoeDropPrefab: {fileID: 0}
   _groundMask:
     serializedVersion: 2
     m_Bits: 4294967295
   _muzzleFxPrefab: {fileID: 4146887271406582440, guid: b8d3b28da51b23248b4b5d5afb4d2c75, type: 3}
+  _impactFxPrefab: {fileID: 0}
+  _impactFxLife: 2
 --- !u!195 &7542423310402389041
 NavMeshAgent:
   m_ObjectHideFlags: 0

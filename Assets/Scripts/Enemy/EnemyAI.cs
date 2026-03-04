@@ -28,6 +28,8 @@ public class EnemyAI : MonoBehaviour
     [Header("VFX")]
     [SerializeField] private ParticleSystem _muzzleFxPrefab;
     private ParticleSystem _muzzleFxInstance;
+    [SerializeField] private GameObject _impactFxPrefab;
+    [SerializeField] private float _impactFxLife = 2.0f;
 
     public bool IsMoving =>
     _state == State.Chase || _state == State.DayPatrol;
@@ -502,6 +504,7 @@ public class EnemyAI : MonoBehaviour
             // 착탄 순간 링 끄고, 폭발
             if (indicator != null) Destroy(indicator.gameObject);
 
+            SpawnImpactFx(target);
             DealImpactDamage(target);
         });
     }
@@ -520,6 +523,14 @@ public class EnemyAI : MonoBehaviour
             if (d != null)
                 d.TakeDamage(dmg);
         }
+    }
+
+    private void SpawnImpactFx(Vector3 pos)
+    {
+        if (_impactFxPrefab == null) return;
+
+        var fx = Instantiate(_impactFxPrefab, pos, Quaternion.identity);
+        Destroy(fx, _impactFxLife);
     }
 
     private void PlayMuzzleFx()
