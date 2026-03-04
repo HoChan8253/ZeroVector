@@ -1537,6 +1537,9 @@ MonoBehaviour:
   _bulletHolePrefab: {fileID: 5272525433949522875, guid: 34930651e7b03544dbd075fef842577a, type: 3}
   _maxBulletHoles: 50
   _pumpLocked: 0
+  _hitMask:
+    serializedVersion: 2
+    m_Bits: 193
   _state:
     ammoInMag: 0
     reserveAmmo: 0
@@ -1581,7 +1584,7 @@ GameObject:
   - component: {fileID: 267050115}
   - component: {fileID: 267050114}
   - component: {fileID: 267050113}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1940,6 +1943,9 @@ MonoBehaviour:
   _bulletHolePrefab: {fileID: 5272525433949522875, guid: 34930651e7b03544dbd075fef842577a, type: 3}
   _maxBulletHoles: 50
   _pumpLocked: 0
+  _hitMask:
+    serializedVersion: 2
+    m_Bits: 193
   _state:
     ammoInMag: 0
     reserveAmmo: 0
@@ -2133,8 +2139,8 @@ GameObject:
   - component: {fileID: 489547950}
   - component: {fileID: 489547949}
   - component: {fileID: 489547948}
-  m_Layer: 0
-  m_Name: Cube (1)
+  m_Layer: 7
+  m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3720,7 +3726,7 @@ Transform:
   m_GameObject: {fileID: 667159466}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.03, y: 1.245, z: 0}
+  m_LocalPosition: {x: -0.03, y: 1.245, z: 0.357}
   m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3752,7 +3758,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 1.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &667159475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3797,6 +3803,13 @@ MonoBehaviour:
   _moveSpeed: 5
   _sprintMultiplier: 1.6
   _gravity: -20
+  _wallMask:
+    serializedVersion: 2
+    m_Bits: 128
+  _checkRadius: 0.35
+  _checkDistance: 1.5
+  _checkHeight: 0.3
+  _intoWallDotThreshold: 0.05
 --- !u!1 &691912756
 GameObject:
   m_ObjectHideFlags: 0
@@ -3961,7 +3974,7 @@ Transform:
   m_GameObject: {fileID: 737592882}
   serializedVersion: 2
   m_LocalRotation: {x: -2.842171e-14, y: -0.00000014901161, z: 0.00000016892932, w: 1}
-  m_LocalPosition: {x: 0.049999993, y: 0.73333335, z: 0.5949999}
+  m_LocalPosition: {x: 0.049999993, y: 0.73333335, z: 0}
   m_LocalScale: {x: 25, y: 25, z: 25}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4184,7 +4197,7 @@ GameObject:
   - component: {fileID: 1057717837}
   - component: {fileID: 1057717836}
   - component: {fileID: 1057717835}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wall (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4296,7 +4309,7 @@ GameObject:
   - component: {fileID: 1114621269}
   - component: {fileID: 1114621268}
   - component: {fileID: 1114621267}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5268,7 +5281,7 @@ GameObject:
   - component: {fileID: 1845048943}
   - component: {fileID: 1845048942}
   - component: {fileID: 1845048941}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wall (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5839,6 +5852,9 @@ MonoBehaviour:
   _bulletHolePrefab: {fileID: 5272525433949522875, guid: 34930651e7b03544dbd075fef842577a, type: 3}
   _maxBulletHoles: 50
   _pumpLocked: 0
+  _hitMask:
+    serializedVersion: 2
+    m_Bits: 193
   _state:
     ammoInMag: 0
     reserveAmmo: 0
