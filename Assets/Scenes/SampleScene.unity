@@ -6009,10 +6009,6 @@ PrefabInstance:
       propertyPath: _player
       value: 
       objectReference: {fileID: 667159471}
-    - target: {fileID: 4970194096631607612, guid: 4a4e7fe4e1f91064885a752ca4e81348, type: 3}
-      propertyPath: _pitchUp
-      value: 93
-      objectReference: {fileID: 0}
     - target: {fileID: 5249679907754556779, guid: 4a4e7fe4e1f91064885a752ca4e81348, type: 3}
       propertyPath: m_Name
       value: Range2

@@ -367,7 +367,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TurretPitchOnlyOnAttack
   _ai: {fileID: 1353826008612785516}
   _turret: {fileID: 1072065310446194560}
-  _pitchUp: 45
+  _pitchUp: 93
   _turnSpeed: 360
 --- !u!1 &5425574627814216894
 GameObject:

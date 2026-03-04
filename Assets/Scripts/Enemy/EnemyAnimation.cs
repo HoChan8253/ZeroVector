@@ -39,4 +39,11 @@ public class EnemyAnimation : MonoBehaviour
         if (_anim == null) return;
         _anim.SetBool(Dead, value);
     }
+
+    // 디버깅
+    public bool TryGetAnimator(out Animator a)
+    {
+        a = _anim;
+        return a != null;
+    }
 }

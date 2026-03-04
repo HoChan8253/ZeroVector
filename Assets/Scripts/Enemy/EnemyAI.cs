@@ -349,6 +349,8 @@ public class EnemyAI : MonoBehaviour
 
         _state = State.Dead;
 
+        Debug.Log($"[Die] animCtrl={(_animCtrl ? _animCtrl.name : "NULL")} / animator={(_animCtrl && _animCtrl.TryGetAnimator(out var a) ? a.runtimeAnimatorController.name : "NULL")}", this);
+
         _agent.isStopped = true;
         _agent.ResetPath();
 
@@ -373,11 +375,15 @@ public class EnemyAI : MonoBehaviour
         float fadeTime = 1.5f;
         float t = 0f;
 
-        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+        Renderer[] renderers = GetComponentsInChildren<Renderer>(true);
 
+        // 각 Renderer의 모든 material을 복제
         foreach (var r in renderers)
         {
-            r.material = new Material(r.material);
+            var mats = r.materials; // 여기서 인스턴스 생성
+            for (int i = 0; i < mats.Length; i++)
+                mats[i] = new Material(mats[i]);
+            r.materials = mats;
         }
 
         while (t < fadeTime)
@@ -387,11 +393,24 @@ public class EnemyAI : MonoBehaviour
 
             foreach (var r in renderers)
             {
-                if (r.material.HasProperty("_Color"))
+                var mats = r.materials;
+                for (int i = 0; i < mats.Length; i++)
                 {
-                    Color c = r.material.color;
-                    c.a = alpha;
-                    r.material.color = c;
+                    var m = mats[i];
+
+                    if (m.HasProperty("_BaseColor"))
+                    {
+                        Color c = m.GetColor("_BaseColor");
+                        c.a = alpha;
+                        m.SetColor("_BaseColor", c);
+                    }
+
+                    if (m.HasProperty("_Color"))
+                    {
+                        Color c = m.GetColor("_Color");
+                        c.a = alpha;
+                        m.SetColor("_Color", c);
+                    }
                 }
             }
             yield return null;
