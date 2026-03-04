@@ -339,7 +339,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   _resetHpOnEnable: 1
-  _stunnable: 1
+  _stunnable: 0
 --- !u!114 &6193538080681886660
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -407,7 +407,7 @@ public class EnemyAI : MonoBehaviour
         if (ObjectPoolManager.Instance == null) return;
 
         Vector3 dir = _player.position - _bulletSpawner.position;
-        dir.y = 0f;
+
         if (dir.sqrMagnitude < 0.0001f) dir = transform.forward;
         dir.Normalize();
 
@@ -422,7 +422,7 @@ public class EnemyAI : MonoBehaviour
         if (ObjectPoolManager.Instance == null) return;
 
         Vector3 baseDir = _player.position - _bulletSpawner.position;
-        baseDir.y = 0f;
+
         if (baseDir.sqrMagnitude < 0.0001f) baseDir = transform.forward;
         baseDir.Normalize();
 
@@ -438,17 +438,14 @@ public class EnemyAI : MonoBehaviour
     // 투사체 발사 (ObjectPooling)
     private void SpawnEnergyBall(Transform spawner, Vector3 dir)
     {
-        Quaternion rot = Quaternion.LookRotation(dir);
+        Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
 
         GameObject obj =
             (ObjectPoolManager.Instance != null)
             ? ObjectPoolManager.Instance.Spawn(PoolKey.EnergyBall, spawner.position, rot)
             : null;
 
-        if (obj == null)
-        {
-            return;
-        }
+        if (obj == null) return;
 
         var proj = obj.GetComponent<EnergyBall>();
         if (proj != null)

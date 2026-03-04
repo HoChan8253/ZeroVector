@@ -17,7 +17,11 @@ public class EnergyBall : MonoBehaviour
 
     private void OnEnable()
     {
-        if (_rb != null) _rb.linearVelocity = Vector3.zero;
+        if (_rb != null)
+        {
+            _rb.linearVelocity = Vector3.zero;
+            _rb.angularVelocity = Vector3.zero;
+        }
     }
 
     public void Init(PoolKey poolKey, Transform owner, Vector3 dir, float speed, int damage, float lifeTime)
@@ -28,7 +32,6 @@ public class EnergyBall : MonoBehaviour
 
         _despawnTime = Time.time + lifeTime;
 
-        dir.y = 0f;
         if (dir.sqrMagnitude < 0.0001f) dir = transform.forward;
         dir.Normalize();
 

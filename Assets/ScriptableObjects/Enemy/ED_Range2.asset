@@ -19,7 +19,7 @@ MonoBehaviour:
   acceleration: 6
   aggroRange: 26
   deaggroRange: 28
-  damageAggroHoldTime: 1
+  damageAggroHoldTime: 3
   attackType: 2
   attackRange: 22
   attackCooldown: 5
@@ -30,9 +30,6 @@ MonoBehaviour:
   aoeDropHeight: 15
   aoeDropTime: 2
   aoeRadius: 3
-  aoeLifeTime: 3.5
-  aoeTickInterval: 0.5
-  aoeTickDamage: 6
   aoeImpactDamage: 18
   dayIdleTime: 2
   dayWalkTime: 3

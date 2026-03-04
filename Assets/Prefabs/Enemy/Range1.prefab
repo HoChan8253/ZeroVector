@@ -1032,7 +1032,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 33.39, y: 0.585, z: -31.49}
-  m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
+  m_LocalScale: {x: 0.16, y: 0.16, z: 0.16}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7364612420711886412}
@@ -1146,7 +1146,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   _resetHpOnEnable: 1
-  _stunnable: 1
+  _stunnable: 0
 --- !u!114 &3999942781644579977
 MonoBehaviour:
   m_ObjectHideFlags: 0
