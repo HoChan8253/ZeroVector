@@ -238,9 +238,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStatsUI
   _stats: {fileID: 667159478}
-  _hp: {fileID: 1260339116}
   _shield: {fileID: 1879977218}
   _stamina: {fileID: 1598972844}
+  _hpAnim: {fileID: 1260339117}
   _staminaFill: {fileID: 859027607}
   _staminaBlinkSpeed: 10
   _staminaMinBrightness: 0.3
@@ -2200,13 +2200,14 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1619147037}
+  - {fileID: 1969357153}
   - {fileID: 2078904733}
   m_Father: {fileID: 1260339115}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.292099, y: -0.29219818}
-  m_SizeDelta: {x: -14.6046, y: -6.8924}
+  m_AnchoredPosition: {x: -0.7010956, y: -0.29219818}
+  m_SizeDelta: {x: -13.7865, y: -6.8924}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &331314946
 MonoBehaviour:
@@ -5226,6 +5227,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1260339115}
   - component: {fileID: 1260339116}
+  - component: {fileID: 1260339117}
   m_Layer: 5
   m_Name: HP_Bar
   m_TagString: Untagged
@@ -5305,6 +5307,24 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1260339117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1260339114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f2f9ea10d5eb6043ba6aa3b9fb0a304, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HPBarAnim
+  _front: {fileID: 2078904733}
+  _back: {fileID: 1969357153}
+  _mask: {fileID: 331314945}
+  _backDelay: 0.12
+  _backDuration: 0.45
+  _ease: 6
 --- !u!1 &1305963488
 GameObject:
   m_ObjectHideFlags: 0
@@ -6610,6 +6630,81 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 047e698bff7546048a6570ef171c1ab9, type: 3}
+--- !u!1 &1969357152
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1969357153}
+  - component: {fileID: 1969357155}
+  - component: {fileID: 1969357154}
+  m_Layer: 5
+  m_Name: BackFill
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1969357153
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1969357152}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 331314945}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -0.000015258789, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1969357154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1969357152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.77254903, g: 0.40040332, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: d4ac900b8c4494f8888dec49fd0071b4, type: 3}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1969357155
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1969357152}
+  m_CullTransparentMesh: 1
 --- !u!1 &2020379450
 GameObject:
   m_ObjectHideFlags: 0
@@ -6985,7 +7080,7 @@ GameObject:
   - component: {fileID: 2078904735}
   - component: {fileID: 2078904734}
   m_Layer: 5
-  m_Name: Fill
+  m_Name: FrontFill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

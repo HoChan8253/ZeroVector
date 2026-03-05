@@ -8,9 +8,11 @@ public class PlayerStatsUI : MonoBehaviour
     [SerializeField] private PlayerStats _stats;
 
     [Header("Sliders")]
-    [SerializeField] private Slider _hp;
     [SerializeField] private Slider _shield;
     [SerializeField] private Slider _stamina;
+
+    [Header("HP Animation")]
+    [SerializeField] private HPBarAnim _hpAnim;
 
     [Header("Stamina Blink (Exhausted)")]
     [SerializeField] private Image _staminaFill;
@@ -36,7 +38,6 @@ public class PlayerStatsUI : MonoBehaviour
         if (_stats == null)
             _stats = FindFirstObjectByType<PlayerStats>();
 
-        if (_hp != null) _hp.minValue = 0f;
         if (_shield != null) _shield.minValue = 0f;
         if (_stamina != null) _stamina.minValue = 0f;
 
@@ -81,10 +82,10 @@ public class PlayerStatsUI : MonoBehaviour
 
     private void OnHpChanged(float cur, float max)
     {
-        if (_hp != null)
+        if (_hpAnim != null && max > 0f)
         {
-            _hp.maxValue = max;
-            _hp.value = cur;
+            float ratio01 = cur / max;
+            _hpAnim.Set01(ratio01);
         }
 
         UpdateHpBlink(cur, max);
