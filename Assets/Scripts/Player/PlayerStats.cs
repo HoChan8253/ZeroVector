@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class PlayerStats : MonoBehaviour
+public class PlayerStats : MonoBehaviour, IDamageable
 {
     [Header("Health")]
     public float _maxHp = 100f;
@@ -93,6 +93,11 @@ public class PlayerStats : MonoBehaviour
 
         if (!Mathf.Approximately(prev, Stamina))
             OnStaminaChanged?.Invoke(Stamina, _maxStamina);
+    }
+
+    public void TakeDamage(int amount)
+    {
+        TakeDamage((float)amount);
     }
 
     public void TakeDamage(float damage)
