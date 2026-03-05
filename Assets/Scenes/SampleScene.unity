@@ -1817,6 +1817,7 @@ MonoBehaviour:
   _hitSparkPrefab: {fileID: 3019489105843672021, guid: 14524e3852390084ab1ca1c37fe13031, type: 3}
   _bulletHolePrefab: {fileID: 5272525433949522875, guid: 34930651e7b03544dbd075fef842577a, type: 3}
   _maxBulletHoles: 50
+  _stats: {fileID: 667159478}
   _pumpLocked: 0
   _state:
     ammoInMag: 0
@@ -2399,6 +2400,7 @@ MonoBehaviour:
   _hitSparkPrefab: {fileID: 3019489105843672021, guid: 14524e3852390084ab1ca1c37fe13031, type: 3}
   _bulletHolePrefab: {fileID: 5272525433949522875, guid: 34930651e7b03544dbd075fef842577a, type: 3}
   _maxBulletHoles: 50
+  _stats: {fileID: 667159478}
   _pumpLocked: 0
   _state:
     ammoInMag: 0
@@ -7096,6 +7098,7 @@ MonoBehaviour:
   _hitSparkPrefab: {fileID: 3019489105843672021, guid: 14524e3852390084ab1ca1c37fe13031, type: 3}
   _bulletHolePrefab: {fileID: 5272525433949522875, guid: 34930651e7b03544dbd075fef842577a, type: 3}
   _maxBulletHoles: 50
+  _stats: {fileID: 667159478}
   _pumpLocked: 0
   _state:
     ammoInMag: 0

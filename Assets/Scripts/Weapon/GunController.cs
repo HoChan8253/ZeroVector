@@ -22,6 +22,8 @@ public class GunController : MonoBehaviour
     [SerializeField] private GameObject _bulletHolePrefab;
     [SerializeField] private int _maxBulletHoles = 50;
 
+    [SerializeField] private PlayerStats _stats;
+
     private readonly Queue<GameObject> _bulletHoles = new Queue<GameObject>();
 
     private Coroutine _muzzleLightCo;
@@ -83,6 +85,9 @@ public class GunController : MonoBehaviour
 
         if (_muzzleLight != null)
             _muzzleLight.enabled = false;
+
+        if (_stats == null)
+            _stats = GetComponentInParent<PlayerStats>();
 
         // 최초 장착
         if (_data != null)
@@ -321,6 +326,9 @@ public class GunController : MonoBehaviour
         _state.isReloading = true;
         _state.nextFireTime = Time.time;
 
+        if (_stats != null)
+            _stats.SetReloading(true);
+
         _anim.SetBool(AnimIsReloading, true);
 
         if (_data.reloadType == ReloadType.Magazine)
@@ -350,6 +358,9 @@ public class GunController : MonoBehaviour
     {
         _state.isReloading = false;
         _anim.SetBool(AnimIsReloading, false);
+
+        if (_stats != null)
+            _stats.SetReloading(false);
 
         int need = _magSize - _state.ammoInMag;
         if (need <= 0) return;
@@ -396,6 +407,9 @@ public class GunController : MonoBehaviour
     {
         _state.isReloading = false;
         _anim.SetBool(AnimIsReloading, false);
+
+        if (_stats != null)
+            _stats.SetReloading(false);
     }
 
     private void CancelReload()
@@ -403,6 +417,9 @@ public class GunController : MonoBehaviour
         _state.isReloading = false;
         _state.reloadEndTime = 0f;
         _anim.SetBool(AnimIsReloading, false);
+
+        if (_stats != null)
+            _stats.SetReloading(false);
     }
 
     private void UpdateSpreadRecover()
@@ -413,7 +430,10 @@ public class GunController : MonoBehaviour
     private void UpdateMovementAnim()
     {
         bool isMoving = _input.Move.sqrMagnitude > (_moveThreshold * _moveThreshold);
-        bool isSprinting = _input.SprintHeld && isMoving && !_state.isReloading;
+
+        bool canSprint = (_stats != null) && _stats.CanSprint;
+
+        bool isSprinting = _input.SprintHeld && isMoving && canSprint && !_state.isReloading;
 
         _anim.SetBool(AnimIsMoving, isMoving);
         _anim.SetBool(AnimIsSprinting, isSprinting);

@@ -20,11 +20,13 @@ public class PlayerStats : MonoBehaviour
     public float _staminaRegenPerSec = 10f;     // 초당 회복
     public float _exhaustRecoverThreshold = 40f; // 여기까지 차야 스프린트 재허용
 
+    public bool IsReloading { get; private set; }
+
     public bool IsDead => Hp <= 0f;
 
     // 탈진 상태: 0이 되면 true, threshold까지 회복되면 false
     public bool IsExhausted { get; private set; }
-    public bool CanSprint => !IsDead && !IsExhausted && Stamina > 0.05f;
+    public bool CanSprint => !IsDead && !IsReloading && !IsExhausted && Stamina > 0.05f;
 
     public event Action<float, float> OnHpChanged;
     public event Action<float, float> OnShieldChanged;
@@ -59,6 +61,11 @@ public class PlayerStats : MonoBehaviour
         if (Shield > _maxShield) Shield = _maxShield;
 
         OnShieldChanged?.Invoke(Shield, _maxShield);
+    }
+
+    public void SetReloading(bool isReloading)
+    {
+        IsReloading = isReloading;
     }
 
     public void TickStamina(bool isSprinting)
