@@ -153,6 +153,23 @@ public class EnemyAI : MonoBehaviour
         UpdateAnimatorSpeed();
     }
 
+    private void OnEnable()
+    {
+        if (_player == null)
+            StartCoroutine(CoBindPlayer());
+    }
+
+    private IEnumerator CoBindPlayer()
+    {
+        while (_player == null)
+        {
+            var go = GameObject.FindGameObjectWithTag("Player");
+            if (go != null) _player = go.transform;
+
+            yield return null;
+        }
+    }
+
     private IEnumerator CoRandomStart()
     {
         yield return new WaitForSeconds(Random.Range(0f, 2f));
