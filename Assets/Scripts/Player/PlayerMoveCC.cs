@@ -18,6 +18,7 @@ public class PlayerMoveCC : MonoBehaviour
 
     private CharacterController _cc;
     private PlayerInputHub _input;
+    private PlayerStats _stats;
 
     private float _yVel;
 
@@ -25,6 +26,7 @@ public class PlayerMoveCC : MonoBehaviour
     {
         _cc = GetComponent<CharacterController>();
         _input = GetComponent<PlayerInputHub>();
+        _stats = GetComponent<PlayerStats>();
     }
 
     void Update()
@@ -32,7 +34,13 @@ public class PlayerMoveCC : MonoBehaviour
         Vector2 move = _input.Move;
 
         bool isMoving = move.sqrMagnitude > 0.01f;
-        bool isSprinting = _input.SprintHeld && isMoving;
+
+        bool wantsSprint = _input.SprintHeld && isMoving;
+        bool canSprint = _stats.CanSprint;
+
+        bool isSprinting = wantsSprint && canSprint;
+
+        _stats.TickStamina(isSprinting);
 
         float speed = _moveSpeed * (isSprinting ? _sprintMultiplier : 1f);
 
