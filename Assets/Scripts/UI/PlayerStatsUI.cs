@@ -8,11 +8,11 @@ public class PlayerStatsUI : MonoBehaviour
     [SerializeField] private PlayerStats _stats;
 
     [Header("Sliders")]
-    [SerializeField] private Slider _shield;
     [SerializeField] private Slider _stamina;
 
     [Header("HP Animation")]
-    [SerializeField] private HPBarAnim _hpAnim;
+    [SerializeField] private StatsBarAnim _hpAnim;
+    [SerializeField] private StatsBarAnim _shieldAnim;
 
     [Header("Stamina Blink (Exhausted)")]
     [SerializeField] private Image _staminaFill;
@@ -20,7 +20,7 @@ public class PlayerStatsUI : MonoBehaviour
     [SerializeField] private float _staminaMinBrightness = 0.3f;
     [SerializeField] private float _staminaMaxBrightness = 1.4f;
 
-    [Header("HP Blink (< 20%)")]
+    [Header("HP Blink")]
     [SerializeField] private Image _hpFill;
     [SerializeField] private float _hpBlinkSpeed = 10f;
     [SerializeField] private float _hpLowRatio = 0.2f;
@@ -38,7 +38,6 @@ public class PlayerStatsUI : MonoBehaviour
         if (_stats == null)
             _stats = FindFirstObjectByType<PlayerStats>();
 
-        if (_shield != null) _shield.minValue = 0f;
         if (_stamina != null) _stamina.minValue = 0f;
 
         if (_staminaFill != null)
@@ -93,9 +92,11 @@ public class PlayerStatsUI : MonoBehaviour
 
     private void OnShieldChanged(float cur, float max)
     {
-        if (_shield == null) return;
-        _shield.maxValue = max;
-        _shield.value = cur;
+        if (_shieldAnim != null && max > 0f)
+        {
+            float ratio01 = cur / max;
+            _shieldAnim.Set01(ratio01);
+        }
     }
 
     private void OnStaminaChanged(float cur, float max)

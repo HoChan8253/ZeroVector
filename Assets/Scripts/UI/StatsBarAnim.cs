@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using DG.Tweening;
 
-public class HPBarAnim : MonoBehaviour
+public class StatsBarAnim : MonoBehaviour
 {
-    [Header("Rects (FillMask 아래 자식)")]
+    [Header("Rects")]
     [SerializeField] private RectTransform _front;
     [SerializeField] private RectTransform _back;
 
-    [Header("Mask Rect (FillMask)")]
+    [Header("FillMask")]
     [SerializeField] private RectTransform _mask;
 
     [Header("Tween")]
