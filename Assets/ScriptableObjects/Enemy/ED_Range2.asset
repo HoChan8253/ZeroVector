@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: ED_Range2
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   maxHp: 180
+  dayIdleTime: 2
+  dayWalkTime: 3
+  patrolRadius: 6
   patrolSpeed: 1.6
   chaseSpeed: 2.2
   angularSpeed: 240
@@ -23,16 +26,15 @@ MonoBehaviour:
   attackType: 2
   attackRange: 22
   attackCooldown: 5
+  attackDamage: 35
+  meleeHitRadius: 0
+  meleeHitForward: 0
+  meleeHitHeight: 0
   projectileSpeed: 0
   projectileLifeTime: 0
-  projectileDamage: 0
   aoeWarnTime: 2
   aoeDropHeight: 15
   aoeDropTime: 2
   aoeRadius: 3
-  aoeImpactDamage: 18
-  dayIdleTime: 2
-  dayWalkTime: 3
-  patrolRadius: 6
-  canStun: 1
+  canStun: 0
   stunTime: 1

@@ -25,18 +25,18 @@ public class EnemyAI : MonoBehaviour
 
     [SerializeField] private LayerMask _groundMask = ~0;
 
+    [Header("Melee Hit")]
+    [SerializeField] private LayerMask _playerMask = ~0;
+    private readonly Collider[] _meleeHits = new Collider[8];
+
     [Header("VFX")]
     [SerializeField] private ParticleSystem _muzzleFxPrefab;
     private ParticleSystem _muzzleFxInstance;
     [SerializeField] private GameObject _impactFxPrefab;
     [SerializeField] private float _impactFxLife = 2.0f;
 
-    public bool IsMoving =>
-    _state == State.Chase || _state == State.DayPatrol;
-
-    public bool IsAttacking =>
-        _state == State.Attack;
-
+    public bool IsMoving => _state == State.Chase || _state == State.DayPatrol;
+    public bool IsAttacking => _state == State.Attack;
     public bool IsDead => _state == State.Dead;
 
     // Default Values (ScriptableObject 없이도 동작 가능)
@@ -47,9 +47,14 @@ public class EnemyAI : MonoBehaviour
     private float _attackRange = 2.0f;
     private float _attackCooldown = 1.2f;
 
+    private int _attackDamage = 10;
+
+    private float _meleeHitRadius = 1.0f;
+    private float _meleeHitForward = 0.9f;
+    private float _meleeHitHeight = 1.0f;
+
     private float _projectileSpeed = 12f;
     private float _projectileLifeTime = 2.0f;
-    private int _projectileDamage = 10;
 
     private float _dayIdleTime = 2.0f;
     private float _dayWalkTime = 3.0f;
@@ -165,6 +170,12 @@ public class EnemyAI : MonoBehaviour
         _attackRange = _data.attackRange;
         _attackCooldown = _data.attackCooldown;
 
+        _attackDamage = _data.attackDamage;
+
+        _meleeHitRadius = _data.meleeHitRadius;
+        _meleeHitForward = _data.meleeHitForward;
+        _meleeHitHeight = _data.meleeHitHeight;
+
         _dayIdleTime = _data.dayIdleTime;
         _dayWalkTime = _data.dayWalkTime;
         _patrolRadius = _data.patrolRadius;
@@ -173,7 +184,6 @@ public class EnemyAI : MonoBehaviour
 
         _projectileSpeed = _data.projectileSpeed;
         _projectileLifeTime = _data.projectileLifeTime;
-        _projectileDamage = _data.projectileDamage;
     }
 
     private void UpdateDayLoop()
@@ -218,10 +228,10 @@ public class EnemyAI : MonoBehaviour
 
         _animCtrl?.PlayAttack();
 
-        // 공격 분기점
+        // 공격 분기점 (근접은 이벤트에서 타격)
         DoAttack();
 
-        Debug.Log($"ATTACK type={_data.attackType} range={_attackRange} state={_state}");
+        Debug.Log($"ATTACK type={(_data != null ? _data.attackType : EnemyAttackType.Melee)} range={_attackRange} state={_state}");
     }
 
     private void DoAttack()
@@ -231,7 +241,7 @@ public class EnemyAI : MonoBehaviour
         switch (type)
         {
             case EnemyAttackType.Melee:
-                // 추후 근접 히트 처리
+                // 근접 데미지는 애니 이벤트(AE_MeleeHit)에서만 처리
                 break;
 
             case EnemyAttackType.Ranged:
@@ -242,6 +252,47 @@ public class EnemyAI : MonoBehaviour
             case EnemyAttackType.RangedAoe:
                 ThrowAoeTwoPhase();
                 break;
+        }
+    }
+
+    // 애니메이션 타격 프레임 이벤트에서 호출
+    public void AE_MeleeHit()
+    {
+        if (_state == State.Dead) return;
+        if (_state != State.Attack) return;
+
+        if (_data != null && _data.attackType != EnemyAttackType.Melee) return;
+
+        TryMeleeHit();
+    }
+
+    private void TryMeleeHit()
+    {
+        if (_attackDamage <= 0) return;
+
+        Vector3 center =
+            transform.position
+            + Vector3.up * _meleeHitHeight
+            + transform.forward * _meleeHitForward;
+
+        int count = Physics.OverlapSphereNonAlloc(
+            center,
+            _meleeHitRadius,
+            _meleeHits,
+            _playerMask,
+            QueryTriggerInteraction.Ignore);
+
+        for (int i = 0; i < count; i++)
+        {
+            var col = _meleeHits[i];
+            if (col == null) continue;
+
+            var d = col.GetComponentInParent<IDamageable>();
+            if (d != null)
+            {
+                d.TakeDamage(_attackDamage);
+                break;
+            }
         }
     }
 
@@ -306,6 +357,7 @@ public class EnemyAI : MonoBehaviour
 
     private float DistanceToPlayer()
     {
+        if (_player == null) return float.MaxValue;
         return Vector3.Distance(transform.position, _player.position);
     }
 
@@ -349,8 +401,6 @@ public class EnemyAI : MonoBehaviour
 
         _state = State.Dead;
 
-        Debug.Log($"[Die] animCtrl={(_animCtrl ? _animCtrl.name : "NULL")} / animator={(_animCtrl && _animCtrl.TryGetAnimator(out var a) ? a.runtimeAnimatorController.name : "NULL")}", this);
-
         _agent.isStopped = true;
         _agent.ResetPath();
 
@@ -377,10 +427,9 @@ public class EnemyAI : MonoBehaviour
 
         Renderer[] renderers = GetComponentsInChildren<Renderer>(true);
 
-        // 각 Renderer의 모든 material을 복제
         foreach (var r in renderers)
         {
-            var mats = r.materials; // 여기서 인스턴스 생성
+            var mats = r.materials;
             for (int i = 0; i < mats.Length; i++)
                 mats[i] = new Material(mats[i]);
             r.materials = mats;
@@ -415,6 +464,7 @@ public class EnemyAI : MonoBehaviour
             }
             yield return null;
         }
+
         Destroy(gameObject);
     }
 
@@ -454,7 +504,6 @@ public class EnemyAI : MonoBehaviour
         SpawnEnergyBall(_bulletSpawner, rightDir);
     }
 
-    // 투사체 발사 (ObjectPooling)
     private void SpawnEnergyBall(Transform spawner, Vector3 dir)
     {
         Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
@@ -468,7 +517,7 @@ public class EnemyAI : MonoBehaviour
 
         var proj = obj.GetComponent<EnergyBall>();
         if (proj != null)
-            proj.Init(PoolKey.EnergyBall, transform, dir, _projectileSpeed, _projectileDamage, _projectileLifeTime);
+            proj.Init(PoolKey.EnergyBall, transform, dir, _projectileSpeed, _attackDamage, _projectileLifeTime);
     }
 
     private void ThrowAoeTwoPhase()
@@ -483,14 +532,12 @@ public class EnemyAI : MonoBehaviour
 
     private IEnumerator CoAoeTwoPhase()
     {
-        // 타겟 확정
         Vector3 target = _player.position + Vector3.up * 10f;
         if (Physics.Raycast(target, Vector3.down, out var hit, 50f, _groundMask))
             target = hit.point;
         else
             target = _player.position;
 
-        // 상향 발사 연출
         if (_aoeLaunchFxPrefab != null)
         {
             Vector3 dir = Vector3.up;
@@ -499,7 +546,6 @@ public class EnemyAI : MonoBehaviour
             fx.Init(dir, 15f, 2f);
         }
 
-        // 경고 링 표시
         var indicator = Instantiate(_aoeIndicatorPrefab);
         indicator.SetRadius(_data != null ? _data.aoeRadius : 2.5f);
         indicator.SetPosition(target);
@@ -508,7 +554,6 @@ public class EnemyAI : MonoBehaviour
         float warn = _data != null ? _data.aoeWarnTime : 3f;
         yield return new WaitForSeconds(warn);
 
-        // 낙하 투사체 생성
         float height = _data != null ? _data.aoeDropHeight : 15f;
         float dropTime = _data != null ? _data.aoeDropTime : 2f;
 
@@ -517,7 +562,6 @@ public class EnemyAI : MonoBehaviour
         var drop = Instantiate(_aoeDropPrefab, start, Quaternion.identity);
         drop.Init(start, target, dropTime, () =>
         {
-            // 착탄 순간 링 끄고, 폭발
             if (indicator != null) Destroy(indicator.gameObject);
 
             SpawnImpactFx(target);
@@ -527,17 +571,16 @@ public class EnemyAI : MonoBehaviour
 
     private void DealImpactDamage(Vector3 center)
     {
-        int dmg = _data != null ? _data.aoeImpactDamage : 0;
-        if (dmg <= 0) return;
+        if (_attackDamage <= 0) return;
 
-        float radius = _data != null ? _data.aoeRadius : 2.5f;
+        float radius = (_data != null) ? _data.aoeRadius : 2.5f;
 
         var hits = Physics.OverlapSphere(center, radius);
         foreach (var h in hits)
         {
             var d = h.GetComponentInParent<IDamageable>();
             if (d != null)
-                d.TakeDamage(dmg);
+                d.TakeDamage(_attackDamage);
         }
     }
 
@@ -571,7 +614,6 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    // 외부 호출
     public void OnDamaged(Vector3 hitPoint, bool stun)
     {
         if (_state == State.Dead) return;
