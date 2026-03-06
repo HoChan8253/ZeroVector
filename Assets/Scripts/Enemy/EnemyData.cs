@@ -13,6 +13,10 @@ public class EnemyData : ScriptableObject
     [Header("Core")]
     public int maxHp = 100;
 
+    [Header("Shield")]
+    public bool useShield = false;
+    public int maxShield = 0;
+
     [Header("Day Loop")]
     public float dayIdleTime = 2.0f;
     public float dayWalkTime = 3.0f;

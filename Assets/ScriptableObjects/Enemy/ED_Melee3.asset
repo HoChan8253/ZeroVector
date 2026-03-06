@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a754f6ca96bd24a89f2999bc053ef6, type: 3}
   m_Name: ED_Melee3
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  maxHp: 250
+  maxHp: 200
+  useShield: 1
+  maxShield: 1300
   dayIdleTime: 3.5
   dayWalkTime: 2
   patrolRadius: 6
