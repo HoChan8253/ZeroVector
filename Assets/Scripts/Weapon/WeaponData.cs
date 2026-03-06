@@ -6,6 +6,12 @@ public enum FireMode
     FullAuto
 }
 
+public enum ReloadType
+{
+    Magazine,    // 한번에 채움
+    PerShell     // 한 발씩
+}
+
 [CreateAssetMenu(menuName = "FPS/Weapon Data", fileName = "WD_NewWeapon")]
 
 public class WeaponData : ScriptableObject
@@ -15,6 +21,11 @@ public class WeaponData : ScriptableObject
 
     [Header("Fire Mode")]
     public FireMode fireMode = FireMode.FullAuto;
+
+    [Header("Shotgun")]
+    public int pelletCount = 8;
+    public float pelletSpread = 0.08f;
+    public float damagePerPellet = 8f;
 
     [Header("Gun Settings")]
     public float fireRate = 10f;
@@ -28,6 +39,16 @@ public class WeaponData : ScriptableObject
 
     [Header("Reload")]
     public float reloadDuration = 4.583f;
+
+    [Header("Reload Type")]
+    public ReloadType reloadType = ReloadType.Magazine;
+
+    // 한 발 장전 시간
+    public float perShellTime = 1.667f;
+
+    // Shotgun 전용 (장전 시작 / 종료 애니 길이)
+    public float reloadStartTime = 1.0f; // IdleToReload 길이
+    public float reloadEndTime = 0.917f; // ReloadToIdle 길이
 
     [Header("Recoil")]
     public float recoilPitchAmount = 2f;

@@ -1,7 +1,7 @@
 ﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class GunController : MonoBehaviour
 {
@@ -22,11 +22,15 @@ public class GunController : MonoBehaviour
     [SerializeField] private GameObject _bulletHolePrefab;
     [SerializeField] private int _maxBulletHoles = 50;
 
+    [SerializeField] private PlayerStats _stats;
+
     private readonly Queue<GameObject> _bulletHoles = new Queue<GameObject>();
 
     private Coroutine _muzzleLightCo;
 
     public event Action<int, int> OnAmmoChanged;
+
+    [SerializeField] private bool _pumpLocked;
 
     // 런타임 상태
     [SerializeField] private WeaponState _state = new WeaponState();
@@ -62,6 +66,8 @@ public class GunController : MonoBehaviour
     private static readonly int AnimIsSprinting = Animator.StringToHash("IsSprinting");
     private static readonly int AnimEquip = Animator.StringToHash("Equip");
     private static readonly int AnimHolster = Animator.StringToHash("Holster");
+    private static readonly int AnimIsReloading = Animator.StringToHash("IsReloading");
+    private static readonly int AnimAction = Animator.StringToHash("Action");
 
     private void Awake()
     {
@@ -79,6 +85,9 @@ public class GunController : MonoBehaviour
 
         if (_muzzleLight != null)
             _muzzleLight.enabled = false;
+
+        if (_stats == null)
+            _stats = GetComponentInParent<PlayerStats>();
 
         // 최초 장착
         if (_data != null)
@@ -100,6 +109,7 @@ public class GunController : MonoBehaviour
         HandleFire();
         HandleReload();
         HandleReloadFinish();
+        HandleShotgunReloadTick();
     }
 
     public void Equip(WeaponData newData)
@@ -123,6 +133,7 @@ public class GunController : MonoBehaviour
     public void Unequip()
     {
         // 여기서 트리거/상태 초기화
+        _pumpLocked = false;
         CancelReload();
         _anim.SetTrigger(AnimHolster);
         _data = null;
@@ -135,6 +146,7 @@ public class GunController : MonoBehaviour
         if (isSprinting) return;
 
         if (_state.isReloading) return;
+        if (_pumpLocked) return;
 
         bool wantFire = (_data != null && _data.fireMode == FireMode.SemiAuto)
         ? _input.FirePressedThisFrame
@@ -161,6 +173,11 @@ public class GunController : MonoBehaviour
     {
         _anim.SetTrigger(AnimShoot);
 
+        bool isShotgun = (_data != null && _data.reloadType == ReloadType.PerShell);
+
+        if (isShotgun)
+            _pumpLocked = true;
+
         if (_muzzleFx != null)
         {
             _muzzleFx.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
@@ -176,39 +193,72 @@ public class GunController : MonoBehaviour
         float randomYaw = UnityEngine.Random.Range(-_recoilYawAmount, _recoilYawAmount);
         _look.AddRecoil(_recoilPitchAmount, randomYaw);
 
-        // 단발 리셋
         if (Time.time - _state.lastShotTime > _tapResetTime)
             _state.currentSpread = 0f;
 
         _state.lastShotTime = Time.time;
 
-        // 퍼짐 증가
         _state.currentSpread += _spreadAmount;
         _state.currentSpread = Mathf.Clamp(_state.currentSpread, 0f, _maxSpread);
 
+        // 분기점
+        if (isShotgun)
+            FireShotgunPellets();
+        else
+            FireSingleRay(_damage);
+    }
+
+    private void FireShotgunPellets()
+    {
+        if (_data == null) return;
+
+        // 6~8발 랜덤
+        int pellets = Mathf.Max(1, _data.pelletCount);
+
+        float spread = Mathf.Max(0f, _data.pelletSpread);
+
+        for (int i = 0; i < pellets; i++)
+        {
+            Vector2 r = UnityEngine.Random.insideUnitCircle * spread;
+
+            Vector3 dir = _cam.transform.forward
+                          + _cam.transform.right * r.x
+                          + _cam.transform.up * r.y;
+
+            dir.Normalize();
+
+            Ray ray = new Ray(_cam.transform.position, dir);
+
+            // 펠릿당 데미지
+            FireRay(ray, _data.damagePerPellet, spawnImpactFx: true);
+        }
+    }
+
+    private void FireSingleRay(float damage)
+    {
         Vector3 direction = _cam.transform.forward;
         direction += _cam.transform.right * UnityEngine.Random.Range(-_state.currentSpread, _state.currentSpread);
         direction += _cam.transform.up * UnityEngine.Random.Range(-_state.currentSpread, _state.currentSpread);
         direction.Normalize();
 
         Ray ray = new Ray(_cam.transform.position, direction);
+        FireRay(ray, damage, spawnImpactFx: true);
+    }
 
+    private void FireRay(Ray ray, float damage, bool spawnImpactFx)
+    {
         if (Physics.Raycast(ray, out RaycastHit hit, _range))
         {
             Debug.DrawLine(ray.origin, hit.point, Color.red, 0.2f);
 
-            Debug.Log($"HIT: {hit.collider.name}");
-            Debug.Log($"Spark prefab: {(_hitSparkPrefab ? _hitSparkPrefab.name : "NULL")}");
-
-            // 히트스캔 충돌이 적인지 검증
             EnemyHealth enemy = hit.collider.GetComponentInParent<EnemyHealth>();
-            bool isEnemy = (enemy != null);
-
-            if (isEnemy)
+            if (enemy != null)
             {
                 bool headshot = hit.collider.CompareTag("EnemyHead");
-                Debug.Log($"[Gun] Hit ENEMY - collider={hit.collider.name} enemy={enemy.name} headshot={headshot}");
-                enemy.TakeDamage((int)_damage, headshot, hit.point, hit.normal);
+
+                Debug.Log($"Pellet Hit: {damage} (headshot={headshot})");
+
+                enemy.TakeDamage((int)damage, headshot, hit.point, hit.normal);
                 return;
             }
 
@@ -227,8 +277,6 @@ public class GunController : MonoBehaviour
             {
                 Vector3 pos = hit.point + hit.normal * 0.01f;
                 Quaternion rot = Quaternion.LookRotation(-hit.normal);
-
-                // 랜덤 회전 추가
                 rot *= Quaternion.Euler(0f, 0f, UnityEngine.Random.Range(0f, 360f));
 
                 GameObject hole = Instantiate(_bulletHolePrefab, pos, rot);
@@ -255,6 +303,8 @@ public class GunController : MonoBehaviour
 
     private void HandleReload()
     {
+        if (_pumpLocked) return;
+
         if (_isHolstered) return;
         bool isSprinting = _input.SprintHeld && _input.Move.sqrMagnitude > 0.01f;
         if (isSprinting) return;    // Sprint 중 재장전 불가
@@ -268,29 +318,49 @@ public class GunController : MonoBehaviour
     private void StartReload()
     {
         if (_state.isReloading) return;
+
+        if (_data == null) return;
         if (_state.ammoInMag >= _magSize) return;
         if (_state.reserveAmmo <= 0) return;
 
         _state.isReloading = true;
-        _state.reloadEndTime = Time.time + _reloadDuration;
-
-        // 재장전 시작 시 연사 타이밍 리셋
         _state.nextFireTime = Time.time;
 
-        _anim.SetTrigger(AnimReload);
+        if (_stats != null)
+            _stats.SetReloading(true);
+
+        _anim.SetBool(AnimIsReloading, true);
+
+        if (_data.reloadType == ReloadType.Magazine)
+        {
+            _state.reloadEndTime = Time.time + _reloadDuration;
+            _anim.SetTrigger(AnimReload);
+            return;
+        }
+
+        // Shotgun
+        _state.reloadEndTime = Time.time + _data.reloadStartTime; // IdleToReload 지나고 첫 장전
+        _anim.SetTrigger(AnimReload); // AnyState -> IdleToReload
     }
 
     private void HandleReloadFinish()
     {
         if (!_state.isReloading) return;
-        if (Time.time < _state.reloadEndTime) return;
+        if (_data == null) return;
 
-        FinishReload();
+        if (_data.reloadType != ReloadType.Magazine) return;
+
+        if (Time.time < _state.reloadEndTime) return;
+        FinishReload_Magazine();
     }
 
-    private void FinishReload()
+    private void FinishReload_Magazine()
     {
         _state.isReloading = false;
+        _anim.SetBool(AnimIsReloading, false);
+
+        if (_stats != null)
+            _stats.SetReloading(false);
 
         int need = _magSize - _state.ammoInMag;
         if (need <= 0) return;
@@ -298,14 +368,58 @@ public class GunController : MonoBehaviour
         int take = Mathf.Min(need, _state.reserveAmmo);
         _state.reserveAmmo -= take;
         _state.ammoInMag += take;
-
         NotifyAmmo();
+    }
+
+    private void HandleShotgunReloadTick()
+    {
+        if (_data == null) return;
+        if (_data.reloadType != ReloadType.PerShell) return;
+        if (!_state.isReloading) return;
+
+        // 장전 중 사격 입력이면 끊기
+        bool wantFire = (_data.fireMode == FireMode.SemiAuto) ? _input.FirePressedThisFrame : _input.FireHeld;
+        if (wantFire && _state.ammoInMag > 0)
+        {
+            StopShotgunReload();
+            return;
+        }
+
+        if (Time.time < _state.reloadEndTime) return;
+
+        // 종료 조건(꽉 참 / 탄 없음)
+        if (_state.ammoInMag >= _magSize || _state.reserveAmmo <= 0)
+        {
+            StopShotgunReload();
+            return;
+        }
+
+        // 쉘 1발 장전
+        _state.reserveAmmo--;
+        _state.ammoInMag++;
+        NotifyAmmo();
+
+        // 다음 쉘 타이밍 예약
+        _state.reloadEndTime = Time.time + _data.perShellTime;
+    }
+
+    private void StopShotgunReload()
+    {
+        _state.isReloading = false;
+        _anim.SetBool(AnimIsReloading, false);
+
+        if (_stats != null)
+            _stats.SetReloading(false);
     }
 
     private void CancelReload()
     {
         _state.isReloading = false;
         _state.reloadEndTime = 0f;
+        _anim.SetBool(AnimIsReloading, false);
+
+        if (_stats != null)
+            _stats.SetReloading(false);
     }
 
     private void UpdateSpreadRecover()
@@ -316,7 +430,10 @@ public class GunController : MonoBehaviour
     private void UpdateMovementAnim()
     {
         bool isMoving = _input.Move.sqrMagnitude > (_moveThreshold * _moveThreshold);
-        bool isSprinting = _input.SprintHeld && isMoving && !_state.isReloading;
+
+        bool canSprint = (_stats != null) && _stats.CanSprint;
+
+        bool isSprinting = _input.SprintHeld && isMoving && canSprint && !_state.isReloading;
 
         _anim.SetBool(AnimIsMoving, isMoving);
         _anim.SetBool(AnimIsSprinting, isSprinting);
@@ -371,6 +488,8 @@ public class GunController : MonoBehaviour
 
     public void BeginHolsterForSwap()
     {
+        _pumpLocked = false;
+
         if (_isSwapping) return;
 
         if (_muzzleFx != null)
@@ -407,6 +526,7 @@ public class GunController : MonoBehaviour
     {
         _isHolstered = false;
         _isSwapping = false;
+        _pumpLocked = false;
     }
 
     public void ForceEquipData(WeaponData newData)
@@ -414,5 +534,10 @@ public class GunController : MonoBehaviour
         Equip(newData);
         _anim.ResetTrigger(AnimHolster);
         _anim.SetTrigger(AnimEquip);
+    }
+
+    public void OnPumpEnd()
+    {
+        _pumpLocked = false;
     }
 }

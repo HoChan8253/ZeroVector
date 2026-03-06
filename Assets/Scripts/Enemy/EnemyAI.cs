@@ -16,19 +16,27 @@ public class EnemyAI : MonoBehaviour
     public EnemyData Data => _data;
 
     [Header("Ranged Refs")]
-    [SerializeField] private GameObject _energyBallPrefab;
     [SerializeField] private Transform _bulletSpawner;
+
+    [Header("AoE Prefabs")]
+    [SerializeField] private AoEIndicator _aoeIndicatorPrefab;
+    [SerializeField] private StraightFxProjectile _aoeLaunchFxPrefab;
+    [SerializeField] private DropProjectile _aoeDropPrefab;
+
+    [SerializeField] private LayerMask _groundMask = ~0;
+
+    [Header("Melee Hit")]
+    [SerializeField] private LayerMask _playerMask = ~0;
+    private readonly Collider[] _meleeHits = new Collider[8];
 
     [Header("VFX")]
     [SerializeField] private ParticleSystem _muzzleFxPrefab;
     private ParticleSystem _muzzleFxInstance;
+    [SerializeField] private GameObject _impactFxPrefab;
+    [SerializeField] private float _impactFxLife = 2.0f;
 
-    public bool IsMoving =>
-    _state == State.Chase || _state == State.DayPatrol;
-
-    public bool IsAttacking =>
-        _state == State.Attack;
-
+    public bool IsMoving => _state == State.Chase || _state == State.DayPatrol;
+    public bool IsAttacking => _state == State.Attack;
     public bool IsDead => _state == State.Dead;
 
     // Default Values (ScriptableObject 없이도 동작 가능)
@@ -39,9 +47,14 @@ public class EnemyAI : MonoBehaviour
     private float _attackRange = 2.0f;
     private float _attackCooldown = 1.2f;
 
+    private int _attackDamage = 10;
+
+    private float _meleeHitRadius = 1.0f;
+    private float _meleeHitForward = 0.9f;
+    private float _meleeHitHeight = 1.0f;
+
     private float _projectileSpeed = 12f;
     private float _projectileLifeTime = 2.0f;
-    private int _projectileDamage = 10;
 
     private float _dayIdleTime = 2.0f;
     private float _dayWalkTime = 3.0f;
@@ -140,6 +153,23 @@ public class EnemyAI : MonoBehaviour
         UpdateAnimatorSpeed();
     }
 
+    private void OnEnable()
+    {
+        if (_player == null)
+            StartCoroutine(CoBindPlayer());
+    }
+
+    private IEnumerator CoBindPlayer()
+    {
+        while (_player == null)
+        {
+            var go = GameObject.FindGameObjectWithTag("Player");
+            if (go != null) _player = go.transform;
+
+            yield return null;
+        }
+    }
+
     private IEnumerator CoRandomStart()
     {
         yield return new WaitForSeconds(Random.Range(0f, 2f));
@@ -157,6 +187,12 @@ public class EnemyAI : MonoBehaviour
         _attackRange = _data.attackRange;
         _attackCooldown = _data.attackCooldown;
 
+        _attackDamage = _data.attackDamage;
+
+        _meleeHitRadius = _data.meleeHitRadius;
+        _meleeHitForward = _data.meleeHitForward;
+        _meleeHitHeight = _data.meleeHitHeight;
+
         _dayIdleTime = _data.dayIdleTime;
         _dayWalkTime = _data.dayWalkTime;
         _patrolRadius = _data.patrolRadius;
@@ -165,7 +201,6 @@ public class EnemyAI : MonoBehaviour
 
         _projectileSpeed = _data.projectileSpeed;
         _projectileLifeTime = _data.projectileLifeTime;
-        _projectileDamage = _data.projectileDamage;
     }
 
     private void UpdateDayLoop()
@@ -194,28 +229,87 @@ public class EnemyAI : MonoBehaviour
 
         float d = DistanceToPlayer();
 
-        bool isMelee = (_data == null) || (_data.attackType == EnemyAttackType.Melee);
-
-        if (isMelee)
-            FaceTarget(_player.position);
-
         if (d > _attackRange * 1.1f)
         {
             EnterChase();
             return;
         }
 
-        if (Time.time >= _nextAttackTime)
-        {
-            _nextAttackTime = Time.time + _attackCooldown;
-            _animCtrl?.PlayAttack();
+        if (Time.time < _nextAttackTime) return;
 
-            if (_data != null && _data.attackType == EnemyAttackType.Ranged)
-            {
+        _nextAttackTime = Time.time + _attackCooldown;
+
+        // 근접타입만 플레이어를 본다
+        if (_data == null || _data.attackType == EnemyAttackType.Melee)
+            FaceTarget(_player.position);
+
+        _animCtrl?.PlayAttack();
+
+        // 공격 분기점 (근접은 이벤트에서 타격)
+        DoAttack();
+
+        Debug.Log($"ATTACK type={(_data != null ? _data.attackType : EnemyAttackType.Melee)} range={_attackRange} state={_state}");
+    }
+
+    private void DoAttack()
+    {
+        var type = (_data != null) ? _data.attackType : EnemyAttackType.Melee;
+
+        switch (type)
+        {
+            case EnemyAttackType.Melee:
+                // 근접 데미지는 애니 이벤트(AE_MeleeHit)에서만 처리
+                break;
+
+            case EnemyAttackType.Ranged:
                 PlayMuzzleFx();
+                FireEnergyBallTriple();
+                break;
+
+            case EnemyAttackType.RangedAoe:
+                ThrowAoeTwoPhase();
+                break;
+        }
+    }
+
+    // 애니메이션 타격 프레임 이벤트에서 호출
+    public void AE_MeleeHit()
+    {
+        if (_state == State.Dead) return;
+        if (_state != State.Attack) return;
+
+        if (_data != null && _data.attackType != EnemyAttackType.Melee) return;
+
+        TryMeleeHit();
+    }
+
+    private void TryMeleeHit()
+    {
+        if (_attackDamage <= 0) return;
+
+        Vector3 center =
+            transform.position
+            + Vector3.up * _meleeHitHeight
+            + transform.forward * _meleeHitForward;
+
+        int count = Physics.OverlapSphereNonAlloc(
+            center,
+            _meleeHitRadius,
+            _meleeHits,
+            _playerMask,
+            QueryTriggerInteraction.Ignore);
+
+        for (int i = 0; i < count; i++)
+        {
+            var col = _meleeHits[i];
+            if (col == null) continue;
+
+            var d = col.GetComponentInParent<IDamageable>();
+            if (d != null)
+            {
+                d.TakeDamage(_attackDamage);
+                break;
             }
-            
-            FireEnergyBallTriple();
         }
     }
 
@@ -239,6 +333,8 @@ public class EnemyAI : MonoBehaviour
 
         _agent.isStopped = false;
 
+        if (_data != null) ApplyMoveSettings(_data.patrolSpeed);
+
         if (TryGetRandomPoint(transform.position, _patrolRadius, out var p))
             _agent.SetDestination(p);
         else
@@ -249,6 +345,8 @@ public class EnemyAI : MonoBehaviour
     {
         _state = State.Chase;
         _agent.isStopped = false;
+
+        if (_data != null) ApplyMoveSettings(_data.chaseSpeed);
     }
 
     private void EnterAttack()
@@ -276,6 +374,7 @@ public class EnemyAI : MonoBehaviour
 
     private float DistanceToPlayer()
     {
+        if (_player == null) return float.MaxValue;
         return Vector3.Distance(transform.position, _player.position);
     }
 
@@ -313,18 +412,6 @@ public class EnemyAI : MonoBehaviour
         return false;
     }
 
-    // 외부 호출
-    public void OnDamaged(Vector3 hitPoint, bool stun)
-    {
-        if (_state == State.Dead) return;
-
-        _aggro = true;
-        _forcedAggroUntil = Time.time + _damageAggroHoldTime;
-
-        if (stun) EnterStun();
-        else if (_state == State.DayIdle || _state == State.DayPatrol) EnterChase();
-    }
-
     public void Die()
     {
         if (_state == State.Dead) return;
@@ -355,11 +442,14 @@ public class EnemyAI : MonoBehaviour
         float fadeTime = 1.5f;
         float t = 0f;
 
-        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+        Renderer[] renderers = GetComponentsInChildren<Renderer>(true);
 
         foreach (var r in renderers)
         {
-            r.material = new Material(r.material);
+            var mats = r.materials;
+            for (int i = 0; i < mats.Length; i++)
+                mats[i] = new Material(mats[i]);
+            r.materials = mats;
         }
 
         while (t < fadeTime)
@@ -369,15 +459,29 @@ public class EnemyAI : MonoBehaviour
 
             foreach (var r in renderers)
             {
-                if (r.material.HasProperty("_Color"))
+                var mats = r.materials;
+                for (int i = 0; i < mats.Length; i++)
                 {
-                    Color c = r.material.color;
-                    c.a = alpha;
-                    r.material.color = c;
+                    var m = mats[i];
+
+                    if (m.HasProperty("_BaseColor"))
+                    {
+                        Color c = m.GetColor("_BaseColor");
+                        c.a = alpha;
+                        m.SetColor("_BaseColor", c);
+                    }
+
+                    if (m.HasProperty("_Color"))
+                    {
+                        Color c = m.GetColor("_Color");
+                        c.a = alpha;
+                        m.SetColor("_Color", c);
+                    }
                 }
             }
             yield return null;
         }
+
         Destroy(gameObject);
     }
 
@@ -385,10 +489,11 @@ public class EnemyAI : MonoBehaviour
     private void FireEnergyBallSingle()
     {
         if (_player == null) return;
-        if (_energyBallPrefab == null || _bulletSpawner == null) return;
+        if (_bulletSpawner == null) return;
+        if (ObjectPoolManager.Instance == null) return;
 
         Vector3 dir = _player.position - _bulletSpawner.position;
-        dir.y = 0f;
+
         if (dir.sqrMagnitude < 0.0001f) dir = transform.forward;
         dir.Normalize();
 
@@ -399,10 +504,11 @@ public class EnemyAI : MonoBehaviour
     private void FireEnergyBallTriple()
     {
         if (_player == null) return;
-        if (_energyBallPrefab == null || _bulletSpawner == null) return;
+        if (_bulletSpawner == null) return;
+        if (ObjectPoolManager.Instance == null) return;
 
         Vector3 baseDir = _player.position - _bulletSpawner.position;
-        baseDir.y = 0f;
+
         if (baseDir.sqrMagnitude < 0.0001f) baseDir = transform.forward;
         baseDir.Normalize();
 
@@ -415,19 +521,92 @@ public class EnemyAI : MonoBehaviour
         SpawnEnergyBall(_bulletSpawner, rightDir);
     }
 
-    // 투사체 발사 (ObjectPooling)
     private void SpawnEnergyBall(Transform spawner, Vector3 dir)
     {
-        Quaternion rot = Quaternion.LookRotation(dir);
+        Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
 
         GameObject obj =
             (ObjectPoolManager.Instance != null)
-            ? ObjectPoolManager.Instance.Spawn(_energyBallPrefab, spawner.position, rot)
-            : Instantiate(_energyBallPrefab, spawner.position, rot);
+            ? ObjectPoolManager.Instance.Spawn(PoolKey.EnergyBall, spawner.position, rot)
+            : null;
+
+        if (obj == null) return;
 
         var proj = obj.GetComponent<EnergyBall>();
         if (proj != null)
-            proj.Init(_energyBallPrefab, transform, dir, _projectileSpeed, _projectileDamage, _projectileLifeTime);
+            proj.Init(PoolKey.EnergyBall, transform, dir, _projectileSpeed, _attackDamage, _projectileLifeTime);
+    }
+
+    private void ThrowAoeTwoPhase()
+    {
+        if (_player == null) return;
+        if (_bulletSpawner == null) return;
+        if (_aoeIndicatorPrefab == null) return;
+        if (_aoeDropPrefab == null) return;
+
+        StartCoroutine(CoAoeTwoPhase());
+    }
+
+    private IEnumerator CoAoeTwoPhase()
+    {
+        Vector3 target = _player.position + Vector3.up * 10f;
+        if (Physics.Raycast(target, Vector3.down, out var hit, 50f, _groundMask))
+            target = hit.point;
+        else
+            target = _player.position;
+
+        if (_aoeLaunchFxPrefab != null)
+        {
+            Vector3 dir = Vector3.up;
+
+            var fx = Instantiate(_aoeLaunchFxPrefab, _bulletSpawner.position, Quaternion.LookRotation(dir));
+            fx.Init(dir, 15f, 2f);
+        }
+
+        var indicator = Instantiate(_aoeIndicatorPrefab);
+        indicator.SetRadius(_data != null ? _data.aoeRadius : 2.5f);
+        indicator.SetPosition(target);
+        indicator.gameObject.SetActive(true);
+
+        float warn = _data != null ? _data.aoeWarnTime : 3f;
+        yield return new WaitForSeconds(warn);
+
+        float height = _data != null ? _data.aoeDropHeight : 15f;
+        float dropTime = _data != null ? _data.aoeDropTime : 2f;
+
+        Vector3 start = target + Vector3.up * height;
+
+        var drop = Instantiate(_aoeDropPrefab, start, Quaternion.identity);
+        drop.Init(start, target, dropTime, () =>
+        {
+            if (indicator != null) Destroy(indicator.gameObject);
+
+            SpawnImpactFx(target);
+            DealImpactDamage(target);
+        });
+    }
+
+    private void DealImpactDamage(Vector3 center)
+    {
+        if (_attackDamage <= 0) return;
+
+        float radius = (_data != null) ? _data.aoeRadius : 2.5f;
+
+        var hits = Physics.OverlapSphere(center, radius);
+        foreach (var h in hits)
+        {
+            var d = h.GetComponentInParent<IDamageable>();
+            if (d != null)
+                d.TakeDamage(_attackDamage);
+        }
+    }
+
+    private void SpawnImpactFx(Vector3 pos)
+    {
+        if (_impactFxPrefab == null) return;
+
+        var fx = Instantiate(_impactFxPrefab, pos, Quaternion.identity);
+        Destroy(fx, _impactFxLife);
     }
 
     private void PlayMuzzleFx()
@@ -437,5 +616,29 @@ public class EnemyAI : MonoBehaviour
 
         fx.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         fx.Play(true);
+    }
+
+    private void ApplyMoveSettings(float speed)
+    {
+        if (_agent == null) return;
+
+        _agent.speed = speed;
+
+        if (_data != null)
+        {
+            _agent.angularSpeed = _data.angularSpeed;
+            _agent.acceleration = _data.acceleration;
+        }
+    }
+
+    public void OnDamaged(Vector3 hitPoint, bool stun)
+    {
+        if (_state == State.Dead) return;
+
+        _aggro = true;
+        _forcedAggroUntil = Time.time + _damageAggroHoldTime;
+
+        if (stun) EnterStun();
+        else if (_state == State.DayIdle || _state == State.DayPatrol) EnterChase();
     }
 }

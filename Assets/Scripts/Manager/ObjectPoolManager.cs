@@ -1,11 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+public enum PoolKey
+{
+    EnergyBall,
+    HitFx_ElectricShort,
+}
+
 public class ObjectPoolManager : MonoBehaviour
 {
     public static ObjectPoolManager Instance;
 
-    private readonly Dictionary<GameObject, Queue<GameObject>> _pools = new();
+    [Header("Prefab Registry")]
+    [SerializeField] private GameObject _energyBallPrefab;
+    [SerializeField] private GameObject _hitFxElectricShortPrefab;
+
+    private readonly Dictionary<PoolKey, GameObject> _prefabs = new();
+    private readonly Dictionary<PoolKey, Queue<GameObject>> _pools = new();
+
+    [Header("Pool Root")]
+    [SerializeField] private Transform _poolRoot;
+    private readonly Dictionary<PoolKey, Transform> _poolParents = new();
 
     private void Awake()
     {
@@ -16,16 +31,61 @@ public class ObjectPoolManager : MonoBehaviour
         }
 
         Instance = this;
+
+        if (_poolRoot == null)
+        {
+            var go = new GameObject("PoolRoot");
+            _poolRoot = go.transform;
+        }
+
+        _prefabs[PoolKey.EnergyBall] = _energyBallPrefab;
+        _prefabs[PoolKey.HitFx_ElectricShort] = _hitFxElectricShortPrefab;
     }
 
-    public GameObject Spawn(GameObject prefab, Vector3 pos, Quaternion rot)
+    private Transform GetPoolParent(PoolKey key)
     {
-        if (prefab == null) return null;
+        if (_poolParents.TryGetValue(key, out var parent) && parent != null)
+            return parent;
 
-        if (!_pools.TryGetValue(prefab, out var q))
+        var go = new GameObject($"Pool_{key}");
+        go.transform.SetParent(_poolRoot, false);
+        parent = go.transform;
+
+        _poolParents[key] = parent;
+        return parent;
+    }
+
+    public void Preload(PoolKey key, int count)
+    {
+        if (count <= 0) return;
+        if (!_prefabs.TryGetValue(key, out var prefab) || prefab == null) return;
+
+        if (!_pools.TryGetValue(key, out var q))
         {
             q = new Queue<GameObject>();
-            _pools.Add(prefab, q);
+            _pools.Add(key, q);
+        }
+
+        var parent = GetPoolParent(key);
+
+        for (int i = 0; i < count; i++)
+        {
+            var obj = Instantiate(prefab);
+            obj.SetActive(false);
+            obj.transform.SetParent(parent, false);
+            q.Enqueue(obj);
+        }
+    }
+
+    public GameObject Spawn(PoolKey key, Vector3 pos, Quaternion rot)
+    {
+        if (!_prefabs.TryGetValue(key, out var prefab) || prefab == null)
+            return null;
+
+        if (!_pools.TryGetValue(key, out var q))
+        {
+            q = new Queue<GameObject>();
+            _pools.Add(key, q);
         }
 
         GameObject obj = null;
@@ -33,24 +93,28 @@ public class ObjectPoolManager : MonoBehaviour
             obj = q.Dequeue();
 
         if (obj == null)
+        {
             obj = Instantiate(prefab);
+        }
 
+        obj.transform.SetParent(null, true);
         obj.transform.SetPositionAndRotation(pos, rot);
         obj.SetActive(true);
         return obj;
     }
 
-    public void Despawn(GameObject prefab, GameObject obj)
+    public void Despawn(PoolKey key, GameObject obj)
     {
-        if (prefab == null || obj == null) return;
+        if (obj == null) return;
 
-        if (!_pools.TryGetValue(prefab, out var q))
+        if (!_pools.TryGetValue(key, out var q))
         {
             q = new Queue<GameObject>();
-            _pools.Add(prefab, q);
+            _pools.Add(key, q);
         }
 
         obj.SetActive(false);
+        obj.transform.SetParent(GetPoolParent(key), false);
         q.Enqueue(obj);
     }
 }

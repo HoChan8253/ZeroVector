@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89a754f6ca96bd24a89f2999bc053ef6, type: 3}
+  m_Name: ED_Range2
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyData
+  maxHp: 180
+  dayIdleTime: 2
+  dayWalkTime: 3
+  patrolRadius: 6
+  patrolSpeed: 1.6
+  chaseSpeed: 2.2
+  angularSpeed: 240
+  acceleration: 6
+  aggroRange: 26
+  deaggroRange: 28
+  damageAggroHoldTime: 3
+  attackType: 2
+  attackRange: 22
+  attackCooldown: 5
+  attackDamage: 35
+  meleeHitRadius: 0
+  meleeHitForward: 0
+  meleeHitHeight: 0
+  projectileSpeed: 0
+  projectileLifeTime: 0
+  aoeWarnTime: 2
+  aoeDropHeight: 15
+  aoeDropTime: 2
+  aoeRadius: 3
+  canStun: 0
+  stunTime: 1
