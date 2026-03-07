@@ -10,37 +10,37 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 89a754f6ca96bd24a89f2999bc053ef6, type: 3}
-  m_Name: ED_Range2
+  m_Name: ED_Flying
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  maxHp: 180
+  maxHp: 10
   useShield: 0
   maxShield: 0
   dayIdleTime: 2
   dayWalkTime: 3
   patrolRadius: 6
   patrolSpeed: 1.6
-  chaseSpeed: 2.2
-  angularSpeed: 240
-  acceleration: 6
-  aggroRange: 26
-  deaggroRange: 28
-  damageAggroHoldTime: 3
-  attackType: 2
-  isFlying: 0
+  chaseSpeed: 3.5
+  angularSpeed: 360
+  acceleration: 8
+  aggroRange: 14
+  deaggroRange: 20
+  damageAggroHoldTime: 2
+  attackType: 1
+  isFlying: 1
   flyingHeight: 4.5
   flyingMoveSpeed: 3.5
   turnSpeed: 8
-  attackRange: 22
-  attackCooldown: 5
-  attackDamage: 35
+  attackRange: 8
+  attackCooldown: 1.5
+  attackDamage: 12
   meleeHitRadius: 0
   meleeHitForward: 0
   meleeHitHeight: 0
-  projectileSpeed: 0
-  projectileLifeTime: 0
-  aoeWarnTime: 2
-  aoeDropHeight: 15
-  aoeDropTime: 2
-  aoeRadius: 3
+  projectileSpeed: 18
+  projectileLifeTime: 4
+  aoeWarnTime: 0
+  aoeDropHeight: 0
+  aoeDropTime: 0
+  aoeRadius: 0
   canStun: 0
-  stunTime: 1
+  stunTime: 0
