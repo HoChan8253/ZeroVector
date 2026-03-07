@@ -1015,6 +1015,8 @@ GameObject:
   - component: {fileID: 775876018345267050}
   - component: {fileID: 3999942781644579977}
   - component: {fileID: 6114539114375309480}
+  - component: {fileID: 4302197566659793310}
+  - component: {fileID: 4385117418369753368}
   m_Layer: 0
   m_Name: Range1
   m_TagString: Untagged
@@ -1099,18 +1101,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
   _player: {fileID: 0}
   _animCtrl: {fileID: 3999942781644579977}
-  _agent: {fileID: 7542423310402389041}
   _data: {fileID: 11400000, guid: 0d3bd1e886875d0498c2e350bd251dbd, type: 2}
-  _bulletSpawner: {fileID: 4399156766920098865}
-  _aoeIndicatorPrefab: {fileID: 0}
-  _aoeLaunchFxPrefab: {fileID: 0}
-  _aoeDropPrefab: {fileID: 0}
-  _groundMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  _muzzleFxPrefab: {fileID: 4146887271406582440, guid: b8d3b28da51b23248b4b5d5afb4d2c75, type: 3}
-  _impactFxPrefab: {fileID: 0}
-  _impactFxLife: 2
+  _movement: {fileID: 4385117418369753368}
+  _attack: {fileID: 4302197566659793310}
 --- !u!195 &7542423310402389041
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1147,6 +1140,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   _resetHpOnEnable: 1
   _stunnable: 0
+  _shieldVisual: {fileID: 0}
 --- !u!114 &3999942781644579977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1175,6 +1169,44 @@ MonoBehaviour:
   _ai: {fileID: 2618707189916012156}
   _turret: {fileID: 6596813513689686513}
   _turnSpeed: 360
+--- !u!114 &4302197566659793310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6465718177912725889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2baeff03cc58a304a817ce570635126e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAttack
+  _bulletSpawner: {fileID: 4399156766920098865}
+  _muzzleFxPrefab: {fileID: 4146887271406582440, guid: b8d3b28da51b23248b4b5d5afb4d2c75, type: 3}
+  _aoeIndicatorPrefab: {fileID: 0}
+  _aoeLaunchFxPrefab: {fileID: 0}
+  _aoeDropPrefab: {fileID: 0}
+  _groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  _impactFxPrefab: {fileID: 0}
+  _impactFxLife: 2
+  _playerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!114 &4385117418369753368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6465718177912725889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 965f72e7d4510d740a283deb0d2725df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
+  _agent: {fileID: 7542423310402389041}
 --- !u!1 &6896513012458087264
 GameObject:
   m_ObjectHideFlags: 0
