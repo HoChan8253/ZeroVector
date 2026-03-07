@@ -4528,8 +4528,8 @@ MonoBehaviour:
   _aoeDropPrefab: {fileID: 8784508017047646712, guid: 19e97d3c20bfcd249b46b862c578e23d, type: 3}
   _groundMask:
     serializedVersion: 2
-    m_Bits: 4294967295
-  _impactFxPrefab: {fileID: 0}
+    m_Bits: 64
+  _impactFxPrefab: {fileID: 4276611637656436699, guid: cae96887cbbdcc04dab55c0437700486, type: 3}
   _impactFxLife: 2
   _playerMask:
     serializedVersion: 2

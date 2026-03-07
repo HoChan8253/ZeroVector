@@ -1099,7 +1099,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b16f43955e2c90f4ebc30509860199a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
-  _player: {fileID: 0}
+  _player: {fileID: 1277078180829926908, guid: 83fc22a1bfa35b74481546e703a4ed5d, type: 3}
   _animCtrl: {fileID: 3999942781644579977}
   _data: {fileID: 11400000, guid: 0d3bd1e886875d0498c2e350bd251dbd, type: 2}
   _movement: {fileID: 4385117418369753368}
