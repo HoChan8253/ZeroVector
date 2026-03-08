@@ -151,6 +151,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GoldPopup
   _label: {fileID: 8069594695486092271}
-  _riseDuration: 1.2
+  _riseDuration: 3
   _riseHeight: 80
   _riseEase: 9

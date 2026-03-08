@@ -10,24 +10,32 @@ public class GoldPopup : MonoBehaviour
     [SerializeField] private Ease _riseEase = Ease.OutCubic;
 
     private RectTransform _rect;
-    private Camera _cam;
 
     private void Awake()
     {
         _rect = GetComponent<RectTransform>();
-        _cam = Camera.main;
     }
 
-    public void Play(int amount, Vector3 worldPos)
+    public void Play(int amount, Vector3 worldPos, Camera cam)
     {
+        Canvas canvas = GetComponentInParent<Canvas>();
+
+        if (canvas == null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         _label.text = $"+{amount:N0}";
         _label.color = new Color(1f, 0.85f, 0.1f, 1f);
 
-        // 월드 -> Canvas 좌표
-        Canvas canvas = GetComponentInParent<Canvas>();
-        _rect.anchoredPosition = WorldToCanvasPos(worldPos, canvas);
+        _rect.anchorMin = new Vector2(1f, 1f);
+        _rect.anchorMax = new Vector2(1f, 1f);
+        _rect.pivot = new Vector2(1f, 1f);
 
-        // 위로 떠오르기 + 페이드아웃 동시 실행
+
+        _rect.anchoredPosition = new Vector2(-20f, -130f); // 이 값을 조절
+
         _rect.DOAnchorPosY(_rect.anchoredPosition.y + _riseHeight, _riseDuration)
              .SetEase(_riseEase);
 
@@ -36,13 +44,13 @@ public class GoldPopup : MonoBehaviour
               .OnComplete(() => Destroy(gameObject));
     }
 
-    private Vector2 WorldToCanvasPos(Vector3 world, Canvas canvas)
+    private Vector2 WorldToCanvasPos(Vector3 world, Canvas canvas, Camera cam)
     {
-        Vector2 screenPoint = _cam.WorldToScreenPoint(world);
+        Vector2 screenPoint = cam.WorldToScreenPoint(world);
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             canvas.GetComponent<RectTransform>(),
             screenPoint,
-            canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : _cam,
+            canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : cam,
             out Vector2 local);
         return local;
     }

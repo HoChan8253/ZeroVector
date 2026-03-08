@@ -1637,6 +1637,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GoldPopupSpawner
   _popupPrefab: {fileID: 7857715258167741746, guid: 8abdb70409633294abee312d359301c8, type: 3}
   _canvas: {fileID: 659891093}
+  _cam: {fileID: 5679194719837607902}
 --- !u!1 &712076860
 GameObject:
   m_ObjectHideFlags: 0
@@ -5301,6 +5302,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 244dd1da98fb69d4dbfd900060ca624c, type: 3}
+--- !u!20 &5679194719837607902 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 1673188256628829022, guid: 5750cb4fcb74b9741995a80ad3a6f303, type: 3}
+  m_PrefabInstance: {fileID: 7649811388698201091}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6135249787067289389
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5528,6 +5534,10 @@ PrefabInstance:
       propertyPath: _ammoText
       value: 
       objectReference: {fileID: 1483183107}
+    - target: {fileID: 6172309662353173623, guid: 5750cb4fcb74b9741995a80ad3a6f303, type: 3}
+      propertyPath: m_TagString
+      value: MainCamera
+      objectReference: {fileID: 0}
     - target: {fileID: 7048019575746970849, guid: 5750cb4fcb74b9741995a80ad3a6f303, type: 3}
       propertyPath: _ammoText
       value: 
