@@ -25,22 +25,22 @@ MonoBehaviour:
   deaggroRange: 30
   damageAggroHoldTime: 5
   atk1Damage: 30
-  atk1Range: 2.5
+  atk1Range: 2
   atk1Cooldown: 2
-  atk1HitRadius: 1.2
+  atk1HitRadius: 5
   atk1HitForward: 1
   atk1HitHeight: 1
   atk2Damage: 20
   atk2Range: 4
   atk2Cooldown: 5
-  atk2Radius: 3.5
+  atk2Radius: 4.5
   stompDamage: 25
   stompRange: 8
   stompCooldown: 8
   stompProjSpeed: 14
   stompProjLife: 3
-  stompDirCount: 8
+  stompDirCount: 10
   canStun: 1
-  stunTime: 1.5
+  stunTime: 1.3
   dayIdleTime: 3
   dayWalkTime: 4

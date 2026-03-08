@@ -47,12 +47,12 @@ public class BossAttack : MonoBehaviour
     {
         if (damage <= 0) return;
 
-        Vector3 center = transform.position
-                         + Vector3.up * height
-                         + transform.forward * fwd;
+        // 캡슐의 두 끝점
+        Vector3 bottom = transform.position + Vector3.up * height;
+        Vector3 top = bottom + transform.forward * fwd;
 
-        int count = Physics.OverlapSphereNonAlloc(
-            center, radius, _hits, _playerMask,
+        int count = Physics.OverlapCapsuleNonAlloc(
+            bottom, top, radius, _hits, _playerMask,
             QueryTriggerInteraction.Ignore);
 
         for (int i = 0; i < count; i++)

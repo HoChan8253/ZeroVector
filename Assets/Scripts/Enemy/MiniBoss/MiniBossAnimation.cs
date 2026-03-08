@@ -4,7 +4,7 @@ public class BossAnimation : MonoBehaviour
 {
     [SerializeField] private Animator _anim;
 
-    private static readonly int H_MoveSpeed = Animator.StringToHash("MoveSpeed");
+    private static readonly int H_MoveSpeed = Animator.StringToHash("Speed");
     private static readonly int H_Attack1 = Animator.StringToHash("Attack1");
     private static readonly int H_Attack2 = Animator.StringToHash("Attack2");
     private static readonly int H_Stomp = Animator.StringToHash("Stomp");

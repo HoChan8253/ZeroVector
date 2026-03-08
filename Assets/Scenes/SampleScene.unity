@@ -5986,7 +5986,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MiniBossAI
   _player: {fileID: 0}
-  _data: {fileID: 11400000, guid: c032be08c5b20094e8135d5a8f964d9b, type: 2}
+  _data: {fileID: 11400000, guid: 4a8ae5278fb396f4fa94f4b8f3f6f782, type: 2}
   _animCtrl: {fileID: 919132149000426153}
   _movement: {fileID: 919132149000426151}
   _attack: {fileID: 919132149000426154}

@@ -105,11 +105,7 @@ public class MiniBossAI : MonoBehaviour, IEnemyAI
             case State.Attack2:
             case State.Stomp:
             case State.Taunt:
-
-                if (_state != State.Taunt) // Taunt 중엔 이동 잠금 유지
-                    if (Time.time >= _stateEndTime) EnterChase();
-                    else
-                    if (Time.time >= _stateEndTime) EnterChase();
+                if (Time.time >= _stateEndTime) EnterChase();
                 break;
 
             case State.Stun:
