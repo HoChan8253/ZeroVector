@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-// 공중 유닛 전용 AI.
-// NavMesh 를 사용하지 않고 Transform 직접 제어.
+// 공중 유닛 전용 AI
+// NavMesh 를 사용하지 않고 Transform 직접 제어
 public class FlyingEnemyAI : MonoBehaviour, IEnemyAI
 {
     private enum State { Spawning, Idle, Chase, Strafe, Dead }
@@ -13,10 +13,24 @@ public class FlyingEnemyAI : MonoBehaviour, IEnemyAI
     [SerializeField] private FlyingEnemyAttack _attack;
     [SerializeField] private Animator _animator;
 
-    [Header("Animator Params")]
+    [Header("Animator")]
     [SerializeField] private string _paramAttack = "Attack";
     [SerializeField] private string _paramDead = "Dead";
     [SerializeField] private string _paramEncounter = "Encounter";
+
+    [Header("Death Fall")]
+    [Tooltip("사망 애니메이션 재생 후 낙하 시작까지 대기 시간")]
+    [SerializeField] private float _deathAnimDelay = 0.6f;
+    [Tooltip("지면까지 낙하하는 데 걸리는 시간")]
+    [SerializeField] private float _deathFallTime = 1.2f;
+    [Tooltip("낙하 속도 곡선")]
+    [SerializeField]
+    private AnimationCurve _deathFallCurve = new AnimationCurve(
+        new Keyframe(0f, 1f, 0f, 0f),   // 처음엔 천천히
+        new Keyframe(0.6f, 0.6f, -1f, -3f),
+        new Keyframe(1f, 0f, -4f, 0f));  // 마지막엔 빠르게
+    [Tooltip("페이드아웃 시작 시점")]
+    [SerializeField] private float _fadeStartNormalized = 0.5f;
 
     // 외부 참조
     public EnemyData Data => _data;
@@ -43,11 +57,7 @@ public class FlyingEnemyAI : MonoBehaviour, IEnemyAI
         if (_attack == null) _attack = GetComponent<FlyingEnemyAttack>();
         if (_animator == null) _animator = GetComponentInChildren<Animator>(true);
 
-        if (_movement != null)
-            _movement.Init(_data, FlyHeight);
-
-        if (_attack != null)
-            _attack.Init(_data, _player);
+        _movement.Init(_data, FlyHeight);
     }
 
     private void Start()
@@ -97,7 +107,6 @@ public class FlyingEnemyAI : MonoBehaviour, IEnemyAI
         }
     }
 
-    // State Machine
     private void UpdateState()
     {
         switch (_state)
@@ -127,12 +136,11 @@ public class FlyingEnemyAI : MonoBehaviour, IEnemyAI
             EnterStrafe();
     }
 
-    // Strafe 공격 사거리 안에서 선회하며 사격
     private void UpdateStrafe()
     {
         if (_player == null) { EnterIdle(); return; }
 
-        // 공격 사거리 이탈 시 다시 추격
+        // 공격 사거리 이탈 → 다시 추격
         if (DistToPlayer() > AttackRange * 1.2f)
         { EnterChase(); return; }
 
@@ -162,17 +170,16 @@ public class FlyingEnemyAI : MonoBehaviour, IEnemyAI
     private void EnterStrafe()
     {
         _state = State.Strafe;
-        _nextAttackTime = Time.time + 0.3f; // 진입 직후 약간의 딜레이
+        _nextAttackTime = Time.time + 0.3f;
     }
 
-    // Attack
+    // 공격
     private void TriggerAttack()
     {
         _animator?.SetTrigger(_paramAttack);
         _attack.Execute(_player);
     }
 
-    // 외부 호출
     public void OnDamaged(Vector3 hitPoint, bool stun)
     {
         if (_state == State.Dead) return;
@@ -191,7 +198,6 @@ public class FlyingEnemyAI : MonoBehaviour, IEnemyAI
         _movement.Stop();
         _animator?.SetTrigger(_paramDead);
 
-        DisableColliders();
         StartCoroutine(CoDeathRoutine());
     }
 
@@ -199,7 +205,7 @@ public class FlyingEnemyAI : MonoBehaviour, IEnemyAI
     private float DistToPlayer()
     {
         if (_player == null) return float.MaxValue;
-        // 수평 거리만 비교 (높이 차 무시)
+
         Vector3 flat = _player.position - transform.position;
         flat.y = 0f;
         return flat.magnitude;
@@ -211,14 +217,12 @@ public class FlyingEnemyAI : MonoBehaviour, IEnemyAI
             c.enabled = false;
     }
 
-    // 코루틴
     // 등장 연출 후 Idle 진입
     private IEnumerator CoSpawn()
     {
         _state = State.Spawning;
         _animator?.SetTrigger(_paramEncounter);
 
-        // Encounter 애니메이션 길이만큼 대기 (기본 1.5s, 필요시 조정)
         yield return new WaitForSeconds(1.5f);
 
         EnterIdle();
@@ -240,13 +244,23 @@ public class FlyingEnemyAI : MonoBehaviour, IEnemyAI
 
     private IEnumerator CoDeathRoutine()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(_deathAnimDelay);
 
-        float fadeTime = 1.5f;
-        float t = 0f;
+        float startY = transform.position.y;
+
+        DisableColliders();
+
+        int groundMask = LayerMask.GetMask("Ground", "Terrain", "Default");
+        float groundY = startY - FlyHeight;
+
+        if (Physics.Raycast(transform.position, Vector3.down, out var hit, 50f, groundMask))
+            groundY = hit.point.y;
+
+        if (startY - groundY < 0.5f)
+            groundY = startY - 2f;
+
+        // Material 인스턴스화
         var renderers = GetComponentsInChildren<Renderer>(true);
-
-        // 머티리얼 인스턴스화
         foreach (var r in renderers)
         {
             var mats = r.materials;
@@ -255,29 +269,46 @@ public class FlyingEnemyAI : MonoBehaviour, IEnemyAI
             r.materials = mats;
         }
 
-        while (t < fadeTime)
+        float t = 0f;
+        while (t < _deathFallTime)
         {
             t += Time.deltaTime;
-            float alpha = Mathf.Lerp(1f, 0f, t / fadeTime);
-            foreach (var r in renderers)
-            {
-                foreach (var m in r.materials)
-                {
-                    if (m.HasProperty("_BaseColor"))
-                    {
-                        var c = m.GetColor("_BaseColor"); c.a = alpha;
-                        m.SetColor("_BaseColor", c);
-                    }
-                    if (m.HasProperty("_Color"))
-                    {
-                        var c = m.GetColor("_Color"); c.a = alpha;
-                        m.SetColor("_Color", c);
-                    }
-                }
-            }
+            float normalized = Mathf.Clamp01(t / _deathFallTime);
+
+            // 낙하
+            float curveY = _deathFallCurve.Evaluate(normalized);
+            var pos = transform.position;
+            pos.y = Mathf.Lerp(groundY, startY, curveY);
+            transform.position = pos;
+
+            // 페이드아웃
+            float fadeProgress = Mathf.InverseLerp(_fadeStartNormalized, 1f, normalized);
+            float alpha = Mathf.Lerp(1f, 0f, fadeProgress);
+            ApplyAlpha(renderers, alpha);
+
             yield return null;
         }
 
         Destroy(gameObject);
+    }
+
+    private static void ApplyAlpha(Renderer[] renderers, float alpha)
+    {
+        foreach (var r in renderers)
+        {
+            foreach (var m in r.materials)
+            {
+                if (m.HasProperty("_BaseColor"))
+                {
+                    var c = m.GetColor("_BaseColor"); c.a = alpha;
+                    m.SetColor("_BaseColor", c);
+                }
+                if (m.HasProperty("_Color"))
+                {
+                    var c = m.GetColor("_Color"); c.a = alpha;
+                    m.SetColor("_Color", c);
+                }
+            }
+        }
     }
 }

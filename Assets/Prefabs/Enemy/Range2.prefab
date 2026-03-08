@@ -387,7 +387,7 @@ MonoBehaviour:
   _impactFxLife: 2
   _playerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 512
 --- !u!114 &6576651903358405398
 MonoBehaviour:
   m_ObjectHideFlags: 0

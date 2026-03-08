@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a754f6ca96bd24a89f2999bc053ef6, type: 3}
   m_Name: ED_Flying
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  maxHp: 100
+  maxHp: 1
   useShield: 0
   maxShield: 0
   dayIdleTime: 2

@@ -95,6 +95,9 @@ public class EnemyAttack : MonoBehaviour
             var col = _meleeHits[i];
             if (col == null) continue;
 
+            // 자기 자신 콜라이더 제외
+            if (col.transform.IsChildOf(transform) || col.transform == transform) continue;
+
             var d = col.GetComponentInParent<IDamageable>();
             if (d != null) { d.TakeDamage(damage); break; }
         }
