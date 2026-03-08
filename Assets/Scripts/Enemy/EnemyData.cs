@@ -13,6 +13,10 @@ public class EnemyData : ScriptableObject
     [Header("Core")]
     public int maxHp = 100;
 
+    [Header("Shield")]
+    public bool useShield = false;
+    public int maxShield = 0;
+
     [Header("Day Loop")]
     public float dayIdleTime = 2.0f;
     public float dayWalkTime = 3.0f;
@@ -31,6 +35,12 @@ public class EnemyData : ScriptableObject
 
     [Header("Type")]
     public EnemyAttackType attackType = EnemyAttackType.Melee;
+
+    [Header("Flying")]
+    public bool isFlying = false; // 공중 유닛인지
+    public float flyingHeight = 4.5f; // 유지할 Y 높이
+    public float flyingMoveSpeed = 3.5f; // 공중 이동 속도
+    public float turnSpeed = 8f; // 플레이어를 바라보는 회전 속도
 
     [Header("Combat")]
     public float attackRange = 2.0f;

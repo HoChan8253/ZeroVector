@@ -71,7 +71,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 977657260808397096}
-  - component: {fileID: 6960747947721664194}
+  - component: {fileID: 4854550692849463354}
   m_Layer: 0
   m_Name: HeadHitbox
   m_TagString: EnemyHead
@@ -94,8 +94,8 @@ Transform:
   m_Children: []
   m_Father: {fileID: 9165819098358172791}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &6960747947721664194
-SphereCollider:
+--- !u!136 &4854550692849463354
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -112,9 +112,11 @@ SphereCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 2
+  m_Radius: 0.0007738011
+  m_Height: 0.002263711
+  m_Direction: 2
+  m_Center: {x: -0.00006913862, y: 2.9300087e-11, z: 0.00018316427}
 --- !u!1 &1478936196976520951
 GameObject:
   m_ObjectHideFlags: 0
@@ -496,6 +498,8 @@ GameObject:
   - component: {fileID: 5839956400315499357}
   - component: {fileID: 1107828120928630886}
   - component: {fileID: 5786603534910889208}
+  - component: {fileID: 155499572136671669}
+  - component: {fileID: 1561962424072265167}
   m_Layer: 0
   m_Name: Melee1
   m_TagString: Untagged
@@ -513,7 +517,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 33.885, y: 0.701, z: -35.54}
-  m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
+  m_LocalScale: {x: 1.4, y: 1.4, z: 1.4}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 672839399144099354}
@@ -579,18 +583,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
   _player: {fileID: 0}
   _animCtrl: {fileID: 5786603534910889208}
-  _agent: {fileID: 2574911956693449202}
   _data: {fileID: 11400000, guid: 61cad716b5f83a94c8e19ed309f1fff8, type: 2}
-  _bulletSpawner: {fileID: 0}
-  _aoeIndicatorPrefab: {fileID: 0}
-  _aoeLaunchFxPrefab: {fileID: 0}
-  _aoeDropPrefab: {fileID: 0}
-  _groundMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  _muzzleFxPrefab: {fileID: 0}
-  _impactFxPrefab: {fileID: 0}
-  _impactFxLife: 2
+  _movement: {fileID: 1561962424072265167}
+  _attack: {fileID: 155499572136671669}
 --- !u!114 &5839956400315499357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -605,6 +600,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   _resetHpOnEnable: 1
   _stunnable: 1
+  _shieldVisual: {fileID: 0}
 --- !u!136 &1107828120928630886
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -624,10 +620,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.21253014
+  m_Radius: 0.25411266
   m_Height: 1.3901782
   m_Direction: 1
-  m_Center: {x: 0.0017642975, y: 0.6950891, z: 0.041940212}
+  m_Center: {x: 0.018414771, y: 0.6950891, z: 0.011939704}
 --- !u!114 &5786603534910889208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -641,6 +637,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAnimation
   _anim: {fileID: 5782818193018466275}
+--- !u!114 &155499572136671669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5044674385491539189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2baeff03cc58a304a817ce570635126e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAttack
+  _bulletSpawner: {fileID: 0}
+  _muzzleFxPrefab: {fileID: 0}
+  _aoeIndicatorPrefab: {fileID: 0}
+  _aoeLaunchFxPrefab: {fileID: 0}
+  _aoeDropPrefab: {fileID: 0}
+  _groundMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _impactFxPrefab: {fileID: 0}
+  _impactFxLife: 2
+  _playerMask:
+    serializedVersion: 2
+    m_Bits: 512
+--- !u!114 &1561962424072265167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5044674385491539189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 965f72e7d4510d740a283deb0d2725df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
+  _agent: {fileID: 2574911956693449202}
 --- !u!1 &5612656985642797959
 GameObject:
   m_ObjectHideFlags: 0
