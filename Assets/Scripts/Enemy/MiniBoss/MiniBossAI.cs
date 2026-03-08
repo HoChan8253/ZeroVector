@@ -19,6 +19,8 @@ public class MiniBossAI : MonoBehaviour, IEnemyAI
     public float StunTime => _data != null ? _data.stunTime : 1.5f;
     public bool IsDead => _state == State.Dead;
 
+    public MiniBossData BossData => _data;
+
     private float AggroRange => _data != null ? _data.aggroRange : 20f;
     private float DeaggroRange => _data != null ? _data.deaggroRange : 30f;
     private float DamageAggroHold => _data != null ? _data.damageAggroHoldTime : 5f;

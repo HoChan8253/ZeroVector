@@ -11,6 +11,12 @@ public class MiniBossData : ScriptableObject
     public int maxShield = 300;
     public float shieldCooldown = 20f; // Taunt 쿨타임
 
+    [Header("Reward")]
+    public int goldReward = 100;
+    public int goldRewardMin = 80;
+    public int goldRewardMax = 120;
+    public bool randomGold = true;
+
     [Header("Movement")]
     public float patrolSpeed = 1.4f;
     public float chaseSpeed = 4f;

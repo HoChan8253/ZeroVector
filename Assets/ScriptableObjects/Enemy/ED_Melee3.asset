@@ -15,6 +15,10 @@ MonoBehaviour:
   maxHp: 200
   useShield: 1
   maxShield: 1300
+  goldReward: 10
+  goldRewardMin: 8
+  goldRewardMax: 15
+  randomGold: 1
   dayIdleTime: 3.5
   dayWalkTime: 2
   patrolRadius: 6

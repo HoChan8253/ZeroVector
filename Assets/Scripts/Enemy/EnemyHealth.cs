@@ -90,8 +90,45 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         if (_hp <= 0)
         {
             _hp = 0;
+            GiveGoldReward();
             _ai?.Die();
         }
+    }
+
+    private void GiveGoldReward()
+    {
+        if (GoldManager.Instance == null) return;
+
+        int amount = 0;
+
+        // EnemyAI
+        if (TryGetComponent<EnemyAI>(out var enemyAI) && enemyAI.Data != null)
+        {
+            var d = enemyAI.Data;
+            amount = d.randomGold
+                ? UnityEngine.Random.Range(d.goldRewardMin, d.goldRewardMax + 1)
+                : d.goldReward;
+        }
+        // MiniBossAI
+        else if (TryGetComponent<MiniBossAI>(out var bossAI))
+        {
+            var d = bossAI.BossData;
+            if (d != null)
+                amount = d.randomGold
+                    ? UnityEngine.Random.Range(d.goldRewardMin, d.goldRewardMax + 1)
+                    : d.goldReward;
+        }
+        // FlyingEnemyAI
+        else if (TryGetComponent<FlyingEnemyAI>(out var flyAI) && flyAI.Data != null)
+        {
+            var d = flyAI.Data;
+            amount = d.randomGold
+                ? UnityEngine.Random.Range(d.goldRewardMin, d.goldRewardMax + 1)
+                : d.goldReward;
+        }
+
+        if (amount > 0)
+            GoldManager.Instance.Add(amount, transform.position);
     }
 
     // 외부 호출
