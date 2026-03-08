@@ -59,7 +59,7 @@ public class GunController : MonoBehaviour
     public bool IsBusy => _state.isReloading || _isHolstered || _isSwapping;
     private bool _isSwapping;
 
-    // 애니메이터 파라미터 (규격 고정)
+    // 애니메이터 파라미터
     private static readonly int AnimIsMoving = Animator.StringToHash("IsMoving");
     private static readonly int AnimShoot = Animator.StringToHash("Shoot");
     private static readonly int AnimReload = Animator.StringToHash("Reload");
@@ -329,7 +329,7 @@ public class GunController : MonoBehaviour
         if (_stats != null)
             _stats.SetReloading(true);
 
-        _anim.SetBool(AnimIsReloading, true);
+        SafeSetBool(AnimIsReloading, true);
 
         if (_data.reloadType == ReloadType.Magazine)
         {
@@ -357,7 +357,7 @@ public class GunController : MonoBehaviour
     private void FinishReload_Magazine()
     {
         _state.isReloading = false;
-        _anim.SetBool(AnimIsReloading, false);
+        SafeSetBool(AnimIsReloading, false);
 
         if (_stats != null)
             _stats.SetReloading(false);
@@ -406,7 +406,7 @@ public class GunController : MonoBehaviour
     private void StopShotgunReload()
     {
         _state.isReloading = false;
-        _anim.SetBool(AnimIsReloading, false);
+        SafeSetBool(AnimIsReloading, false);
 
         if (_stats != null)
             _stats.SetReloading(false);
@@ -416,7 +416,7 @@ public class GunController : MonoBehaviour
     {
         _state.isReloading = false;
         _state.reloadEndTime = 0f;
-        _anim.SetBool(AnimIsReloading, false);
+        SafeSetBool(AnimIsReloading, false);
 
         if (_stats != null)
             _stats.SetReloading(false);
@@ -539,5 +539,11 @@ public class GunController : MonoBehaviour
     public void OnPumpEnd()
     {
         _pumpLocked = false;
+    }
+
+    private void SafeSetBool(int hash, bool value)
+    {
+        foreach (var p in _anim.parameters)
+            if (p.nameHash == hash) { _anim.SetBool(hash, value); return; }
     }
 }
