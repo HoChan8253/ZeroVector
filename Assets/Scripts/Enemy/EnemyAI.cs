@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemyAI : MonoBehaviour
+public class EnemyAI : MonoBehaviour, IEnemyAI
 {
     private enum State { DayIdle, DayPatrol, Chase, Attack, Stun, Dead }
 

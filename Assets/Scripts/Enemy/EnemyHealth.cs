@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemyHealth : MonoBehaviour
+// EnemyAI / FlyingEnemyAI 양쪽 모두에서 사용 가능 체력 컴포넌트
+public class EnemyHealth : MonoBehaviour, IDamageable
 {
     [SerializeField] private bool _resetHpOnEnable = true;
 
@@ -11,32 +12,34 @@ public class EnemyHealth : MonoBehaviour
     [Header("Shield Visual")]
     [SerializeField] private GameObject _shieldVisual;
 
+    // Runtime
     private int _hp;
     private int _shield;
-
-    private EnemyAI _ai;
+    private IEnemyAI _ai;
 
     public int Hp => _hp;
     public int Shield => _shield;
-
-    public int MaxHp => (_ai != null && _ai.Data != null) ? _ai.Data.maxHp : 100;
-
+    public int MaxHp => _ai?.Data != null ? _ai.Data.maxHp : 100;
     public int MaxShield
     {
         get
         {
-            if (_ai != null && _ai.Data != null && _ai.Data.useShield)
+            if (_ai?.Data != null && _ai.Data.useShield)
                 return _ai.Data.maxShield;
-
             return 0;
         }
     }
-
     public bool HasShield => _shield > 0;
 
     private void Awake()
     {
-        _ai = GetComponent<EnemyAI>();
+        // GetComponent 로 어느 AI 타입이든 자동으로 찾음
+        _ai = GetComponent<IEnemyAI>();
+
+        if (_ai == null)
+            Debug.LogWarning($"[EnemyHealth] {name}: IEnemyAI 구현체를 찾지 못했습니다. " +
+                             "EnemyAI 또는 FlyingEnemyAI 컴포넌트가 같은 GameObject에 있어야 합니다.");
+
         ResetHp();
     }
 
@@ -46,16 +49,6 @@ public class EnemyHealth : MonoBehaviour
             ResetHp();
     }
 
-    private bool CanStun()
-    {
-        if (HasShield) return false;
-
-        if (_ai != null && _ai.Data != null)
-            return _ai.Data.canStun;
-
-        return _stunnable;
-    }
-
     public void ResetHp()
     {
         _hp = MaxHp;
@@ -63,49 +56,60 @@ public class EnemyHealth : MonoBehaviour
         RefreshShieldVisual();
     }
 
+    public void TakeDamage(int amount)
+    {
+        TakeDamage(amount, false, transform.position, Vector3.up);
+    }
+
     public void TakeDamage(int amount, bool headshot, Vector3 hitPoint, Vector3 hitNormal)
     {
-        if (_hp <= 0) return;
+        if (_ai != null && _ai.IsDead) return;
         if (amount <= 0) return;
 
         PlayHitFx(hitPoint, hitNormal);
 
+        // 실드가 남아 있으면 실드 우선 차감
         if (HasShield)
         {
             _shield -= amount;
-
             if (_shield <= 0)
             {
                 _shield = 0;
                 RefreshShieldVisual();
                 OnShieldBreak();
             }
-
-            if (_ai != null)
-                _ai.OnDamaged(hitPoint, false);
-
+            // 실드에 맞았을 때는 스턴 없이 어그로만 활성화
+            _ai?.OnDamaged(hitPoint, false);
             return;
         }
 
+        // HP 차감
         _hp -= amount;
 
         bool stun = CanStun() && headshot;
-
-        if (_ai != null)
-            _ai.OnDamaged(hitPoint, stun);
+        _ai?.OnDamaged(hitPoint, stun);
 
         if (_hp <= 0)
         {
             _hp = 0;
-
-            if (_ai != null)
-                _ai.Die();
+            _ai?.Die();
         }
+    }
+
+    // 외부 호출
+    private bool CanStun()
+    {
+        if (HasShield) return false;
+
+        // EnemyData 에 canStun 있으면 우선 사용
+        if (_ai?.Data != null) return _ai.Data.canStun;
+
+        return _stunnable;
     }
 
     private void OnShieldBreak()
     {
-        Debug.Log($"{name} shield broken");
+        Debug.Log($"[EnemyHealth] {name} 실드 파괴");
     }
 
     private void RefreshShieldVisual()
@@ -114,25 +118,27 @@ public class EnemyHealth : MonoBehaviour
             _shieldVisual.SetActive(HasShield);
     }
 
+    // HitFX
     public void PlayHitFx(Vector3 point, Vector3 normal)
     {
         if (ObjectPoolManager.Instance == null) return;
 
-        Quaternion rot = Quaternion.LookRotation(normal);
-        Vector3 pos = point + normal * 0.01f;
+        Quaternion rot = normal != Vector3.zero
+            ? Quaternion.LookRotation(normal)
+            : Quaternion.identity;
 
+        Vector3 pos = point + normal * 0.01f;
         GameObject obj = ObjectPoolManager.Instance.Spawn(PoolKey.HitFx_ElectricShort, pos, rot);
         if (obj == null) return;
 
-        var ps = obj.GetComponent<ParticleSystem>();
-        if (ps == null) ps = obj.GetComponentInChildren<ParticleSystem>(true);
+        var ps = obj.GetComponent<ParticleSystem>()
+                 ?? obj.GetComponentInChildren<ParticleSystem>(true);
 
         if (ps != null)
         {
             ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             ps.Clear(true);
             ps.Play(true);
-
             float life = ps.main.duration + ps.main.startLifetime.constantMax;
             StartCoroutine(CoDespawnFx(PoolKey.HitFx_ElectricShort, obj, life));
         }
@@ -145,7 +151,6 @@ public class EnemyHealth : MonoBehaviour
     private IEnumerator CoDespawnFx(PoolKey key, GameObject obj, float delay)
     {
         yield return new WaitForSeconds(delay);
-
         if (ObjectPoolManager.Instance != null && obj != null)
             ObjectPoolManager.Instance.Despawn(key, obj);
     }

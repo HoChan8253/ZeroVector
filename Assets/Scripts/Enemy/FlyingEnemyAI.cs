@@ -3,7 +3,7 @@ using System.Collections;
 
 // 공중 유닛 전용 AI.
 // NavMesh 를 사용하지 않고 Transform 직접 제어.
-public class FlyingEnemyAI : MonoBehaviour
+public class FlyingEnemyAI : MonoBehaviour, IEnemyAI
 {
     private enum State { Spawning, Idle, Chase, Strafe, Dead }
 
@@ -43,7 +43,11 @@ public class FlyingEnemyAI : MonoBehaviour
         if (_attack == null) _attack = GetComponent<FlyingEnemyAttack>();
         if (_animator == null) _animator = GetComponentInChildren<Animator>(true);
 
-        _movement.Init(_data, FlyHeight);
+        if (_movement != null)
+            _movement.Init(_data, FlyHeight);
+
+        if (_attack != null)
+            _attack.Init(_data, _player);
     }
 
     private void Start()
