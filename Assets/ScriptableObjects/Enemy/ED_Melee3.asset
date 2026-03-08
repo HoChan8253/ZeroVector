@@ -26,10 +26,14 @@ MonoBehaviour:
   deaggroRange: 18
   damageAggroHoldTime: 2
   attackType: 0
+  isFlying: 0
+  flyingHeight: 4.5
+  flyingMoveSpeed: 3.5
+  turnSpeed: 8
   attackRange: 2
   attackCooldown: 2
   attackDamage: 20
-  meleeHitRadius: 1
+  meleeHitRadius: 2.5
   meleeHitForward: 0.9
   meleeHitHeight: 1
   projectileSpeed: 15

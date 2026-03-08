@@ -43,4 +43,4 @@ MonoBehaviour:
   aoeDropTime: 2
   aoeRadius: 3
   canStun: 0
-  stunTime: 1
+  stunTime: 0
