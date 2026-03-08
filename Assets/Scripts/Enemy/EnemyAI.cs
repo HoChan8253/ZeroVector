@@ -17,6 +17,12 @@ public class EnemyAI : MonoBehaviour, IEnemyAI
     public Transform Target => _player;
     public EnemyData Data => _data;
 
+    public int MaxHp => _data != null ? _data.maxHp : 100;
+    public int MaxShield => _data != null ? _data.maxShield : 0;
+    public bool UseShield => _data != null && _data.useShield;
+    public bool CanStun => _data != null ? _data.canStun : true;
+    public float StunTime => _data != null ? _data.stunTime : 1f;
+
     public bool IsMoving => _state == State.Chase || _state == State.DayPatrol;
     public bool IsAttacking => _state == State.Attack;
     public bool IsDead => _state == State.Dead;
@@ -30,7 +36,7 @@ public class EnemyAI : MonoBehaviour, IEnemyAI
     private float DayIdleTime => _data != null ? _data.dayIdleTime : 2f;
     private float DayWalkTime => _data != null ? _data.dayWalkTime : 3f;
     private float PatrolRadius => _data != null ? _data.patrolRadius : 6f;
-    private float StunTime => _data != null ? _data.stunTime : 1f;
+    private float _StunDuration => _data != null ? _data.stunTime : 1f;
 
     // Runtime
     private State _state;
@@ -197,7 +203,7 @@ public class EnemyAI : MonoBehaviour, IEnemyAI
     private void EnterStun()
     {
         _state = State.Stun;
-        _stateEndTime = Time.time + StunTime;
+        _stateEndTime = Time.time + _StunDuration;
         _movement.Stop();
         _animCtrl?.PlayStun();
     }

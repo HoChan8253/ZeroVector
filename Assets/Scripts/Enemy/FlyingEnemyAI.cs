@@ -35,6 +35,11 @@ public class FlyingEnemyAI : MonoBehaviour, IEnemyAI
     // 외부 참조
     public EnemyData Data => _data;
     public bool IsDead => _state == State.Dead;
+    public int MaxHp => _data != null ? _data.maxHp : 100;
+    public int MaxShield => _data != null ? _data.maxShield : 0;
+    public bool UseShield => _data != null && _data.useShield;
+    public bool CanStun => false; // 공중 유닛은 스턴 없음
+    public float StunTime => 0f;
 
     // 데이터 캐시
     private float AggroRange => _data != null ? _data.aggroRange : 12f;

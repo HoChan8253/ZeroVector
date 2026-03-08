@@ -19,16 +19,8 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     public int Hp => _hp;
     public int Shield => _shield;
-    public int MaxHp => _ai?.Data != null ? _ai.Data.maxHp : 100;
-    public int MaxShield
-    {
-        get
-        {
-            if (_ai?.Data != null && _ai.Data.useShield)
-                return _ai.Data.maxShield;
-            return 0;
-        }
-    }
+    public int MaxHp => _ai != null ? _ai.MaxHp : 100;
+    public int MaxShield => _ai != null && _ai.UseShield ? _ai.MaxShield : 0;
     public bool HasShield => _shield > 0;
 
     private void Awake()
@@ -52,6 +44,12 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     public void ResetHp()
     {
         _hp = MaxHp;
+        _shield = MaxShield;
+        RefreshShieldVisual();
+    }
+
+    public void ResetShieldOnly()
+    {
         _shield = MaxShield;
         RefreshShieldVisual();
     }
@@ -100,10 +98,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     private bool CanStun()
     {
         if (HasShield) return false;
-
-        // EnemyData 에 canStun 있으면 우선 사용
-        if (_ai?.Data != null) return _ai.Data.canStun;
-
+        if (_ai != null) return _ai.CanStun;
         return _stunnable;
     }
 
