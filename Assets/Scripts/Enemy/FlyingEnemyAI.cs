@@ -16,7 +16,7 @@ public class FlyingEnemyAI : MonoBehaviour, IEnemyAI
     [Header("Animator")]
     [SerializeField] private string _paramAttack = "Attack";
     [SerializeField] private string _paramDead = "Dead";
-    [SerializeField] private string _paramEncounter = "Encounter";
+    [SerializeField] private string _paramEncounter = "Entrance";
 
     [Header("Death Fall")]
     [Tooltip("사망 애니메이션 재생 후 낙하 시작까지 대기 시간")]
