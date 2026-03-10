@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "FPS/Wave Data", fileName = "WD_Wave")]
+[CreateAssetMenu(menuName = "LoopSO/Wave Data", fileName = "WD_Wave")]
 public class WaveData : ScriptableObject
 {
     [Serializable]

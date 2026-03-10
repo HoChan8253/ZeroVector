@@ -14,13 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
   weaponName: Pistol
   fireMode: 0
+  pelletCount: 8
+  pelletSpread: 0.08
+  damagePerPellet: 8
   fireRate: 4
   range: 60
   damage: 12
   magSize: 12
   startAmmoInMag: 12
-  startReserveAmmo: 48
+  startReserveAmmo: 999
+  infiniteReserveAmmo: 1
   reloadDuration: 2.708
+  reloadType: 0
+  perShellTime: 1.667
+  reloadStartTime: 1
+  reloadEndTime: 0.917
   recoilPitchAmount: 2.4
   recoilYawAmount: 0.8
   spreadAmount: 0.008

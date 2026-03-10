@@ -12,7 +12,7 @@ public enum ReloadType
     PerShell     // 한 발씩
 }
 
-[CreateAssetMenu(menuName = "FPS/Weapon Data", fileName = "WD_NewWeapon")]
+[CreateAssetMenu(menuName = "WeaponSO/Weapon Data", fileName = "WD_NewWeapon")]
 
 public class WeaponData : ScriptableObject
 {
@@ -36,6 +36,9 @@ public class WeaponData : ScriptableObject
     public int magSize = 30;
     public int startAmmoInMag = 30;
     public int startReserveAmmo = 90;
+
+    [Header("Ammo Option")]
+    public bool infiniteReserveAmmo = false;
 
     [Header("Reload")]
     public float reloadDuration = 4.583f;
