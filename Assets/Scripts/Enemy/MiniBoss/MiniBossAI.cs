@@ -257,6 +257,14 @@ public class MiniBossAI : MonoBehaviour, IEnemyAI
         StartCoroutine(CoDeathRoutine());
     }
 
+    public void ActivateCombat()
+    {
+        if (_state == State.Dead) return;
+        _aggro = true;
+        if (_state == State.DayIdle || _state == State.DayPatrol)
+            EnterChase();
+    }
+
     // 유틸
     private float Dist() =>
         _player != null ? Vector3.Distance(transform.position, _player.position) : float.MaxValue;

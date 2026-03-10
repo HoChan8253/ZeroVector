@@ -238,6 +238,14 @@ public class EnemyAI : MonoBehaviour, IEnemyAI
         StartCoroutine(CoDeathRoutine());
     }
 
+    public void ActivateCombat()
+    {
+        if (_state == State.Dead) return;
+        _aggro = true;
+        if (_state == State.DayIdle || _state == State.DayPatrol)
+            EnterChase();
+    }
+
     // 유틸
     private float DistanceToPlayer()
     {

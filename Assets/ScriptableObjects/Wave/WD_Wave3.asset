@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfecf228497ba264f9d5b8dd2450925a, type: 3}
+  m_Name: WD_Wave3
+  m_EditorClassIdentifier: Assembly-CSharp::WaveData
+  waveNumber: 3
+  dayFieldTarget: 14
+  dayEntries:
+  - prefab: {fileID: 5061237599360014270, guid: 2d6b844b8fe55d2419f79f3b9a82a8d7, type: 3}
+    fixedCount: 0
+    weight: 7
+  - prefab: {fileID: 5044674385491539189, guid: ebed62d14cce3a849adc78996a45002e, type: 3}
+    fixedCount: 0
+    weight: 3
+  - prefab: {fileID: 6465718177912725889, guid: 0eaec59044aa2eb4dac0ce7cc710e299, type: 3}
+    fixedCount: 0
+    weight: 2
+  nightEntries:
+  - prefab: {fileID: 5061237599360014270, guid: 2d6b844b8fe55d2419f79f3b9a82a8d7, type: 3}
+    fixedCount: 0
+    weight: 5
+  - prefab: {fileID: 5044674385491539189, guid: ebed62d14cce3a849adc78996a45002e, type: 3}
+    fixedCount: 0
+    weight: 3
+  - prefab: {fileID: 6465718177912725889, guid: 0eaec59044aa2eb4dac0ce7cc710e299, type: 3}
+    fixedCount: 0
+    weight: 4
+  spawnInterval: 0.5

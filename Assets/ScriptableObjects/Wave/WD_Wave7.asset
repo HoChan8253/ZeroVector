@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfecf228497ba264f9d5b8dd2450925a, type: 3}
+  m_Name: WD_Wave7
+  m_EditorClassIdentifier: Assembly-CSharp::WaveData
+  waveNumber: 7
+  dayFieldTarget: 18
+  dayEntries:
+  - prefab: {fileID: 5044674385491539189, guid: ebed62d14cce3a849adc78996a45002e, type: 3}
+    fixedCount: 0
+    weight: 5
+  - prefab: {fileID: 3677515323193531616, guid: 1829a0485ef47fd479ce9d2a6a09a2bd, type: 3}
+    fixedCount: 0
+    weight: 2
+  - prefab: {fileID: 6465718177912725889, guid: 0eaec59044aa2eb4dac0ce7cc710e299, type: 3}
+    fixedCount: 0
+    weight: 3
+  - prefab: {fileID: 9163086858490928039, guid: 23f31dc7300542a43a39dee59b31848a, type: 3}
+    fixedCount: 0
+    weight: 2
+  - prefab: {fileID: 5249679907754556779, guid: 4a4e7fe4e1f91064885a752ca4e81348, type: 3}
+    fixedCount: 0
+    weight: 2
+  nightEntries:
+  - prefab: {fileID: 5044674385491539189, guid: ebed62d14cce3a849adc78996a45002e, type: 3}
+    fixedCount: 0
+    weight: 5
+  - prefab: {fileID: 3677515323193531616, guid: 1829a0485ef47fd479ce9d2a6a09a2bd, type: 3}
+    fixedCount: 0
+    weight: 3
+  - prefab: {fileID: 6465718177912725889, guid: 0eaec59044aa2eb4dac0ce7cc710e299, type: 3}
+    fixedCount: 0
+    weight: 3
+  - prefab: {fileID: 9163086858490928039, guid: 23f31dc7300542a43a39dee59b31848a, type: 3}
+    fixedCount: 0
+    weight: 3
+  - prefab: {fileID: 5249679907754556779, guid: 4a4e7fe4e1f91064885a752ca4e81348, type: 3}
+    fixedCount: 0
+    weight: 2
+  spawnInterval: 0.4

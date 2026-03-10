@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
 // EnemyAI / FlyingEnemyAI 양쪽 모두에서 사용 가능 체력 컴포넌트
@@ -22,6 +23,8 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     public int MaxHp => _ai != null ? _ai.MaxHp : 100;
     public int MaxShield => _ai != null && _ai.UseShield ? _ai.MaxShield : 0;
     public bool HasShield => _shield > 0;
+
+    public event Action OnDead;
 
     private void Awake()
     {
@@ -91,6 +94,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         {
             _hp = 0;
             GiveGoldReward();
+            OnDead?.Invoke();
             _ai?.Die();
         }
     }

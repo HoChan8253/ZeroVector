@@ -206,6 +206,14 @@ public class FlyingEnemyAI : MonoBehaviour, IEnemyAI
         StartCoroutine(CoDeathRoutine());
     }
 
+    public void ActivateCombat()
+    {
+        if (_state == State.Dead || _state == State.Spawning) return;
+        _aggro = true;
+        if (_state == State.Idle)
+            EnterChase();
+    }
+
     // 유틸
     private float DistToPlayer()
     {
