@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.InputSystem;
 
 // FPS 마우스 시점 회전 스크립트
 public class PlayerLook : MonoBehaviour

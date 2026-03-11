@@ -13,15 +13,24 @@ MonoBehaviour:
   m_Name: WD_AR
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
   weaponName: AR
+  fireMode: 1
+  pelletCount: 8
+  pelletSpread: 0.08
+  damagePerPellet: 8
   fireRate: 10
   range: 100
   damage: 25
   magSize: 30
   startAmmoInMag: 30
   startReserveAmmo: 90
-  reloadDuration: 4.583
-  recoilPitchAmount: 2
-  recoilYawAmount: 1
+  infiniteReserveAmmo: 0
+  reloadDuration: 3.7
+  reloadType: 0
+  perShellTime: 1.667
+  reloadStartTime: 1
+  reloadEndTime: 0.917
+  recoilPitchAmount: 3
+  recoilYawAmount: 2
   spreadAmount: 0.02
   maxSpread: 0.08
   spreadRecoverSpeed: 8

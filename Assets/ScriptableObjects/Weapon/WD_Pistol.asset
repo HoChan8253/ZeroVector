@@ -24,7 +24,7 @@ MonoBehaviour:
   startAmmoInMag: 12
   startReserveAmmo: 999
   infiniteReserveAmmo: 1
-  reloadDuration: 2.708
+  reloadDuration: 2.2
   reloadType: 0
   perShellTime: 1.667
   reloadStartTime: 1

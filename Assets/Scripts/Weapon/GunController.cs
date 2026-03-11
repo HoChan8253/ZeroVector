@@ -52,6 +52,7 @@ public class GunController : MonoBehaviour
 
     private bool _isHolstered;
     public bool IsBusy => _state.isReloading || _isHolstered || _isSwapping;
+    public float CurrentSpread => _state.currentSpread;
     private bool _isSwapping;
 
     private static readonly int AnimIsMoving = Animator.StringToHash("IsMoving");

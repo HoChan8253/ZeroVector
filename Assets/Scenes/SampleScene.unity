@@ -16821,6 +16821,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1606494677}
+  - component: {fileID: 1606494678}
   m_Layer: 5
   m_Name: CrossHair
   m_TagString: Untagged
@@ -16851,6 +16852,27 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1606494678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1606494676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50348892cc1e67f4da96fce829feab86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CrosshairController
+  _top: {fileID: 320356327}
+  _bottom: {fileID: 1795555425}
+  _left: {fileID: 2144018271}
+  _right: {fileID: 1596266956}
+  _gun: {fileID: 0}
+  _baseOffset: 20
+  _maxSpreadOffset: 80
+  _lerpSpeed: 12
+  _weaponData: {fileID: 0}
 --- !u!1 &1619147036
 GameObject:
   m_ObjectHideFlags: 0
@@ -24173,6 +24195,10 @@ PrefabInstance:
       propertyPath: _ammoText
       value: 
       objectReference: {fileID: 1483183107}
+    - target: {fileID: 7362490299765271531, guid: 5750cb4fcb74b9741995a80ad3a6f303, type: 3}
+      propertyPath: _crosshair
+      value: 
+      objectReference: {fileID: 1606494678}
     - target: {fileID: 7594220105218783932, guid: 5750cb4fcb74b9741995a80ad3a6f303, type: 3}
       propertyPath: m_Name
       value: Player

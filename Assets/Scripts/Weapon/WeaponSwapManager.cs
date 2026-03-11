@@ -6,10 +6,13 @@ public class WeaponSwapManager : MonoBehaviour
     [Header("Refs")]
     [SerializeField] private PlayerInputHub _input;
 
-    [Header("Weapons By Slot (1-based)")]
+    [Header("Weapons By Slot")]
     [SerializeField] private GameObject _weapon1;
     [SerializeField] private GameObject _weapon2;
     [SerializeField] private GameObject _weapon3;
+
+    [Header("UI")]
+    [SerializeField] private CrosshairController _crosshair;
 
     private GameObject _current;
     private GameObject _pending;
@@ -96,6 +99,10 @@ public class WeaponSwapManager : MonoBehaviour
         _current = weaponGO;
         _currentGun = _current != null ? _current.GetComponent<GunController>() : null;
         _currentAnim = _current != null ? _current.GetComponent<Animator>() : null;
+
+        // 크로스헤어에 현재 활성 GunController 전달
+        if (_crosshair != null)
+            _crosshair.SetGunController(_currentGun);
     }
 
     private void RequestSwap(GameObject target)
