@@ -28,24 +28,30 @@ public class WeaponUpgradeManager : MonoBehaviour
         }
     }
 
-    // 탄창 크기
+    // 탄창 크기 (AR/권총 전용)
     public int CurrentMagSize
-        => WeaponData != null
-            ? WeaponData.magSize + _upgradeData.magPerLevel * MagLevel
-            : 0;
+    {
+        get
+        {
+            if (WeaponData == null) return 0;
+            if (_upgradeData.isShotgun) return WeaponData.magSize; // 샷건은 탄창 업그레이드 없음
+            return WeaponData.magSize + _upgradeData.magPerLevel * MagLevel;
+        }
+    }
 
-    // 펠릿 수
+    // 펠릿 수 (샷건 전용)
     public int CurrentPelletCount
         => WeaponData != null
             ? WeaponData.pelletCount + _upgradeData.magPerLevel * MagLevel
             : 0;
 
+    // 예비탄약 (AR/샷건)
     public int CurrentReserveAmmo
         => WeaponData != null
             ? WeaponData.startReserveAmmo + _upgradeData.thirdPerLevel * ThirdLevel
             : 0;
 
-    // 권총 치명타 확률
+    // 치명타 확률 0~1 (권총 전용)
     public float CurrentCritChance
         => _upgradeData != null && _upgradeData.isPistol
             ? Mathf.Clamp01(_upgradeData.baseCritChance + _upgradeData.thirdPerLevel * ThirdLevel * 0.01f)
