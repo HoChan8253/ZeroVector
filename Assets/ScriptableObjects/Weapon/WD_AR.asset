@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 625576d5e73688d459a72090be27e638, type: 3}
   m_Name: WD_AR
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
-  weaponName: AR
+  weaponName: Assault Rifle
   fireMode: 1
   pelletCount: 8
   pelletSpread: 0.08

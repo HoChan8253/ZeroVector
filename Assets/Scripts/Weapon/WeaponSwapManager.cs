@@ -100,9 +100,11 @@ public class WeaponSwapManager : MonoBehaviour
         _currentGun = _current != null ? _current.GetComponent<GunController>() : null;
         _currentAnim = _current != null ? _current.GetComponent<Animator>() : null;
 
-        // 크로스헤어에 현재 활성 GunController 전달
-        if (_crosshair != null)
-            _crosshair.SetGunController(_currentGun);
+        if (_crosshair != null) _crosshair.SetGunController(_currentGun);
+
+        // 현재 무기의 AmmoUI에서 무기명 갱신
+        AmmoUI ammoUI = _current != null ? _current.GetComponent<AmmoUI>() : null;
+        if (ammoUI != null) ammoUI.UpdateWeaponName();
     }
 
     private void RequestSwap(GameObject target)
