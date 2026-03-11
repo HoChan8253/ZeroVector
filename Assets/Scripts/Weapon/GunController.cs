@@ -36,6 +36,7 @@ public class GunController : MonoBehaviour
 
     [SerializeField] private WeaponState _state = new WeaponState();
 
+    // 캐시
     private float _fireRate;
     private float _range;
     private float _damage;
@@ -136,19 +137,26 @@ public class GunController : MonoBehaviour
     }
 
     // 업그레이드 스탯 적용
-    // 업그레이드 매니저의 현재 스탯을 GunController 캐시에 반영.
+    // 업그레이드 매니저의 현재 스탯을 GunController 캐시에 반영
+    // OnStatsChanged 이벤트 또는 Equip() 직후 호출
     private void ApplyUpgradeStats()
     {
         if (_upgradeManager == null || !_upgradeManager.IsOwned) return;
 
         _damage = _upgradeManager.CurrentDamage;
-        _magSize = _upgradeManager.CurrentMagSize;
         _critChance = _upgradeManager.CurrentCritChance;
 
-        // 예비탄약: 게임 중 업그레이드 시 차액만큼 추가
-        int newMax = _upgradeManager.CurrentReserveAmmo;
-        if (_state.reserveAmmo < newMax)
-            _state.reserveAmmo = newMax;
+        // 업그레이드로 늘어난 차액만큼만 현재 탄창에 추가
+        int newMagSize = _upgradeManager.CurrentMagSize;
+        int magDiff = newMagSize - _magSize;
+        if (magDiff > 0)
+            _state.ammoInMag = Mathf.Min(_state.ammoInMag + magDiff, newMagSize);
+        _magSize = newMagSize;
+
+        // 업그레이드로 늘어난 차액만큼 예비 탄약 추가
+        int newReserve = _upgradeManager.CurrentReserveAmmo;
+        if (_state.reserveAmmo < newReserve)
+            _state.reserveAmmo = newReserve;
 
         NotifyAmmo();
     }

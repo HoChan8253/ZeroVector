@@ -30,19 +30,14 @@ public class CrosshairController : MonoBehaviour
     {
         float spread = 0f;
         float maxSpread = 1f;
-
         if (_gun != null && _gun._data != null)
         {
             maxSpread = Mathf.Max(_gun._data.maxSpread, 0.001f);
         }
-
         spread = _gun != null ? _gun.CurrentSpread : 0f;
-
         float normalizedSpread = Mathf.Clamp01(spread / maxSpread);
         float targetOffset = _baseOffset + normalizedSpread * _maxSpreadOffset;
-
         _currentOffset = Mathf.Lerp(_currentOffset, targetOffset, _lerpSpeed * Time.deltaTime);
-
         ApplyOffset(_currentOffset);
     }
 

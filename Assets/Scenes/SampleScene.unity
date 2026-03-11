@@ -238,6 +238,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStatsUI
   _stats: {fileID: 3661382856248163749}
+  _upgradeManager: {fileID: 0}
   _stamina: {fileID: 1598972844}
   _hpAnim: {fileID: 1260339117}
   _shieldAnim: {fileID: 1879977219}
@@ -4050,6 +4051,8 @@ GameObject:
   - component: {fileID: 369951108}
   - component: {fileID: 369951110}
   - component: {fileID: 369951109}
+  - component: {fileID: 369951112}
+  - component: {fileID: 369951111}
   m_Layer: 5
   m_Name: PlayerStatPanel
   m_TagString: Untagged
@@ -4116,6 +4119,70 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 369951107}
   m_CullTransparentMesh: 1
+--- !u!114 &369951111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 369951107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d0823cb81a1d194b83adfac76fc71e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStatPanelUI
+  _upgradeManager: {fileID: 369951112}
+  _stats: {fileID: 3661382856248163749}
+  _hpDots:
+  - {fileID: 690586809}
+  - {fileID: 1388853337}
+  - {fileID: 228571402}
+  - {fileID: 1936953658}
+  - {fileID: 800756743}
+  _hpPriceText: {fileID: 907775199}
+  _hpBuyBtn: {fileID: 651110630}
+  _sdDots:
+  - {fileID: 962867845}
+  - {fileID: 460572242}
+  - {fileID: 1427054803}
+  - {fileID: 1731460906}
+  - {fileID: 333855361}
+  _sdPriceText: {fileID: 1836317037}
+  _sdBuyBtn: {fileID: 1732587264}
+  _stDots:
+  - {fileID: 1103738906}
+  - {fileID: 380276789}
+  - {fileID: 962582088}
+  - {fileID: 1470602555}
+  - {fileID: 1875316338}
+  _stPriceText: {fileID: 1841739170}
+  _stBuyBtn: {fileID: 247735255}
+  _minHpText: {fileID: 1798162438}
+  _maxHpText: {fileID: 697871970}
+  _minSdText: {fileID: 1754962767}
+  _maxSdText: {fileID: 608338189}
+  _stRegenText: {fileID: 1855298645}
+  _dotOff: {r: 0.8, g: 0.1, b: 0.1, a: 1}
+  _dotOn: {r: 0.1, g: 0.9, b: 0.2, a: 1}
+--- !u!114 &369951112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 369951107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfbf7d6c9c40c2c47ae721278cdefe1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStatUpgradeManager
+  _stats: {fileID: 3661382856248163749}
+  _hpPrices: 0000000000000000000000000000000000000000
+  _hpPerLevel: 20
+  _sdPrices: 0000000000000000000000000000000000000000
+  _sdPerLevel: 10
+  _stPrices: 0000000000000000000000000000000000000000
+  _stRegenPerLevel: 5
 --- !u!1 &376717886
 GameObject:
   m_ObjectHideFlags: 0
@@ -26934,8 +27001,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b7de60eb5ffbb84c90190d44321425d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DayNightManager
-  _dayDuration: 10
-  _nightDuration: 10
+  _dayDuration: 30
+  _nightDuration: 30
   _input: {fileID: 7688918829908536325}
   _showDebugLog: 1
 --- !u!4 &2034174957
