@@ -29,8 +29,8 @@ MonoBehaviour:
   perShellTime: 1.667
   reloadStartTime: 1
   reloadEndTime: 0.917
-  recoilPitchAmount: 3
-  recoilYawAmount: 2
+  recoilPitchAmount: 2.5
+  recoilYawAmount: 1.5
   spreadAmount: 0.02
   maxSpread: 0.08
   spreadRecoverSpeed: 8

@@ -18,7 +18,7 @@ public class GoldUI : MonoBehaviour
         }
     }
 
-    private void OnDestroy()  // OnDisable → OnDestroy 로 변경
+    private void OnDestroy()
     {
         if (GoldManager.Instance != null)
             GoldManager.Instance.OnGoldAdded -= HandleGoldAdded;
@@ -28,5 +28,5 @@ public class GoldUI : MonoBehaviour
         => Refresh(total);
 
     private void Refresh(int total)
-        => _goldText.text = $"Gold:{total:N0}";
+        => _goldText.text = $"{total:N0}";
 }

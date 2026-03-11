@@ -6,6 +6,7 @@ public class PlayerStatsUI : MonoBehaviour
 {
     [Header("Refs")]
     [SerializeField] private PlayerStats _stats;
+    [SerializeField] private PlayerStatUpgradeManager _upgradeManager;
 
     [Header("Sliders")]
     [SerializeField] private Slider _stamina;
@@ -38,13 +39,13 @@ public class PlayerStatsUI : MonoBehaviour
         if (_stats == null)
             _stats = FindFirstObjectByType<PlayerStats>();
 
+        if (_upgradeManager == null)
+            _upgradeManager = FindFirstObjectByType<PlayerStatUpgradeManager>();
+
         if (_stamina != null) _stamina.minValue = 0f;
 
-        if (_staminaFill != null)
-            _staminaNormalColor = _staminaFill.color;
-
-        if (_hpFill != null)
-            _hpNormalColor = _hpFill.color;
+        if (_staminaFill != null) _staminaNormalColor = _staminaFill.color;
+        if (_hpFill != null) _hpNormalColor = _hpFill.color;
     }
 
     private void OnEnable()
@@ -54,6 +55,10 @@ public class PlayerStatsUI : MonoBehaviour
         _stats.OnHpChanged += OnHpChanged;
         _stats.OnShieldChanged += OnShieldChanged;
         _stats.OnStaminaChanged += OnStaminaChanged;
+
+        // 업그레이드로 최대치가 바뀔 때 전체 갱신
+        if (_upgradeManager != null)
+            _upgradeManager.OnStatsChanged += ForceRefresh;
 
         ForceRefresh();
         UpdateStaminaBlink();
@@ -68,12 +73,16 @@ public class PlayerStatsUI : MonoBehaviour
         _stats.OnShieldChanged -= OnShieldChanged;
         _stats.OnStaminaChanged -= OnStaminaChanged;
 
+        if (_upgradeManager != null)
+            _upgradeManager.OnStatsChanged -= ForceRefresh;
+
         StopStaminaBlink();
         StopHpBlink();
     }
 
     private void ForceRefresh()
     {
+        if (_stats == null) return;
         OnHpChanged(_stats.Hp, _stats._maxHp);
         OnShieldChanged(_stats.Shield, _stats._maxShield);
         OnStaminaChanged(_stats.Stamina, _stats._maxStamina);
@@ -82,10 +91,7 @@ public class PlayerStatsUI : MonoBehaviour
     private void OnHpChanged(float cur, float max)
     {
         if (_hpAnim != null && max > 0f)
-        {
-            float ratio01 = cur / max;
-            _hpAnim.Set01(ratio01);
-        }
+            _hpAnim.Set01(cur / max);
 
         UpdateHpBlink(cur, max);
     }
@@ -93,10 +99,7 @@ public class PlayerStatsUI : MonoBehaviour
     private void OnShieldChanged(float cur, float max)
     {
         if (_shieldAnim != null && max > 0f)
-        {
-            float ratio01 = cur / max;
-            _shieldAnim.Set01(ratio01);
-        }
+            _shieldAnim.Set01(cur / max);
     }
 
     private void OnStaminaChanged(float cur, float max)
@@ -113,10 +116,8 @@ public class PlayerStatsUI : MonoBehaviour
     // 스테미너 깜빡임
     private void UpdateStaminaBlink()
     {
-        if (_stats != null && _stats.IsExhausted)
-            StartStaminaBlink();
-        else
-            StopStaminaBlink();
+        if (_stats != null && _stats.IsExhausted) StartStaminaBlink();
+        else StopStaminaBlink();
     }
 
     private void StartStaminaBlink()
@@ -127,14 +128,8 @@ public class PlayerStatsUI : MonoBehaviour
 
     private void StopStaminaBlink()
     {
-        if (_staminaBlinkCo != null)
-        {
-            StopCoroutine(_staminaBlinkCo);
-            _staminaBlinkCo = null;
-        }
-
-        if (_staminaFill != null)
-            _staminaFill.color = _staminaNormalColor;
+        if (_staminaBlinkCo != null) { StopCoroutine(_staminaBlinkCo); _staminaBlinkCo = null; }
+        if (_staminaFill != null) _staminaFill.color = _staminaNormalColor;
     }
 
     private IEnumerator CoStaminaBlink()
@@ -142,16 +137,10 @@ public class PlayerStatsUI : MonoBehaviour
         while (_stats != null && _stats.IsExhausted)
         {
             float t = Mathf.PingPong(Time.time * _staminaBlinkSpeed, 1f);
-
-            Color c = _staminaNormalColor;
-            c *= Mathf.Lerp(_staminaMinBrightness, _staminaMaxBrightness, t);
-
-            if (_staminaFill != null)
-                _staminaFill.color = c;
-
+            Color c = _staminaNormalColor * Mathf.Lerp(_staminaMinBrightness, _staminaMaxBrightness, t);
+            if (_staminaFill != null) _staminaFill.color = c;
             yield return null;
         }
-
         StopStaminaBlink();
     }
 
@@ -159,12 +148,8 @@ public class PlayerStatsUI : MonoBehaviour
     private void UpdateHpBlink(float cur, float max)
     {
         if (max <= 0f) { StopHpBlink(); return; }
-
-        float ratio = cur / max;
-        if (ratio <= _hpLowRatio)
-            StartHpBlink();
-        else
-            StopHpBlink();
+        if (cur / max <= _hpLowRatio) StartHpBlink();
+        else StopHpBlink();
     }
 
     private void StartHpBlink()
@@ -175,14 +160,8 @@ public class PlayerStatsUI : MonoBehaviour
 
     private void StopHpBlink()
     {
-        if (_hpBlinkCo != null)
-        {
-            StopCoroutine(_hpBlinkCo);
-            _hpBlinkCo = null;
-        }
-
-        if (_hpFill != null)
-            _hpFill.color = _hpNormalColor;
+        if (_hpBlinkCo != null) { StopCoroutine(_hpBlinkCo); _hpBlinkCo = null; }
+        if (_hpFill != null) _hpFill.color = _hpNormalColor;
     }
 
     private IEnumerator CoHpBlink()
@@ -191,21 +170,13 @@ public class PlayerStatsUI : MonoBehaviour
         {
             float max = _stats._maxHp;
             if (max <= 0f) break;
-
-            float ratio = _stats.Hp / max;
-            if (ratio > _hpLowRatio) break;
+            if (_stats.Hp / max > _hpLowRatio) break;
 
             float t = Mathf.PingPong(Time.time * _hpBlinkSpeed, 1f);
-
-            Color c = _hpNormalColor;
-            c *= Mathf.Lerp(_hpMinBrightness, _hpMaxBrightness, t);
-
-            if (_hpFill != null)
-                _hpFill.color = c;
-
+            Color c = _hpNormalColor * Mathf.Lerp(_hpMinBrightness, _hpMaxBrightness, t);
+            if (_hpFill != null) _hpFill.color = c;
             yield return null;
         }
-
         StopHpBlink();
     }
 }
