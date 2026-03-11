@@ -21,6 +21,8 @@ public class ShopPanelUI : MonoBehaviour
     [Header("옵션")]
     [SerializeField] private bool _onlyDaytime = true;
 
+    public static bool IsOpen { get; private set; }
+
     private Coroutine _warningCo;
 
     private void Awake()
@@ -73,6 +75,7 @@ public class ShopPanelUI : MonoBehaviour
 
     private void OpenShop()
     {
+        IsOpen = true;
         _shopPanel?.SetActive(true);
         Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.None;
@@ -81,6 +84,7 @@ public class ShopPanelUI : MonoBehaviour
 
     private void CloseShop()
     {
+        IsOpen = false;
         _shopPanel?.SetActive(false);
         Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.Locked;

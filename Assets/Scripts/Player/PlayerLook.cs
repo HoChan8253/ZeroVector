@@ -33,6 +33,8 @@ public class PlayerLook : MonoBehaviour
 
     private void Update()
     {
+        if (ShopPanelUI.IsOpen) return;
+
         Vector2 look = _input.Look;
 
         // 좌우 입력은 플레이어 바디 회전
