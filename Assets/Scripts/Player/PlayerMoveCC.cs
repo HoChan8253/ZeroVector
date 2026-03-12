@@ -9,6 +9,9 @@ public class PlayerMoveCC : MonoBehaviour
     public float _sprintMultiplier = 1.6f;
     public float _gravity = -20f;
 
+    [Header("ADS")]
+    [SerializeField] private float _adsMoveMultiplier = 0.5f;
+
     [Header("Wall SphereCast")]
     [SerializeField] private LayerMask _wallMask;
     [SerializeField] private float _checkRadius = 0.35f;
@@ -34,15 +37,26 @@ public class PlayerMoveCC : MonoBehaviour
         Vector2 move = _input.Move;
 
         bool isMoving = move.sqrMagnitude > 0.01f;
+        bool isAiming = _input.AimHeld;
 
-        bool wantsSprint = _input.SprintHeld && isMoving;
+        bool wantsSprint = _input.SprintHeld && isMoving && !isAiming;
         bool canSprint = _stats.CanSprint;
 
         bool isSprinting = wantsSprint && canSprint;
 
         _stats.TickStamina(isSprinting);
 
-        float speed = _moveSpeed * (isSprinting ? _sprintMultiplier : 1f);
+        float speed = _moveSpeed;
+
+        if (isSprinting)
+        {
+            speed *= _sprintMultiplier;
+        }
+
+        if (isAiming)
+        {
+            speed *= _adsMoveMultiplier;
+        }
 
         Vector3 moveDirection = new Vector3(move.x, 0f, move.y);
         moveDirection = transform.TransformDirection(moveDirection);
