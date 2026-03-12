@@ -6,6 +6,8 @@ public class GoldManager : MonoBehaviour
 {
     public static GoldManager Instance { get; private set; }
 
+    private const int MaxGold = 90000000;
+
     public int Gold { get; private set; }
 
     public bool CanAfford(int amount) => Gold >= amount;
@@ -24,7 +26,10 @@ public class GoldManager : MonoBehaviour
     public void Add(int amount, Vector3 worldPos)
     {
         if (amount <= 0) return;
+
         Gold += amount;
+        Gold = Mathf.Clamp(Gold, 0, MaxGold);
+
         OnGoldAdded?.Invoke(Gold, amount, worldPos);
     }
 
@@ -34,6 +39,8 @@ public class GoldManager : MonoBehaviour
         if (Gold < amount) return false;
 
         Gold -= amount;
+        Gold = Mathf.Clamp(Gold, 0, MaxGold);
+
         OnGoldSpent?.Invoke(Gold);
         OnGoldAdded?.Invoke(Gold, -amount, Vector3.zero);
         return true;

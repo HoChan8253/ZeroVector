@@ -5,6 +5,8 @@ public class GoldUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _goldText;
 
+    private const int MaxDisplayGold = 90000000;
+
     private void Start()
     {
         if (GoldManager.Instance != null)
@@ -28,5 +30,8 @@ public class GoldUI : MonoBehaviour
         => Refresh(total);
 
     private void Refresh(int total)
-        => _goldText.text = $"{total:N0}";
+    {
+        int displayGold = Mathf.Clamp(total, 0, MaxDisplayGold);
+        _goldText.text = $"{displayGold:N0}";
+    }
 }
