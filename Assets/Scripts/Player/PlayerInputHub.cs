@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Security.Claims;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerInputHub : MonoBehaviour
@@ -7,6 +8,8 @@ public class PlayerInputHub : MonoBehaviour
     public Vector2 Look { get; private set; }
 
     public bool FireHeld { get; private set; }
+
+    public bool AimHeld { get; private set; }
     public bool FirePressedThisFrame { get; private set; }
     public bool ReloadPressedThisFrame { get; private set; }
     public bool Weapon1PressedThisFrame { get; private set; }
@@ -35,6 +38,8 @@ public class PlayerInputHub : MonoBehaviour
         _input.Player.Look.canceled += OnLook;
         _input.Player.Fire.performed += OnFire;
         _input.Player.Fire.canceled += OnFire;
+        _input.Player.Aim.performed += OnAim;
+        _input.Player.Aim.canceled += OnAim;
         _input.Player.Reload.performed += OnReload;
         _input.Player.Sprint.performed += OnSprint;
         _input.Player.Sprint.canceled += OnSprint;
@@ -56,6 +61,8 @@ public class PlayerInputHub : MonoBehaviour
         _input.Player.Look.canceled -= OnLook;
         _input.Player.Fire.performed -= OnFire;
         _input.Player.Fire.canceled -= OnFire;
+        _input.Player.Aim.performed -= OnAim;
+        _input.Player.Aim.canceled -= OnAim;
         _input.Player.Reload.performed -= OnReload;
         _input.Player.Sprint.performed -= OnSprint;
         _input.Player.Sprint.canceled -= OnSprint;
@@ -92,6 +99,12 @@ public class PlayerInputHub : MonoBehaviour
     {
         if (ctx.performed) { FireHeld = true; FirePressedThisFrame = true; }
         if (ctx.canceled) FireHeld = false;
+    }
+
+    private void OnAim(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed) AimHeld = true;
+        if (ctx.canceled) AimHeld = false;
     }
 
     private void OnReload(InputAction.CallbackContext ctx)

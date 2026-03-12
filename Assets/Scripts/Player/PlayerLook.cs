@@ -16,12 +16,19 @@ public class PlayerLook : MonoBehaviour
     private float _recoilPitch; // 수직
     private float _recoilYaw; // 수평
 
+    [Header("ADS")]
+    public float _adsFOV = 40f;
+    public float _normalFOV = 60f;
+    public float _adsFOVSpeed = 10f;
+
     private PlayerInputHub _input;
     private float _pitch;
+    private Camera _camera;
 
     private void Awake()
     {
         _input = GetComponent<PlayerInputHub>();
+        _camera = _cam.GetComponent<Camera>();
     }
 
     private void Start()
@@ -52,6 +59,9 @@ public class PlayerLook : MonoBehaviour
         float finalPitch = Mathf.Clamp(_pitch + _recoilPitch, _pitchMin, _pitchMax);
 
         _cam.localRotation = Quaternion.Euler(finalPitch, _recoilYaw, 0f);
+
+        float targetFOV = _input.AimHeld ? _adsFOV : _normalFOV;
+        _camera.fieldOfView = Mathf.Lerp(_camera.fieldOfView, targetFOV, _adsFOVSpeed * Time.deltaTime);
     }
 
     public void AddRecoil(float pitchAmount, float yawAmount)

@@ -11,6 +11,10 @@ public class GunController : MonoBehaviour
     [Header("Upgrade")]
     [SerializeField] private WeaponUpgradeManager _upgradeManager;
 
+    [Header("ADS Multipliers")]
+    [SerializeField] private float _adsRecoilMult = 0.4f; // 반동% 감소
+    [SerializeField] private float _adsSpreadMult = 0.3f; // 탄퍼짐% 감소
+
     [Header("Refs")]
     [SerializeField] private Camera _cam;
     [SerializeField] private Animator _anim;
@@ -203,14 +207,19 @@ public class GunController : MonoBehaviour
             _muzzleLightCo = StartCoroutine(CoMuzzleLight());
         }
 
+        bool isAiming = _input.AimHeld;
+        float recoilMult = isAiming ? _adsRecoilMult : 1f;
+        float spreadMult = isAiming ? _adsSpreadMult : 1f;
+
         float randomYaw = UnityEngine.Random.Range(-_recoilYawAmount, _recoilYawAmount);
-        _look.AddRecoil(_recoilPitchAmount, randomYaw);
+        _look.AddRecoil(_recoilPitchAmount * recoilMult, randomYaw * recoilMult);
 
         if (Time.time - _state.lastShotTime > _tapResetTime)
             _state.currentSpread = 0f;
 
         _state.lastShotTime = Time.time;
-        _state.currentSpread = Mathf.Clamp(_state.currentSpread + _spreadAmount, 0f, _maxSpread);
+        _state.currentSpread = Mathf.Clamp(
+            _state.currentSpread + _spreadAmount * spreadMult, 0f, _maxSpread * spreadMult);
 
         if (isShotgun)
             FireShotgunPellets();
