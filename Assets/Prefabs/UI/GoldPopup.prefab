@@ -154,3 +154,4 @@ MonoBehaviour:
   _riseDuration: 3
   _riseHeight: 80
   _riseEase: 9
+  _anchoredPosition: {x: -20, y: -130}
