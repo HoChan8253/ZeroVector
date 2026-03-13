@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(menuName = "LoopSO/Boss Data", fileName = "BD_NewBoss")]
+[CreateAssetMenu(menuName = "EnemySO/MiniBoss Data", fileName = "BD_NewBoss")]
 public class MiniBossData : ScriptableObject
 {
     [Header("Core")]

@@ -7,7 +7,7 @@ public enum EnemyAttackType
     RangedAoe
 }
 
-[CreateAssetMenu(menuName = "LoopSO/Enemy Data", fileName = "ED_NewEnemy")]
+[CreateAssetMenu(menuName = "EnemySO/Enemy Data", fileName = "ED_NewEnemy")]
 public class EnemyData : ScriptableObject
 {
     [Header("Core")]

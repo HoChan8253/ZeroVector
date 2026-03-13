@@ -19,6 +19,9 @@ public class PlayerMoveCC : MonoBehaviour
     [SerializeField] private float _checkHeight = 0.9f;
     [SerializeField] private float _intoWallDotThreshold = 0.05f;
 
+    private Vector3 _knockbackVelocity;
+    private float _knockbackDecay = 8f;
+
     private CharacterController _cc;
     private PlayerInputHub _input;
     private PlayerStats _stats;
@@ -86,10 +89,17 @@ public class PlayerMoveCC : MonoBehaviour
         if (_cc.isGrounded && _yVel < 0f) _yVel = -2f;
         _yVel += _gravity * Time.deltaTime;
 
-        Vector3 dirFinal = moveDirection;
+        Vector3 dirFinal = moveDirection + _knockbackVelocity;
         dirFinal.y = _yVel;
 
         _cc.Move(dirFinal * Time.deltaTime);
+
+        _knockbackVelocity = Vector3.Lerp(_knockbackVelocity, Vector3.zero, _knockbackDecay * Time.deltaTime);
+    }
+
+    public void ApplyKnockback(Vector3 direction, float force)
+    {
+        _knockbackVelocity = direction.normalized * force;
     }
 
 #if UNITY_EDITOR

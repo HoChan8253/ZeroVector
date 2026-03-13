@@ -26,6 +26,8 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     public event Action OnDead;
 
+    public event Action<int, int> OnHpChanged;
+
     private void Awake()
     {
         // GetComponent 로 어느 AI 타입이든 자동으로 찾음
@@ -86,6 +88,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
         // HP 차감
         _hp -= amount;
+        OnHpChanged?.Invoke(_hp, MaxHp);
 
         bool stun = CanStun() && headshot;
         _ai?.OnDamaged(hitPoint, stun);
@@ -130,6 +133,14 @@ public class EnemyHealth : MonoBehaviour, IDamageable
                 ? UnityEngine.Random.Range(d.goldRewardMin, d.goldRewardMax + 1)
                 : d.goldReward;
         }
+        // Boss
+        else if (TryGetComponent<BossAI>(out var newBossAI))
+        {
+            // BossData에 골드 필드 추가 후 처리
+            // 지금은 고정값으로 임시 처리
+            amount = 500;
+        }
+
 
         if (amount > 0)
             GoldManager.Instance.Add(amount, transform.position);

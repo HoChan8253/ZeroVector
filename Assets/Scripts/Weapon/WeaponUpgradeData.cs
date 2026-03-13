@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "WeaponUpgradeData", menuName = "Game/WeaponUpgradeData")]
+[CreateAssetMenu(fileName = "WeaponUpgradeData", menuName = "WeaponSO/WeaponUpgradeData")]
 public class WeaponUpgradeData : ScriptableObject
 {
     [Header("무기 기본 정보")]
