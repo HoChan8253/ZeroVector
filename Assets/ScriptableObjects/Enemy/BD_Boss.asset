@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd2826493d2d2184887a3dd030ada7c7, type: 3}
+  m_Name: BD_Boss
+  m_EditorClassIdentifier: Assembly-CSharp::BossData
+  maxHp: 3000
+  chaseSpeed: 4
+  aimMoveSpeed: 2.5
+  angularSpeed: 240
+  acceleration: 8
+  aggroRange: 30
+  meleeRange: 2.5
+  farRange: 18
+  smackDamage: 35
+  smackRange: 2.8
+  smackCooldown: 3
+  smackKnockback: 50
+  shootDamage: 20
+  shootCooldown: 5
+  shootProjSpeed: 18
+  shootProjLife: 4
+  shootRadius: 6
+  tripleShootDamage: 15
+  tripleShootCooldown: 8
+  tripleShootProjSpeed: 10
+  tripleShootProjLife: 6
+  tripleShootTurnSpeed: 90
+  tripleShootInterval: 0.4
+  slamDamage: 50
+  slamCooldown: 15
+  slamProjSpeed: 14
+  slamProjLife: 3
+  slamProjCount: 12
+  phase2HpRatio: 0.5
+  idleChance: 0.15
+  idleDuration: 1.5
+  goldReward: 5000

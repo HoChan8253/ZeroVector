@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 625576d5e73688d459a72090be27e638, type: 3}
   m_Name: WD_Shotgun
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
-  weaponName: Shotgun
+  weaponName: Pump Shotgun
   fireMode: 0
-  pelletCount: 8
+  pelletCount: 5
   pelletSpread: 0.08
   damagePerPellet: 10
   fireRate: 1.2
@@ -23,16 +23,17 @@ MonoBehaviour:
   magSize: 8
   startAmmoInMag: 8
   startReserveAmmo: 24
+  infiniteReserveAmmo: 0
   reloadDuration: 4.583
   reloadType: 1
-  perShellTime: 1.667
+  perShellTime: 1.4
   reloadStartTime: 1
-  reloadEndTime: 0.917
-  recoilPitchAmount: 7
-  recoilYawAmount: 2
-  spreadAmount: 0.08
-  maxSpread: 0.12
-  spreadRecoverSpeed: 6
+  reloadEndTime: 0.83
+  recoilPitchAmount: 20
+  recoilYawAmount: 5
+  spreadAmount: 0.1
+  maxSpread: 0.3
+  spreadRecoverSpeed: 1
   tapResetTime: 0.25
   moveThreshold: 0.1
   animatorOverride: {fileID: 0}

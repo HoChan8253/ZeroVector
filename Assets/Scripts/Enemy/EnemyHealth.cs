@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
 // EnemyAI / FlyingEnemyAI 양쪽 모두에서 사용 가능 체력 컴포넌트
@@ -19,17 +20,13 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     public int Hp => _hp;
     public int Shield => _shield;
-    public int MaxHp => _ai?.Data != null ? _ai.Data.maxHp : 100;
-    public int MaxShield
-    {
-        get
-        {
-            if (_ai?.Data != null && _ai.Data.useShield)
-                return _ai.Data.maxShield;
-            return 0;
-        }
-    }
+    public int MaxHp => _ai != null ? _ai.MaxHp : 100;
+    public int MaxShield => _ai != null && _ai.UseShield ? _ai.MaxShield : 0;
     public bool HasShield => _shield > 0;
+
+    public event Action OnDead;
+
+    public event Action<int, int> OnHpChanged;
 
     private void Awake()
     {
@@ -52,6 +49,12 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     public void ResetHp()
     {
         _hp = MaxHp;
+        _shield = MaxShield;
+        RefreshShieldVisual();
+    }
+
+    public void ResetShieldOnly()
+    {
         _shield = MaxShield;
         RefreshShieldVisual();
     }
@@ -85,6 +88,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
         // HP 차감
         _hp -= amount;
+        OnHpChanged?.Invoke(_hp, MaxHp);
 
         bool stun = CanStun() && headshot;
         _ai?.OnDamaged(hitPoint, stun);
@@ -92,18 +96,61 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         if (_hp <= 0)
         {
             _hp = 0;
+            GiveGoldReward();
+            OnDead?.Invoke();
             _ai?.Die();
         }
+    }
+
+    private void GiveGoldReward()
+    {
+        if (GoldManager.Instance == null) return;
+
+        int amount = 0;
+
+        // EnemyAI
+        if (TryGetComponent<EnemyAI>(out var enemyAI) && enemyAI.Data != null)
+        {
+            var d = enemyAI.Data;
+            amount = d.randomGold
+                ? UnityEngine.Random.Range(d.goldRewardMin, d.goldRewardMax + 1)
+                : d.goldReward;
+        }
+        // MiniBossAI
+        else if (TryGetComponent<MiniBossAI>(out var bossAI))
+        {
+            var d = bossAI.BossData;
+            if (d != null)
+                amount = d.randomGold
+                    ? UnityEngine.Random.Range(d.goldRewardMin, d.goldRewardMax + 1)
+                    : d.goldReward;
+        }
+        // FlyingEnemyAI
+        else if (TryGetComponent<FlyingEnemyAI>(out var flyAI) && flyAI.Data != null)
+        {
+            var d = flyAI.Data;
+            amount = d.randomGold
+                ? UnityEngine.Random.Range(d.goldRewardMin, d.goldRewardMax + 1)
+                : d.goldReward;
+        }
+        // Boss
+        else if (TryGetComponent<BossAI>(out var newBossAI))
+        {
+            // BossData에 골드 필드 추가 후 처리
+            // 지금은 고정값으로 임시 처리
+            amount = 500;
+        }
+
+
+        if (amount > 0)
+            GoldManager.Instance.Add(amount, transform.position);
     }
 
     // 외부 호출
     private bool CanStun()
     {
         if (HasShield) return false;
-
-        // EnemyData 에 canStun 있으면 우선 사용
-        if (_ai?.Data != null) return _ai.Data.canStun;
-
+        if (_ai != null) return _ai.CanStun;
         return _stunnable;
     }
 

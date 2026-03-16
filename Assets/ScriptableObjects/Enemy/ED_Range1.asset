@@ -13,6 +13,12 @@ MonoBehaviour:
   m_Name: ED_Range1
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   maxHp: 200
+  useShield: 0
+  maxShield: 0
+  goldReward: 10
+  goldRewardMin: 8
+  goldRewardMax: 15
+  randomGold: 1
   dayIdleTime: 2
   dayWalkTime: 3
   patrolRadius: 6
@@ -24,6 +30,10 @@ MonoBehaviour:
   deaggroRange: 20
   damageAggroHoldTime: 2
   attackType: 1
+  isFlying: 0
+  flyingHeight: 4.5
+  flyingMoveSpeed: 3.5
+  turnSpeed: 8
   attackRange: 15
   attackCooldown: 1.5
   attackDamage: 11
@@ -37,4 +47,4 @@ MonoBehaviour:
   aoeDropTime: 0
   aoeRadius: 0
   canStun: 0
-  stunTime: 1
+  stunTime: 0

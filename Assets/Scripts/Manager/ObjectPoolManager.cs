@@ -5,6 +5,8 @@ public enum PoolKey
 {
     EnergyBall,
     HitFx_ElectricShort,
+    BossProj_Straight,
+    BossProj_Homing
 }
 
 public class ObjectPoolManager : MonoBehaviour
@@ -14,6 +16,8 @@ public class ObjectPoolManager : MonoBehaviour
     [Header("Prefab Registry")]
     [SerializeField] private GameObject _energyBallPrefab;
     [SerializeField] private GameObject _hitFxElectricShortPrefab;
+    [SerializeField] private GameObject _bossProjStraightPrefab;
+    [SerializeField] private GameObject _bossProjHomingPrefab;
 
     private readonly Dictionary<PoolKey, GameObject> _prefabs = new();
     private readonly Dictionary<PoolKey, Queue<GameObject>> _pools = new();
@@ -40,6 +44,8 @@ public class ObjectPoolManager : MonoBehaviour
 
         _prefabs[PoolKey.EnergyBall] = _energyBallPrefab;
         _prefabs[PoolKey.HitFx_ElectricShort] = _hitFxElectricShortPrefab;
+        _prefabs[PoolKey.BossProj_Straight] = _bossProjStraightPrefab;
+        _prefabs[PoolKey.BossProj_Homing] = _bossProjHomingPrefab;
     }
 
     private Transform GetPoolParent(PoolKey key)

@@ -16,7 +16,7 @@ public class FlyingEnemyAI : MonoBehaviour, IEnemyAI
     [Header("Animator")]
     [SerializeField] private string _paramAttack = "Attack";
     [SerializeField] private string _paramDead = "Dead";
-    [SerializeField] private string _paramEncounter = "Encounter";
+    [SerializeField] private string _paramEncounter = "Entrance";
 
     [Header("Death Fall")]
     [Tooltip("사망 애니메이션 재생 후 낙하 시작까지 대기 시간")]
@@ -35,6 +35,11 @@ public class FlyingEnemyAI : MonoBehaviour, IEnemyAI
     // 외부 참조
     public EnemyData Data => _data;
     public bool IsDead => _state == State.Dead;
+    public int MaxHp => _data != null ? _data.maxHp : 100;
+    public int MaxShield => _data != null ? _data.maxShield : 0;
+    public bool UseShield => _data != null && _data.useShield;
+    public bool CanStun => false; // 공중 유닛은 스턴 없음
+    public float StunTime => 0f;
 
     // 데이터 캐시
     private float AggroRange => _data != null ? _data.aggroRange : 12f;
@@ -199,6 +204,14 @@ public class FlyingEnemyAI : MonoBehaviour, IEnemyAI
         _animator?.SetTrigger(_paramDead);
 
         StartCoroutine(CoDeathRoutine());
+    }
+
+    public void ActivateCombat()
+    {
+        if (_state == State.Dead || _state == State.Spawning) return;
+        _aggro = true;
+        if (_state == State.Idle)
+            EnterChase();
     }
 
     // 유틸

@@ -34,6 +34,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Aim",
+                    "type": "Button",
+                    "id": "ee640522-b32c-43fe-97ec-9827b4c5e28d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Reload",
                     "type": "Button",
                     "id": "85906e6d-a3e6-4968-854e-1aa2867c8262",
@@ -73,6 +82,15 @@
                     "name": "Weapon3",
                     "type": "Button",
                     "id": "0ad117c4-db80-4a34-852e-75e98bcbf773",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Shop",
+                    "type": "Button",
+                    "id": "331111b2-b040-40cc-b607-1773b554c309",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -251,6 +269,39 @@
                     "action": "Weapon3",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fd66ce56-9736-4fb1-98b2-bb86acfea0c6",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Shop",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "36ec91cf-5a88-457c-aeb6-0f9b898299d9",
+                    "path": "<Keyboard>/b",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Shop",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e1e9d48c-b1ba-48d3-b25a-476737f9dc93",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -277,6 +328,34 @@
                     "processors": "",
                     "groups": "",
                     "action": "ToggleDayNight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Menu",
+            "id": "7e1ccb07-0a0a-4e35-9cf2-663fa832f3c2",
+            "actions": [
+                {
+                    "name": "Cancel",
+                    "type": "Button",
+                    "id": "5721374a-24a0-4856-90da-11d1a04fe766",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "6540c997-3ad0-41cf-8da1-59c1d8c19821",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Cancel",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

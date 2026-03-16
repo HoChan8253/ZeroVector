@@ -7,7 +7,7 @@ public enum EnemyAttackType
     RangedAoe
 }
 
-[CreateAssetMenu(menuName = "FPS/Enemy Data", fileName = "ED_NewEnemy")]
+[CreateAssetMenu(menuName = "EnemySO/Enemy Data", fileName = "ED_NewEnemy")]
 public class EnemyData : ScriptableObject
 {
     [Header("Core")]
@@ -16,6 +16,12 @@ public class EnemyData : ScriptableObject
     [Header("Shield")]
     public bool useShield = false;
     public int maxShield = 0;
+
+    [Header("Reward")]
+    public int goldReward = 10;
+    public int goldRewardMin = 8; // 랜덤 최솟값
+    public int goldRewardMax = 15; // 랜덤 최댓값
+    public bool randomGold = false;
 
     [Header("Day Loop")]
     public float dayIdleTime = 2.0f;

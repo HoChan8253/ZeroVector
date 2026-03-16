@@ -97,6 +97,7 @@ public class EnemyAttack : MonoBehaviour
 
             // 자기 자신 콜라이더 제외
             if (col.transform.IsChildOf(transform) || col.transform == transform) continue;
+            if (!col.CompareTag("Player")) continue;
 
             var d = col.GetComponentInParent<IDamageable>();
             if (d != null) { d.TakeDamage(damage); break; }
@@ -184,8 +185,10 @@ public class EnemyAttack : MonoBehaviour
         int damage = _data != null ? _data.attackDamage : 10;
         if (damage <= 0) return;
 
-        foreach (var h in Physics.OverlapSphere(center, radius))
+        foreach (var h in Physics.OverlapSphere(center, radius, _playerMask))
         {
+            if (!h.CompareTag("Player")) continue;
+
             var d = h.GetComponentInParent<IDamageable>();
             if (d != null) d.TakeDamage(damage);
         }

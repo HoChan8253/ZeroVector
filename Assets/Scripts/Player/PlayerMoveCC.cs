@@ -9,12 +9,18 @@ public class PlayerMoveCC : MonoBehaviour
     public float _sprintMultiplier = 1.6f;
     public float _gravity = -20f;
 
+    [Header("ADS")]
+    [SerializeField] private float _adsMoveMultiplier = 0.5f;
+
     [Header("Wall SphereCast")]
     [SerializeField] private LayerMask _wallMask;
     [SerializeField] private float _checkRadius = 0.35f;
     [SerializeField] private float _checkDistance = 0.6f;
     [SerializeField] private float _checkHeight = 0.9f;
     [SerializeField] private float _intoWallDotThreshold = 0.05f;
+
+    private Vector3 _knockbackVelocity;
+    private float _knockbackDecay = 8f;
 
     private CharacterController _cc;
     private PlayerInputHub _input;
@@ -34,15 +40,26 @@ public class PlayerMoveCC : MonoBehaviour
         Vector2 move = _input.Move;
 
         bool isMoving = move.sqrMagnitude > 0.01f;
+        bool isAiming = _input.AimHeld;
 
-        bool wantsSprint = _input.SprintHeld && isMoving;
+        bool wantsSprint = _input.SprintHeld && isMoving && !isAiming;
         bool canSprint = _stats.CanSprint;
 
         bool isSprinting = wantsSprint && canSprint;
 
         _stats.TickStamina(isSprinting);
 
-        float speed = _moveSpeed * (isSprinting ? _sprintMultiplier : 1f);
+        float speed = _moveSpeed;
+
+        if (isSprinting)
+        {
+            speed *= _sprintMultiplier;
+        }
+
+        if (isAiming)
+        {
+            speed *= _adsMoveMultiplier;
+        }
 
         Vector3 moveDirection = new Vector3(move.x, 0f, move.y);
         moveDirection = transform.TransformDirection(moveDirection);
@@ -72,10 +89,17 @@ public class PlayerMoveCC : MonoBehaviour
         if (_cc.isGrounded && _yVel < 0f) _yVel = -2f;
         _yVel += _gravity * Time.deltaTime;
 
-        Vector3 dirFinal = moveDirection;
+        Vector3 dirFinal = moveDirection + _knockbackVelocity;
         dirFinal.y = _yVel;
 
         _cc.Move(dirFinal * Time.deltaTime);
+
+        _knockbackVelocity = Vector3.Lerp(_knockbackVelocity, Vector3.zero, _knockbackDecay * Time.deltaTime);
+    }
+
+    public void ApplyKnockback(Vector3 direction, float force)
+    {
+        _knockbackVelocity = direction.normalized * force;
     }
 
 #if UNITY_EDITOR

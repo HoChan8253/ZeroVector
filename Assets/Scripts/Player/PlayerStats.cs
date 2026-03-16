@@ -127,4 +127,20 @@ public class PlayerStats : MonoBehaviour, IDamageable
                 OnDie?.Invoke();
         }
     }
+
+    //최대치를 초과하지 않는 선에서 HP 회복
+    public void Heal(float amount)
+    {
+        if (amount <= 0f) return;
+        Hp = Mathf.Min(Hp + amount, _maxHp);
+        OnHpChanged?.Invoke(Hp, _maxHp);
+    }
+
+    //최대치를 초과하지 않는 선에서 Shield 회복
+    public void HealShield(float amount)
+    {
+        if (amount <= 0f) return;
+        Shield = Mathf.Min(Shield + amount, _maxShield);
+        OnShieldChanged?.Invoke(Shield, _maxShield);
+    }
 }
