@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
   weaponName: Assault Rifle
   fireMode: 1
-  pelletCount: 8
-  pelletSpread: 0.08
-  damagePerPellet: 8
+  pelletCount: 0
+  pelletSpread: 0
+  damagePerPellet: 0
   fireRate: 10
   range: 100
   damage: 25

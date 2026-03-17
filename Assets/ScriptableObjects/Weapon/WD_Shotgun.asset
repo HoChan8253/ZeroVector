@@ -18,7 +18,7 @@ MonoBehaviour:
   pelletSpread: 0.08
   damagePerPellet: 10
   fireRate: 1.2
-  range: 20
+  range: 30
   damage: 10
   magSize: 8
   startAmmoInMag: 8

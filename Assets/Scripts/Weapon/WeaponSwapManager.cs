@@ -11,6 +11,10 @@ public class WeaponSwapManager : MonoBehaviour
     [SerializeField] private GameObject _weapon2;
     [SerializeField] private GameObject _weapon3;
 
+    [SerializeField] private WeaponUpgradeManager _upgradeManager1;
+    [SerializeField] private WeaponUpgradeManager _upgradeManager2;
+    [SerializeField] private WeaponUpgradeManager _upgradeManager3;
+
     [Header("UI")]
     [SerializeField] private CrosshairController _crosshair;
 
@@ -29,7 +33,7 @@ public class WeaponSwapManager : MonoBehaviour
     private static readonly int AnimHolster = Animator.StringToHash("Holster");
     private static readonly int AnimEquip = Animator.StringToHash("Equip");
 
-    private void Awake()
+    private void Start()
     {
         if (_input == null)
             _input = GetComponentInParent<PlayerInputHub>();
@@ -73,6 +77,17 @@ public class WeaponSwapManager : MonoBehaviour
     {
         GameObject target = GetWeaponBySlot(slot);
         if (target == null) return;
+
+        WeaponUpgradeManager upgradeManager = slot switch
+        {
+            1 => _upgradeManager1,
+            2 => _upgradeManager2,
+            3 => _upgradeManager3,
+            _ => null
+        };
+
+        if (upgradeManager != null && !upgradeManager.IsOwned) return;
+
         RequestSwap(target);
     }
 

@@ -11,7 +11,8 @@ public class WeaponUpgradeManager : MonoBehaviour
     public int MagLevel;
     public int ThirdLevel;
 
-    public bool IsOwned { get; private set; }
+    private bool _purchased;
+    public bool IsOwned => _upgradeData != null && (_upgradeData.isPistol || _purchased);
 
     public WeaponUpgradeData Data => _upgradeData;
     public WeaponData WeaponData => _upgradeData != null ? _upgradeData.weaponData : null;
@@ -60,11 +61,6 @@ public class WeaponUpgradeManager : MonoBehaviour
     public event Action OnStatsChanged;
     public event Action OnWeaponPurchased;
 
-    private void Awake()
-    {
-        IsOwned = _upgradeData != null && _upgradeData.isPistol;
-    }
-
     // 무기 구매
     public bool TryPurchaseWeapon()
     {
@@ -73,7 +69,7 @@ public class WeaponUpgradeManager : MonoBehaviour
         if (!GoldManager.Instance.CanAfford(_upgradeData.purchasePrice)) return false;
 
         GoldManager.Instance.Spend(_upgradeData.purchasePrice);
-        IsOwned = true;
+        _purchased = true;
         OnWeaponPurchased?.Invoke();
         OnStatsChanged?.Invoke();
         return true;
