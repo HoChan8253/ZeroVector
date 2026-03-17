@@ -176,6 +176,8 @@ public class GunController : MonoBehaviour
         // 미구매 무기 발사 차단
         if (_upgradeManager != null && !_upgradeManager.IsOwned) return;
 
+        if (ShopPanelUI.IsOpen) return;
+
         bool isSprinting = _input.SprintHeld && _input.Move.sqrMagnitude > 0.01f;
         if (isSprinting) return;
         if (_state.isReloading) return;
@@ -341,6 +343,7 @@ public class GunController : MonoBehaviour
         if (_pumpLocked) return;
         if (_isHolstered) return;
         if (_upgradeManager != null && !_upgradeManager.IsOwned) return;
+        if (ShopPanelUI.IsOpen) return;
         bool isSprinting = _input.SprintHeld && _input.Move.sqrMagnitude > 0.01f;
         if (isSprinting) return;
         if (_state.isReloading) return;
