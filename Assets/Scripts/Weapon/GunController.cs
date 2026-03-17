@@ -289,6 +289,8 @@ public class GunController : MonoBehaviour
             return;
         }
 
+        if (hit.collider.gameObject.layer == LayerMask.NameToLayer("InvisibleWall")) return;
+
         // Hit Spark
         if (_hitSparkPrefab != null)
         {
