@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class NightWeatherController : MonoBehaviour
 {
@@ -14,11 +16,20 @@ public class NightWeatherController : MonoBehaviour
     [SerializeField] private float _dayLightIntensity = 1.2f;
     [SerializeField] private float _nightLightIntensity = 0.2f;
 
+    [Header("Ambient")]
+    [SerializeField] private Color _dayAmbient = new Color(0.5f, 0.5f, 0.5f);
+    [SerializeField] private Color _nightAmbient = new Color(0.08f, 0.09f, 0.12f);
+
     [Header("Fog")]
     [SerializeField] private Color _dayFogColor = new Color(0.7f, 0.8f, 0.9f);
     [SerializeField] private Color _nightFogColor = new Color(0.01f, 0.02f, 0.05f);
     [SerializeField] private float _dayFogDensity = 0.002f;
     [SerializeField] private float _nightFogDensity = 0.02f;
+
+    [Header("Post Processing")]
+    [SerializeField] private Volume _globalVolume;
+    [SerializeField] private Color _dayColorTint = Color.white;
+    [SerializeField] private Color _nightColorTint = new Color(0.75f, 0.8f, 0.9f);
 
     [Header("Rain")]
     [SerializeField] private ParticleSystem _rainParticle;
@@ -35,9 +46,13 @@ public class NightWeatherController : MonoBehaviour
 
     private Coroutine _transitionCo;
     private Coroutine _thunderCo;
+    private ColorAdjustments _colorAdjustments;
 
     private void Start()
     {
+        if (_globalVolume != null)
+            _globalVolume.profile.TryGet(out _colorAdjustments);
+
         if (DayNightManager.Instance == null) return;
         DayNightManager.Instance.OnDayStart += OnDayStart;
         DayNightManager.Instance.OnNightStart += OnNightStart;
@@ -57,7 +72,6 @@ public class NightWeatherController : MonoBehaviour
     {
         StartTransition(isNight: false);
 
-        // 비 / 천둥 중단
         _rainParticle?.Stop();
         if (_thunderCo != null) { StopCoroutine(_thunderCo); _thunderCo = null; }
         if (_thunderLight != null) _thunderLight.enabled = false;
@@ -68,15 +82,12 @@ public class NightWeatherController : MonoBehaviour
     {
         StartTransition(isNight: true);
 
-        // 비 시작
         _rainParticle?.Play();
 
-        // 천둥 루프 시작
         if (_thunderCo != null) StopCoroutine(_thunderCo);
         _thunderCo = StartCoroutine(CoThunderLoop());
     }
 
-    // 전환
     private void StartTransition(bool isNight)
     {
         if (_transitionCo != null) StopCoroutine(_transitionCo);
@@ -85,7 +96,7 @@ public class NightWeatherController : MonoBehaviour
 
     private IEnumerator CoTransition(bool isNight)
     {
-        // 스카이박스 즉시 교체
+        // 스카이박스 교체
         RenderSettings.skybox = isNight ? _nightSkybox : _daySkybox;
         DynamicGI.UpdateEnvironment();
 
@@ -97,6 +108,10 @@ public class NightWeatherController : MonoBehaviour
         Color toFog = isNight ? _nightFogColor : _dayFogColor;
         float fromDens = isNight ? _dayFogDensity : _nightFogDensity;
         float toDens = isNight ? _nightFogDensity : _dayFogDensity;
+        Color fromAmbient = isNight ? _dayAmbient : _nightAmbient;
+        Color toAmbient = isNight ? _nightAmbient : _dayAmbient;
+        Color fromTint = isNight ? _dayColorTint : _nightColorTint;
+        Color toTint = isNight ? _nightColorTint : _dayColorTint;
 
         RenderSettings.fog = true;
 
@@ -114,6 +129,11 @@ public class NightWeatherController : MonoBehaviour
 
             RenderSettings.fogColor = Color.Lerp(fromFog, toFog, s);
             RenderSettings.fogDensity = Mathf.Lerp(fromDens, toDens, s);
+            RenderSettings.ambientLight = Color.Lerp(fromAmbient, toAmbient, s);
+
+            if (_colorAdjustments != null)
+                _colorAdjustments.colorFilter.Override(
+                    Color.Lerp(fromTint, toTint, s));
 
             yield return null;
         }
@@ -146,7 +166,7 @@ public class NightWeatherController : MonoBehaviour
     {
         if (_thunderLight == null) yield break;
 
-        // 2~3번 불규칙하게 깜빡임
+        // 2~3번 불규칙 깜빡임
         int flashes = Random.Range(2, 4);
         for (int i = 0; i < flashes; i++)
         {
@@ -165,12 +185,17 @@ public class NightWeatherController : MonoBehaviour
         RenderSettings.fog = true;
         RenderSettings.fogColor = isNight ? _nightFogColor : _dayFogColor;
         RenderSettings.fogDensity = isNight ? _nightFogDensity : _dayFogDensity;
+        RenderSettings.ambientLight = isNight ? _nightAmbient : _dayAmbient;
 
         if (_sunLight != null)
         {
             _sunLight.color = isNight ? _nightLightColor : _dayLightColor;
             _sunLight.intensity = isNight ? _nightLightIntensity : _dayLightIntensity;
         }
+
+        if (_colorAdjustments != null)
+            _colorAdjustments.colorFilter.Override(
+                isNight ? _nightColorTint : _dayColorTint);
 
         DynamicGI.UpdateEnvironment();
     }
