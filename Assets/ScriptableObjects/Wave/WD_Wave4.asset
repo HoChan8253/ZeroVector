@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: WD_Wave4
   m_EditorClassIdentifier: Assembly-CSharp::WaveData
   waveNumber: 4
+  nightDuration: 120
   dayFieldTarget: 15
   dayEntries:
   - prefab: {fileID: 5061237599360014270, guid: 2d6b844b8fe55d2419f79f3b9a82a8d7, type: 3}
@@ -25,7 +26,7 @@ MonoBehaviour:
     fixedCount: 0
     weight: 3
   - prefab: {fileID: 9163086858490928039, guid: 23f31dc7300542a43a39dee59b31848a, type: 3}
-    fixedCount: 0
+    fixedCount: 1
     weight: 1
   nightEntries:
   - prefab: {fileID: 5061237599360014270, guid: 2d6b844b8fe55d2419f79f3b9a82a8d7, type: 3}
@@ -38,6 +39,6 @@ MonoBehaviour:
     fixedCount: 0
     weight: 4
   - prefab: {fileID: 9163086858490928039, guid: 23f31dc7300542a43a39dee59b31848a, type: 3}
-    fixedCount: 0
+    fixedCount: 1
     weight: 2
   spawnInterval: 0.5

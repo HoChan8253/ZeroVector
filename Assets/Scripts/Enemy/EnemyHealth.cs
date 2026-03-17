@@ -34,8 +34,6 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         _ai = GetComponent<IEnemyAI>();
 
         if (_ai == null)
-            Debug.LogWarning($"[EnemyHealth] {name}: IEnemyAI 구현체를 찾지 못했습니다. " +
-                             "EnemyAI 또는 FlyingEnemyAI 컴포넌트가 같은 GameObject에 있어야 합니다.");
 
         ResetHp();
     }
@@ -85,6 +83,10 @@ public class EnemyHealth : MonoBehaviour, IDamageable
             _ai?.OnDamaged(hitPoint, false);
             return;
         }
+
+        // 헤드샷 배율 적용
+        if (headshot && _ai != null)
+            amount = Mathf.RoundToInt(amount * _ai.HeadshotMultiplier);
 
         // HP 차감
         _hp -= amount;
@@ -156,7 +158,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     private void OnShieldBreak()
     {
-        Debug.Log($"[EnemyHealth] {name} 실드 파괴");
+        
     }
 
     private void RefreshShieldVisual()

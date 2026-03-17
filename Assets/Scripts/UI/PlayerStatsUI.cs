@@ -15,6 +15,9 @@ public class PlayerStatsUI : MonoBehaviour
     [SerializeField] private StatsBarAnim _hpAnim;
     [SerializeField] private StatsBarAnim _shieldAnim;
 
+    [Header("Shield Bar")]
+    [SerializeField] private CanvasGroup _shieldCanvasGroup;
+
     [Header("Stamina Blink (Exhausted)")]
     [SerializeField] private Image _staminaFill;
     [SerializeField] private float _staminaBlinkSpeed = 20f;
@@ -98,6 +101,9 @@ public class PlayerStatsUI : MonoBehaviour
 
     private void OnShieldChanged(float cur, float max)
     {
+        if (_shieldCanvasGroup != null)
+            _shieldCanvasGroup.alpha = max <= 0f ? 0f : 1f;
+
         if (_shieldAnim != null && max > 0f)
             _shieldAnim.Set01(cur / max);
     }

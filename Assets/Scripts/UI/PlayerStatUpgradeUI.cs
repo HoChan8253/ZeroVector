@@ -69,20 +69,17 @@ public class PlayerStatPanelUI : MonoBehaviour
 
     private void OnHpBuyClicked()
     {
-        if (_upgradeManager != null && !_upgradeManager.TryUpgradeHp())
-            Debug.Log("[StatUI] HP 업그레이드 실패 (골드 부족 or 만렙)");
+        _upgradeManager?.TryUpgradeHp();
     }
 
     private void OnSdBuyClicked()
     {
-        if (_upgradeManager != null && !_upgradeManager.TryUpgradeSd())
-            Debug.Log("[StatUI] Shield 업그레이드 실패");
+        _upgradeManager?.TryUpgradeSd();
     }
 
     private void OnStBuyClicked()
     {
-        if (_upgradeManager != null && !_upgradeManager.TryUpgradeSt())
-            Debug.Log("[StatUI] Stamina 업그레이드 실패");
+        _upgradeManager?.TryUpgradeSt();
     }
 
     private void Refresh()

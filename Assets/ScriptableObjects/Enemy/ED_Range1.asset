@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a754f6ca96bd24a89f2999bc053ef6, type: 3}
   m_Name: ED_Range1
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  maxHp: 200
+  maxHp: 120
   useShield: 0
   maxShield: 0
-  goldReward: 10
-  goldRewardMin: 8
-  goldRewardMax: 15
+  goldReward: 150
+  goldRewardMin: 105
+  goldRewardMax: 195
   randomGold: 1
   dayIdleTime: 2
   dayWalkTime: 3
@@ -36,7 +36,7 @@ MonoBehaviour:
   turnSpeed: 8
   attackRange: 15
   attackCooldown: 1.5
-  attackDamage: 11
+  attackDamage: 8
   meleeHitRadius: 0
   meleeHitForward: 0
   meleeHitHeight: 0

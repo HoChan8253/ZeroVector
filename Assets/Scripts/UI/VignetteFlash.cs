@@ -37,13 +37,11 @@ public class DamageVignetteFlash : MonoBehaviour
 
         if (_volume == null || _volume.profile == null)
         {
-            Debug.LogWarning("[VignetteFlash] Volume or Profile missing.");
             return;
         }
 
         if (!_volume.profile.TryGet(out _vignette) || _vignette == null)
         {
-            Debug.LogWarning("[VignetteFlash] Vignette override not found in profile.");
             return;
         }
 

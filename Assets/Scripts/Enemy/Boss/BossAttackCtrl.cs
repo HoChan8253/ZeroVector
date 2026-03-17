@@ -31,7 +31,6 @@ public class BossAttackCtrl : MonoBehaviour
 
         // 넉백
         var moveCC = _target.GetComponentInParent<PlayerMoveCC>();
-        Debug.Log($"[BossAttackCtrl] moveCC = {moveCC}");
         if (moveCC != null)
         {
             Vector3 dir = (_target.position - transform.position);

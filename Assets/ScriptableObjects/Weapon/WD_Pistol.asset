@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
   weaponName: Semi-Auto Pistol
   fireMode: 0
-  pelletCount: 8
-  pelletSpread: 0.08
-  damagePerPellet: 8
-  fireRate: 4
+  pelletCount: 0
+  pelletSpread: 0
+  damagePerPellet: 0
+  fireRate: 6
   range: 60
   damage: 12
   magSize: 12

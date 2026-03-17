@@ -19,6 +19,10 @@ public class WaveData : ScriptableObject
     [Header("Wave Info")]
     public int waveNumber;
 
+    [Header("Time Settings")]
+    [Tooltip("이 웨이브의 밤 지속 시간 (0이면 DayNightManager 기본값 사용)")]
+    public float nightDuration = 0f;
+
     [Header("낮 필드 유지")]
     [Tooltip("낮에 필드에 유지할 목표 적 수")]
     public int dayFieldTarget = 10;

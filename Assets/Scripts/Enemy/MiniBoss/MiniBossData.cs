@@ -55,6 +55,9 @@ public class MiniBossData : ScriptableObject
     public bool canStun = true;
     public float stunTime = 1.5f;
 
+    [Header("Headshot")]
+    public float headshotMultiplier = 1.5f;
+
     [Header("Day Loop")]
     public float dayIdleTime = 3f;
     public float dayWalkTime = 4f;

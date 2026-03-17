@@ -87,8 +87,7 @@ public class WeaponUpgradeUI : MonoBehaviour
 
     private void OnRegisterClicked()
     {
-        if (_upgradeManager != null && !_upgradeManager.TryPurchaseWeapon())
-            Debug.Log("[ShopUI] 골드 부족");
+        _upgradeManager?.TryPurchaseWeapon();
     }
 
     private void HandleWeaponPurchased()
@@ -100,20 +99,17 @@ public class WeaponUpgradeUI : MonoBehaviour
 
     private void OnPowerBuyClicked()
     {
-        if (_upgradeManager != null && !_upgradeManager.TryUpgradePower())
-            Debug.Log("[ShopUI] Power 업그레이드 실패");
+        _upgradeManager?.TryUpgradePower();
     }
 
     private void OnMagBuyClicked()
     {
-        if (_upgradeManager != null && !_upgradeManager.TryUpgradeMag())
-            Debug.Log("[ShopUI] Mag/Pellet 업그레이드 실패");
+        _upgradeManager?.TryUpgradeMag();
     }
 
     private void OnThirdBuyClicked()
     {
-        if (_upgradeManager != null && !_upgradeManager.TryUpgradeThird())
-            Debug.Log("[ShopUI] Third 업그레이드 실패");
+        _upgradeManager?.TryUpgradeThird();
     }
 
     private void Refresh()

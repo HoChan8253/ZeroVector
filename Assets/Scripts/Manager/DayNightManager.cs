@@ -58,7 +58,6 @@ public class DayNightManager : MonoBehaviour
             {
                 // 밤 종료, 신호만 발송
                 _waitingForCleanup = true;
-                if (_showDebugLog) Debug.Log("[DayNight] 밤 타이머 종료 → Cleanup 대기");
                 OnNightTimerEnd?.Invoke();
             }
             else
@@ -66,6 +65,12 @@ public class DayNightManager : MonoBehaviour
                 EnterNight();
             }
         }
+    }
+
+    public void SetNightDuration(float duration)
+    {
+        if (duration > 0f)
+            _nightDuration = duration;
     }
 
     public void RequestEnterDay()
@@ -78,7 +83,6 @@ public class DayNightManager : MonoBehaviour
     {
         IsNight = false;
         PhaseTimeRemaining = _dayDuration;
-        if (_showDebugLog) Debug.Log($"[DayNight] 낮 시작 - {_dayDuration}s");
         OnDayStart?.Invoke();
     }
 
@@ -87,7 +91,6 @@ public class DayNightManager : MonoBehaviour
         IsNight = true;
         _waitingForCleanup = false;
         PhaseTimeRemaining = _nightDuration;
-        if (_showDebugLog) Debug.Log($"[DayNight] 밤 시작 - {_nightDuration}s");
         OnNightStart?.Invoke();
     }
 

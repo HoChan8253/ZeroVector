@@ -113,7 +113,6 @@ public class GunController : MonoBehaviour
     {
         if (newData == null)
         {
-            Debug.LogWarning("[GunController] Equip 실패: newData == null");
             return;
         }
 

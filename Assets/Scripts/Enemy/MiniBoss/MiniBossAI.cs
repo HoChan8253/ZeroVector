@@ -17,6 +17,7 @@ public class MiniBossAI : MonoBehaviour, IEnemyAI
     public bool UseShield => _data != null && _data.useShield;
     public bool CanStun => _data != null ? _data.canStun : true;
     public float StunTime => _data != null ? _data.stunTime : 1.5f;
+    public float HeadshotMultiplier => _data != null ? _data.headshotMultiplier : 1f;
     public bool IsDead => _state == State.Dead;
 
     public MiniBossData BossData => _data;
