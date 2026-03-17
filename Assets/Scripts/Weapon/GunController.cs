@@ -15,6 +15,10 @@ public class GunController : MonoBehaviour
     [SerializeField] private float _adsRecoilMult = 0.4f; // 반동% 감소
     [SerializeField] private float _adsSpreadMult = 0.3f; // 탄퍼짐% 감소
 
+    [Header("Air Spread")]
+    [SerializeField] private PlayerMoveCC _playerMove;
+    [SerializeField] private float _airSpreadMultiplier = 3f;
+
     [Header("Refs")]
     [SerializeField] private Camera _cam;
     [SerializeField] private Animator _anim;
@@ -221,8 +225,13 @@ public class GunController : MonoBehaviour
             _state.currentSpread = 0f;
 
         _state.lastShotTime = Time.time;
+
+        bool isAirborne = _playerMove != null && !_playerMove.IsGrounded;
+        float airMult = isAirborne ? _airSpreadMultiplier : 1f;
+
         _state.currentSpread = Mathf.Clamp(
-            _state.currentSpread + _spreadAmount * spreadMult, 0f, _maxSpread * spreadMult);
+            _state.currentSpread + _spreadAmount * spreadMult * airMult,
+            0f, _maxSpread * spreadMult * airMult);
 
         if (isShotgun)
             FireShotgunPellets();

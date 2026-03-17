@@ -143,4 +143,16 @@ public class PlayerStats : MonoBehaviour, IDamageable
         Shield = Mathf.Min(Shield + amount, _maxShield);
         OnShieldChanged?.Invoke(Shield, _maxShield);
     }
+
+    public void ConsumeStamina(float amount)
+    {
+        if (amount <= 0f) return;
+        Stamina -= amount;
+        if (Stamina <= 0f)
+        {
+            Stamina = 0f;
+            IsExhausted = true;
+        }
+        OnStaminaChanged?.Invoke(Stamina, _maxStamina);
+    }
 }
