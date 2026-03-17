@@ -77,13 +77,12 @@ public class PlayerMoveCC : MonoBehaviour
 
         if (_cc.isGrounded && _yVel < 0f) _yVel = -2f;
 
-        // ★ 점프
-        if (_cc.isGrounded && _input.JumpPressedThisFrame)
+        // 점프
+        if (_cc.isGrounded && _input.JumpPressedThisFrame && !_stats.IsExhausted && !_stats.IsDead)
         {
             _yVel = Mathf.Sqrt(-2f * _gravity * _jumpHeight);
             _stats.ConsumeStamina(_jumpStaminaCost);
 
-            // 이동 중 점프 시 전진력 추가
             if (isMoving)
             {
                 float forwardForce = isSprinting ? _sprintJumpForwardForce : _walkJumpForwardForce;
