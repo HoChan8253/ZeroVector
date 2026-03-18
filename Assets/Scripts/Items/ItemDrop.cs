@@ -15,6 +15,9 @@ public class ItemDrop : MonoBehaviour
     [SerializeField] private float _magnetSpeed = 5f;
     [SerializeField] private float _collectRadius = 0.6f;
 
+    [Header("Rotation")]
+    [SerializeField] private float _rotateSpeed = 90f;
+
     private bool _isMovingToPlayer;
     private bool _collected;
 
@@ -38,6 +41,8 @@ public class ItemDrop : MonoBehaviour
     private void Update()
     {
         if (_collected || _player == null) return;
+
+        transform.Rotate(0f, _rotateSpeed * Time.deltaTime, 0f);
 
         float dist = Vector3.Distance(transform.position, _player.position);
 
