@@ -143,9 +143,10 @@ public class EnemyHealth : MonoBehaviour, IDamageable
             amount = 500;
         }
 
-
         if (amount > 0)
             GoldManager.Instance.Add(amount, transform.position);
+
+        ItemDropSpawner.Instance?.TrySpawn(transform.position);
     }
 
     // 외부 호출

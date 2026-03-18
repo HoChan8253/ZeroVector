@@ -440,6 +440,17 @@ public class GunController : MonoBehaviour
         if (_stats != null) _stats.SetReloading(false);
     }
 
+    public void FillReserveAmmo(int amount)
+    {
+        int max = _upgradeManager != null && _upgradeManager.IsOwned
+            ? _upgradeManager.CurrentReserveAmmo
+            : (_data != null ? _data.startReserveAmmo : 0);
+
+        if (_state.reserveAmmo >= max) return;
+        _state.reserveAmmo = Mathf.Min(_state.reserveAmmo + amount, max);
+        NotifyAmmo();
+    }
+
     // 유틸
     private void UpdateSpreadRecover()
     {

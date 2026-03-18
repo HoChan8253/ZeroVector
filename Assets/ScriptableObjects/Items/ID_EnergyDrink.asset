@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82c8d24b80ff4234086c58b5cf8fdd99, type: 3}
+  m_Name: ID_EnergyDrink
+  m_EditorClassIdentifier: Assembly-CSharp::ItemDropData
+  dropType: 2
+  prefab: {fileID: 1598013652658027879, guid: 374e8865456898543a4d60c8b91f91fc, type: 3}
+  dropChance: 0.2
+  ammoAmount: 0
+  staminaRegenMultiplier: 2
+  staminaBoostDuration: 10
+  healPercent: 0
+  goldMin: 0
+  goldMax: 0
+  lifetime: 20
+  blinkStartTime: 10
