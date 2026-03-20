@@ -82,7 +82,7 @@ public class ShopPanelUI : MonoBehaviour
         Cursor.visible = true;
     }
 
-    private void CloseShop()
+    public void CloseShop()
     {
         IsOpen = false;
         _shopPanel?.SetActive(false);

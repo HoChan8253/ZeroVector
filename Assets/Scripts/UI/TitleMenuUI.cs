@@ -10,8 +10,7 @@ public class TitleMenuUI : MonoBehaviour
     [SerializeField] private Button _quitBtn;
 
     [Header("패널")]
-    [SerializeField] private GameObject _howToPlayPanel;
-    [SerializeField] private Button _howToPlayCloseBtn;
+    [SerializeField] private HowToPlayUI _howToPlayUI;
     [SerializeField] private OptionsUI _optionsUI;
 
     [Header("씬 이름")]
@@ -23,9 +22,6 @@ public class TitleMenuUI : MonoBehaviour
         _howToPlayBtn?.onClick.AddListener(OnHowToPlay);
         _optionsBtn?.onClick.AddListener(OnOptions);
         _quitBtn?.onClick.AddListener(OnQuit);
-        _howToPlayCloseBtn?.onClick.AddListener(() => _howToPlayPanel?.SetActive(false));
-
-        _howToPlayPanel?.SetActive(false);
     }
 
     private void OnGameStart()
@@ -35,12 +31,16 @@ public class TitleMenuUI : MonoBehaviour
 
     private void OnHowToPlay()
     {
-        _howToPlayPanel?.SetActive(true);
+        if (_optionsUI != null && _optionsUI.IsOpen) return; // 옵션 열려있으면 무시
+        _howToPlayUI?.Open();
+        SetMenuButtonsInteractable(false);
     }
 
     private void OnOptions()
     {
+        if (_howToPlayUI != null && _howToPlayUI.IsOpen) return; // HowToPlay 열려있으면 무시
         _optionsUI?.Open();
+        SetMenuButtonsInteractable(false);
     }
 
     private void OnQuit()
@@ -50,5 +50,19 @@ public class TitleMenuUI : MonoBehaviour
 #else
         Application.Quit();
 #endif
+    }
+
+    // 패널 닫힐 때 버튼 다시 활성화
+    public void OnPanelClosed()
+    {
+        SetMenuButtonsInteractable(true);
+    }
+
+    private void SetMenuButtonsInteractable(bool interactable)
+    {
+        if (_gameStartBtn) _gameStartBtn.interactable = interactable;
+        if (_howToPlayBtn) _howToPlayBtn.interactable = interactable;
+        if (_optionsBtn) _optionsBtn.interactable = interactable;
+        if (_quitBtn) _quitBtn.interactable = interactable;
     }
 }

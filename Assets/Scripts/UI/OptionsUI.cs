@@ -8,6 +8,9 @@ public class OptionsUI : MonoBehaviour
     [Header("패널")]
     [SerializeField] private GameObject _optionsPanel;
 
+    [Header("타이틀 메뉴")]
+    [SerializeField] private TitleMenuUI _titleMenuUI;
+
     [Header("탭 버튼")]
     [SerializeField] private Button _graphicTabBtn;
     [SerializeField] private Button _audioTabBtn;
@@ -46,10 +49,13 @@ public class OptionsUI : MonoBehaviour
     [Header("씬 이름")]
     [SerializeField] private string _titleSceneName = "Title";
 
+    public bool IsOpen => _optionsPanel != null && _optionsPanel.activeSelf;
+
     private bool _isIngame;
     private Image _graphicTabImage;
     private Image _audioTabImage;
     private Image _controlTabImage;
+    private ShopPanelUI _shopPanelUI;
 
     private void Awake()
     {
@@ -88,8 +94,6 @@ public class OptionsUI : MonoBehaviour
 
         // Display Mode 옵션 설정
         InitDisplayModeDropdown();
-
-        _optionsPanel?.SetActive(false);
     }
 
     private void Start()
@@ -97,12 +101,22 @@ public class OptionsUI : MonoBehaviour
         InitResolutionDropdown();
         RefreshUI();
         SwitchTab(0); // 항상 Graphic 탭으로 시작
+
+        if (_isIngame)
+            _shopPanelUI = FindFirstObjectByType<ShopPanelUI>();
     }
 
     private void Update()
     {
         if (_isIngame && Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (ShopPanelUI.IsOpen)
+            {
+                _shopPanelUI?.CloseShop();
+                return;
+            }
             Toggle();
+        }
     }
 
     // 탭 전환
@@ -136,7 +150,9 @@ public class OptionsUI : MonoBehaviour
     {
         _optionsPanel?.SetActive(false);
 
-        if (_isIngame)
+        if (!_isIngame)
+            _titleMenuUI?.OnPanelClosed();
+        else
         {
             Time.timeScale = 1f;
             Cursor.lockState = CursorLockMode.Locked;
