@@ -7,11 +7,13 @@ public class TitleMenuUI : MonoBehaviour
     [SerializeField] private Button _gameStartBtn;
     [SerializeField] private Button _howToPlayBtn;
     [SerializeField] private Button _optionsBtn;
+    [SerializeField] private Button _creditsBtn;
     [SerializeField] private Button _quitBtn;
 
     [Header("패널")]
     [SerializeField] private HowToPlayUI _howToPlayUI;
     [SerializeField] private OptionsUI _optionsUI;
+    [SerializeField] private CreditsUI _creditsUI;
 
     [Header("씬 이름")]
     [SerializeField] private string _gameSceneName = "InGame";
@@ -21,6 +23,7 @@ public class TitleMenuUI : MonoBehaviour
         _gameStartBtn?.onClick.AddListener(OnGameStart);
         _howToPlayBtn?.onClick.AddListener(OnHowToPlay);
         _optionsBtn?.onClick.AddListener(OnOptions);
+        _creditsBtn?.onClick.AddListener(OnCredits);
         _quitBtn?.onClick.AddListener(OnQuit);
     }
 
@@ -40,6 +43,14 @@ public class TitleMenuUI : MonoBehaviour
     {
         if (_howToPlayUI != null && _howToPlayUI.IsOpen) return; // HowToPlay 열려있으면 무시
         _optionsUI?.Open();
+        SetMenuButtonsInteractable(false);
+    }
+
+    private void OnCredits()
+    {
+        if (_howToPlayUI != null && _howToPlayUI.IsOpen) return;
+        if (_optionsUI != null && _optionsUI.IsOpen) return;
+        _creditsUI?.Open();
         SetMenuButtonsInteractable(false);
     }
 
