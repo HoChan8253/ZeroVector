@@ -75,4 +75,7 @@ public class EnemyData : ScriptableObject
     [Header("Stun")]
     public bool canStun = true; // 헤드샷 여부
     public float stunTime = 1.0f; // 헤드샷시 움찔
+
+    [Header("Headshot")]
+    public float headshotMultiplier = 1.5f;
 }

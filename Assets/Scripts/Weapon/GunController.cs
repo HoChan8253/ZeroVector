@@ -15,6 +15,10 @@ public class GunController : MonoBehaviour
     [SerializeField] private float _adsRecoilMult = 0.4f; // 반동% 감소
     [SerializeField] private float _adsSpreadMult = 0.3f; // 탄퍼짐% 감소
 
+    [Header("Air Spread")]
+    [SerializeField] private PlayerMoveCC _playerMove;
+    [SerializeField] private float _airSpreadMultiplier = 3f;
+
     [Header("Refs")]
     [SerializeField] private Camera _cam;
     [SerializeField] private Animator _anim;
@@ -113,7 +117,6 @@ public class GunController : MonoBehaviour
     {
         if (newData == null)
         {
-            Debug.LogWarning("[GunController] Equip 실패: newData == null");
             return;
         }
 
@@ -169,6 +172,12 @@ public class GunController : MonoBehaviour
     private void HandleFire()
     {
         if (_isHolstered) return;
+
+        // 미구매 무기 발사 차단
+        if (_upgradeManager != null && !_upgradeManager.IsOwned) return;
+
+        if (ShopPanelUI.IsOpen) return;
+
         bool isSprinting = _input.SprintHeld && _input.Move.sqrMagnitude > 0.01f;
         if (isSprinting) return;
         if (_state.isReloading) return;
@@ -218,8 +227,13 @@ public class GunController : MonoBehaviour
             _state.currentSpread = 0f;
 
         _state.lastShotTime = Time.time;
+
+        bool isAirborne = _playerMove != null && !_playerMove.IsGrounded;
+        float airMult = isAirborne ? _airSpreadMultiplier : 1f;
+
         _state.currentSpread = Mathf.Clamp(
-            _state.currentSpread + _spreadAmount * spreadMult, 0f, _maxSpread * spreadMult);
+            _state.currentSpread + _spreadAmount * spreadMult * airMult,
+            0f, _maxSpread * spreadMult * airMult);
 
         if (isShotgun)
             FireShotgunPellets();
@@ -286,6 +300,8 @@ public class GunController : MonoBehaviour
             return;
         }
 
+        if (hit.collider.gameObject.layer == LayerMask.NameToLayer("InvisibleWall")) return;
+
         // Hit Spark
         if (_hitSparkPrefab != null)
         {
@@ -326,6 +342,8 @@ public class GunController : MonoBehaviour
     {
         if (_pumpLocked) return;
         if (_isHolstered) return;
+        if (_upgradeManager != null && !_upgradeManager.IsOwned) return;
+        if (ShopPanelUI.IsOpen) return;
         bool isSprinting = _input.SprintHeld && _input.Move.sqrMagnitude > 0.01f;
         if (isSprinting) return;
         if (_state.isReloading) return;
@@ -420,6 +438,17 @@ public class GunController : MonoBehaviour
         _state.reloadEndTime = 0f;
         SafeSetBool(AnimIsReloading, false);
         if (_stats != null) _stats.SetReloading(false);
+    }
+
+    public void FillReserveAmmo(int amount)
+    {
+        int max = _upgradeManager != null && _upgradeManager.IsOwned
+            ? _upgradeManager.CurrentReserveAmmo
+            : (_data != null ? _data.startReserveAmmo : 0);
+
+        if (_state.reserveAmmo >= max) return;
+        _state.reserveAmmo = Mathf.Min(_state.reserveAmmo + amount, max);
+        NotifyAmmo();
     }
 
     // 유틸

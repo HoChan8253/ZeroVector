@@ -10,6 +10,7 @@ public class CrosshairController : MonoBehaviour
 
     [Header("Refs")]
     [SerializeField] private GunController _gun;
+    [SerializeField] private PlayerMoveCC _playerMove;
 
     [Header("Spread Settings")]
     [Tooltip("spread 0일 때 크로스헤어 중심에서의 기본 거리")]
@@ -31,12 +32,16 @@ public class CrosshairController : MonoBehaviour
         float spread = 0f;
         float maxSpread = 1f;
         if (_gun != null && _gun._data != null)
-        {
             maxSpread = Mathf.Max(_gun._data.maxSpread, 0.001f);
-        }
+
         spread = _gun != null ? _gun.CurrentSpread : 0f;
         float normalizedSpread = Mathf.Clamp01(spread / maxSpread);
-        float targetOffset = _baseOffset + normalizedSpread * _maxSpreadOffset;
+
+        bool isAirborne = _playerMove != null && !_playerMove.IsGrounded;
+        float targetOffset = isAirborne
+            ? _baseOffset + _maxSpreadOffset
+            : _baseOffset + normalizedSpread * _maxSpreadOffset;
+
         _currentOffset = Mathf.Lerp(_currentOffset, targetOffset, _lerpSpeed * Time.deltaTime);
         ApplyOffset(_currentOffset);
     }

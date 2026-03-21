@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: WD_Wave1
   m_EditorClassIdentifier: Assembly-CSharp::WaveData
   waveNumber: 1
-  dayFieldTarget: 10
+  nightDuration: 90
+  dayFieldTarget: 12
   dayEntries:
   - prefab: {fileID: 5061237599360014270, guid: 2d6b844b8fe55d2419f79f3b9a82a8d7, type: 3}
     fixedCount: 0

@@ -18,6 +18,7 @@ public class PlayerInputHub : MonoBehaviour
     public bool SprintHeld { get; private set; }
     public bool ShopPressedThisFrame { get; private set; }
     public bool CancelPressedThisFrame { get; private set; }
+    public bool JumpPressedThisFrame { get; private set; }
 
     // 테스트용
     public bool ToggleDayNightPressedThisFrame { get; private set; }
@@ -48,6 +49,7 @@ public class PlayerInputHub : MonoBehaviour
         _input.Player.Weapon3.performed += OnWeapon3;
         _input.Player.Shop.performed += OnShop;
         _input.Menu.Cancel.performed += OnCancel;
+        _input.Player.Jump.performed += OnJump;
 
         // 테스트용
         _input.Debug.ToggleDayNight.performed += OnToggleDayNight;
@@ -71,6 +73,7 @@ public class PlayerInputHub : MonoBehaviour
         _input.Player.Weapon3.performed -= OnWeapon3;
         _input.Player.Shop.performed -= OnShop;
         _input.Menu.Cancel.performed -= OnCancel;
+        _input.Player.Jump.performed -= OnJump;
 
         // 테스트용
         _input.Debug.ToggleDayNight.performed -= OnToggleDayNight;
@@ -87,6 +90,7 @@ public class PlayerInputHub : MonoBehaviour
         Weapon3PressedThisFrame = false;
         ShopPressedThisFrame = false;
         CancelPressedThisFrame = false;
+        JumpPressedThisFrame = false;
 
         // 테스트용
         ToggleDayNightPressedThisFrame = false;
@@ -130,6 +134,11 @@ public class PlayerInputHub : MonoBehaviour
     private void OnCancel(InputAction.CallbackContext ctx)
     {
         if (ctx.performed) CancelPressedThisFrame = true;
+    }
+
+    private void OnJump(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed) JumpPressedThisFrame = true;
     }
 
     // 테스트용

@@ -12,10 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbdd1abccf5c28f419258fd1177d0c1e, type: 3}
   m_Name: BD_MiniBoss
   m_EditorClassIdentifier: Assembly-CSharp::MiniBossData
-  maxHp: 1000
+  maxHp: 2500
   useShield: 1
   maxShield: 300
   shieldCooldown: 20
+  goldReward: 1000
+  goldRewardMin: 700
+  goldRewardMax: 1300
+  randomGold: 1
   patrolSpeed: 1.4
   chaseSpeed: 4
   angularSpeed: 240
@@ -24,7 +28,7 @@ MonoBehaviour:
   aggroRange: 20
   deaggroRange: 30
   damageAggroHoldTime: 5
-  atk1Damage: 30
+  atk1Damage: 35
   atk1Range: 2
   atk1Cooldown: 2
   atk1HitRadius: 5
@@ -37,7 +41,7 @@ MonoBehaviour:
   stompDamage: 25
   stompRange: 8
   stompCooldown: 8
-  stompProjSpeed: 14
+  stompProjSpeed: 20
   stompProjLife: 3
   stompDirCount: 10
   canStun: 1

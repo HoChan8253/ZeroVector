@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: WD_Wave9
   m_EditorClassIdentifier: Assembly-CSharp::WaveData
   waveNumber: 9
+  nightDuration: 170
   dayFieldTarget: 20
   dayEntries:
   - prefab: {fileID: 5044674385491539189, guid: ebed62d14cce3a849adc78996a45002e, type: 3}
@@ -31,7 +32,7 @@ MonoBehaviour:
     fixedCount: 0
     weight: 3
   - prefab: {fileID: 1620465946646508445, guid: 244dd1da98fb69d4dbfd900060ca624c, type: 3}
-    fixedCount: 0
+    fixedCount: 1
     weight: 1
   nightEntries:
   - prefab: {fileID: 5044674385491539189, guid: ebed62d14cce3a849adc78996a45002e, type: 3}
@@ -50,6 +51,6 @@ MonoBehaviour:
     fixedCount: 0
     weight: 3
   - prefab: {fileID: 1620465946646508445, guid: 244dd1da98fb69d4dbfd900060ca624c, type: 3}
-    fixedCount: 0
+    fixedCount: 1
     weight: 1
   spawnInterval: 0.5

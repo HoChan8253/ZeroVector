@@ -22,6 +22,7 @@ public class EnemyAI : MonoBehaviour, IEnemyAI
     public bool UseShield => _data != null && _data.useShield;
     public bool CanStun => _data != null ? _data.canStun : true;
     public float StunTime => _data != null ? _data.stunTime : 1f;
+    public float HeadshotMultiplier => _data != null ? _data.headshotMultiplier : 1f;
 
     public bool IsMoving => _state == State.Chase || _state == State.DayPatrol;
     public bool IsAttacking => _state == State.Attack;

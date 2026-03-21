@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd2826493d2d2184887a3dd030ada7c7, type: 3}
   m_Name: BD_Boss
   m_EditorClassIdentifier: Assembly-CSharp::BossData
-  maxHp: 3000
+  maxHp: 18000
   chaseSpeed: 4
   aimMoveSpeed: 2.5
   angularSpeed: 240
@@ -24,12 +24,12 @@ MonoBehaviour:
   smackRange: 2.8
   smackCooldown: 3
   smackKnockback: 50
-  shootDamage: 20
+  shootDamage: 30
   shootCooldown: 5
   shootProjSpeed: 18
   shootProjLife: 4
   shootRadius: 6
-  tripleShootDamage: 15
+  tripleShootDamage: 22
   tripleShootCooldown: 8
   tripleShootProjSpeed: 10
   tripleShootProjLife: 6

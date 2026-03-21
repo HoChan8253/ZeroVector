@@ -39,7 +39,6 @@ public class BossAttack : MonoBehaviour
     public void AE_ShieldRegen()
     {
         // 시각 연출만 담당
-        Debug.Log("[BossAttack] AE_ShieldRegen — 실드 연출 재생");
     }
 
     // 내부 공격 로직

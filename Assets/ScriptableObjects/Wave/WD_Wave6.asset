@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: WD_Wave6
   m_EditorClassIdentifier: Assembly-CSharp::WaveData
   waveNumber: 6
-  dayFieldTarget: 17
+  nightDuration: 140
+  dayFieldTarget: 16
   dayEntries:
   - prefab: {fileID: 5044674385491539189, guid: ebed62d14cce3a849adc78996a45002e, type: 3}
     fixedCount: 0
@@ -25,10 +26,10 @@ MonoBehaviour:
     fixedCount: 0
     weight: 3
   - prefab: {fileID: 9163086858490928039, guid: 23f31dc7300542a43a39dee59b31848a, type: 3}
-    fixedCount: 0
+    fixedCount: 2
     weight: 2
   - prefab: {fileID: 5249679907754556779, guid: 4a4e7fe4e1f91064885a752ca4e81348, type: 3}
-    fixedCount: 0
+    fixedCount: 2
     weight: 1
   nightEntries:
   - prefab: {fileID: 5044674385491539189, guid: ebed62d14cce3a849adc78996a45002e, type: 3}
@@ -41,9 +42,9 @@ MonoBehaviour:
     fixedCount: 0
     weight: 3
   - prefab: {fileID: 9163086858490928039, guid: 23f31dc7300542a43a39dee59b31848a, type: 3}
-    fixedCount: 0
+    fixedCount: 2
     weight: 2
   - prefab: {fileID: 5249679907754556779, guid: 4a4e7fe4e1f91064885a752ca4e81348, type: 3}
-    fixedCount: 0
+    fixedCount: 2
     weight: 1
   spawnInterval: 0.5

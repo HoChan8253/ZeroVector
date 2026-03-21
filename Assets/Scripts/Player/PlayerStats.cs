@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using System.Collections;
 
 public class PlayerStats : MonoBehaviour, IDamageable
 {
@@ -34,6 +35,9 @@ public class PlayerStats : MonoBehaviour, IDamageable
     public event Action OnDie;
 
     private float _shieldRegenResumeTime;
+
+    private float _staminaBoostMultiplier = 1f;
+    private Coroutine _staminaBoostCo;
 
     private void Awake()
     {
@@ -83,7 +87,7 @@ public class PlayerStats : MonoBehaviour, IDamageable
         }
         else
         {
-            Stamina += _staminaRegenPerSec * Time.deltaTime;
+            Stamina += _staminaRegenPerSec * _staminaBoostMultiplier * Time.deltaTime;
             if (Stamina > _maxStamina) Stamina = _maxStamina;
 
             // 탈진이면 스테미너 회복이 일정 수준까지 회복해야 스프린트 잠금 해제
@@ -142,5 +146,30 @@ public class PlayerStats : MonoBehaviour, IDamageable
         if (amount <= 0f) return;
         Shield = Mathf.Min(Shield + amount, _maxShield);
         OnShieldChanged?.Invoke(Shield, _maxShield);
+    }
+
+    public void ConsumeStamina(float amount)
+    {
+        if (amount <= 0f) return;
+        Stamina -= amount;
+        if (Stamina <= 0f)
+        {
+            Stamina = 0f;
+            IsExhausted = true;
+        }
+        OnStaminaChanged?.Invoke(Stamina, _maxStamina);
+    }
+
+    public void ApplyStaminaBoost(float multiplier, float duration)
+    {
+        if (_staminaBoostCo != null) StopCoroutine(_staminaBoostCo);
+        _staminaBoostCo = StartCoroutine(CoStaminaBoost(multiplier, duration));
+    }
+
+    private IEnumerator CoStaminaBoost(float multiplier, float duration)
+    {
+        _staminaBoostMultiplier = multiplier;
+        yield return new WaitForSeconds(duration);
+        _staminaBoostMultiplier = 1f;
     }
 }

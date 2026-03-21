@@ -29,6 +29,7 @@ public class BossAI : MonoBehaviour, IEnemyAI
     public bool CanStun => false;
     public float StunTime => 0f;
     public bool IsDead => _state == State.Dead;
+    public float HeadshotMultiplier => 1f;
 
     private State _state;
     private float _stateEndTime;

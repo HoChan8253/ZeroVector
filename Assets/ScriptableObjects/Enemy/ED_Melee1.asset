@@ -15,9 +15,9 @@ MonoBehaviour:
   maxHp: 260
   useShield: 0
   maxShield: 0
-  goldReward: 10
-  goldRewardMin: 8
-  goldRewardMax: 15
+  goldReward: 200
+  goldRewardMin: 140
+  goldRewardMax: 260
   randomGold: 1
   dayIdleTime: 2
   dayWalkTime: 3
@@ -35,7 +35,7 @@ MonoBehaviour:
   flyingMoveSpeed: 3.5
   turnSpeed: 8
   attackRange: 2.5
-  attackCooldown: 1.2
+  attackCooldown: 1
   attackDamage: 15
   meleeHitRadius: 2.8
   meleeHitForward: 0.9

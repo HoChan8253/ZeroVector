@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a754f6ca96bd24a89f2999bc053ef6, type: 3}
   m_Name: ED_Melee3
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  maxHp: 200
+  maxHp: 500
   useShield: 1
-  maxShield: 1300
-  goldReward: 10
-  goldRewardMin: 8
-  goldRewardMax: 15
+  maxShield: 150
+  goldReward: 350
+  goldRewardMin: 245
+  goldRewardMax: 455
   randomGold: 1
   dayIdleTime: 3.5
   dayWalkTime: 2
@@ -35,8 +35,8 @@ MonoBehaviour:
   flyingMoveSpeed: 3.5
   turnSpeed: 8
   attackRange: 2
-  attackCooldown: 2
-  attackDamage: 20
+  attackCooldown: 1.2
+  attackDamage: 25
   meleeHitRadius: 2.5
   meleeHitForward: 0.9
   meleeHitHeight: 1

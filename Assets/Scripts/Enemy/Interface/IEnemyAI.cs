@@ -7,6 +7,7 @@ public interface IEnemyAI
     bool UseShield { get; }
     bool CanStun { get; }
     float StunTime { get; }
+    float HeadshotMultiplier { get; }
     bool IsDead { get; }
     void OnDamaged(Vector3 hitPoint, bool stun);
     void Die();

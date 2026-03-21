@@ -39,6 +39,7 @@ public class FlyingEnemyAI : MonoBehaviour, IEnemyAI
     public int MaxShield => _data != null ? _data.maxShield : 0;
     public bool UseShield => _data != null && _data.useShield;
     public bool CanStun => false; // 공중 유닛은 스턴 없음
+    public float HeadshotMultiplier => 1f;
     public float StunTime => 0f;
 
     // 데이터 캐시

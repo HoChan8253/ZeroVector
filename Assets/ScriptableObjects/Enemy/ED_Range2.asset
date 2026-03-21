@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a754f6ca96bd24a89f2999bc053ef6, type: 3}
   m_Name: ED_Range2
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  maxHp: 180
+  maxHp: 300
   useShield: 0
   maxShield: 0
-  goldReward: 10
-  goldRewardMin: 8
-  goldRewardMax: 15
+  goldReward: 300
+  goldRewardMin: 210
+  goldRewardMax: 390
   randomGold: 1
   dayIdleTime: 2
   dayWalkTime: 3
@@ -26,15 +26,15 @@ MonoBehaviour:
   chaseSpeed: 2.2
   angularSpeed: 240
   acceleration: 6
-  aggroRange: 26
-  deaggroRange: 28
+  aggroRange: 28
+  deaggroRange: 32
   damageAggroHoldTime: 3
   attackType: 2
   isFlying: 0
   flyingHeight: 4.5
   flyingMoveSpeed: 3.5
   turnSpeed: 8
-  attackRange: 22
+  attackRange: 30
   attackCooldown: 5
   attackDamage: 35
   meleeHitRadius: 0

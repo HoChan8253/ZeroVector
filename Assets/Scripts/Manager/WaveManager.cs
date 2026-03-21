@@ -9,7 +9,6 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private Transform[] _spawnPoints;
 
     [Header("Wave Data")]
-    [Tooltip("Wave SO List")]
     [SerializeField] private WaveData[] _waveDatas;
 
     [Header("Wave Settings")]
@@ -21,6 +20,12 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private int _fallbackBaseCount = 10;
     [SerializeField] private int _fallbackCountPerWave = 2;
     [SerializeField] private float _fallbackSpawnInterval = 0.4f;
+
+    [Header("Clear Bonus")]
+    [SerializeField] private int _baseClearBonus = 300;
+    [SerializeField] private int _bonusPerWave = 200;
+    [SerializeField] private Transform _player;
+    [SerializeField] private WaveClearBonusUI _clearBonusUI;
 
     [Header("Debug")]
     [SerializeField] private bool _showDebugLog = true;
@@ -61,9 +66,11 @@ public class WaveManager : MonoBehaviour
         _phase = Phase.Day;
         CurrentWave++;
 
-        if (_showDebugLog) Debug.Log($"[Wave] Wave {CurrentWave} 낮 시작");
-        OnWaveStart?.Invoke(CurrentWave);
+        WaveData data = GetWaveData(CurrentWave);
+        if (data != null && data.nightDuration > 0f)
+            DayNightManager.Instance.SetNightDuration(data.nightDuration);
 
+        OnWaveStart?.Invoke(CurrentWave);
         StartFieldLoop(CoDayFieldLoop());
     }
 
@@ -92,8 +99,6 @@ public class WaveManager : MonoBehaviour
     {
         _phase = Phase.Night;
         IsWaveActive = true;
-
-        if (_showDebugLog) Debug.Log($"[Wave] Wave {CurrentWave} 밤 시작");
 
         ActivateAllEnemies();
         StartFieldLoop(CoNightRegenLoop());
@@ -125,7 +130,6 @@ public class WaveManager : MonoBehaviour
         _phase = Phase.Cleanup;
         StopFieldLoop();
 
-        if (_showDebugLog) Debug.Log("[Wave] Cleanup - 리젠 중단, 잔여 적 처치 대기");
         OnCleanupPhaseStart?.Invoke();
 
         if (_aliveEnemies.Count == 0)
@@ -144,7 +148,9 @@ public class WaveManager : MonoBehaviour
     private void FinishWave()
     {
         IsWaveActive = false;
-        if (_showDebugLog) Debug.Log($"[Wave] Wave {CurrentWave} 클리어");
+
+        GiveClearBonus();
+
         OnWaveEnd?.Invoke(CurrentWave);
 
         if (CurrentWave >= _totalWaves)
@@ -154,6 +160,18 @@ public class WaveManager : MonoBehaviour
         }
 
         DayNightManager.Instance?.RequestEnterDay();
+    }
+
+    private void GiveClearBonus()
+    {
+        if (GoldManager.Instance == null) return;
+
+        int bonus = _baseClearBonus + _bonusPerWave * CurrentWave;
+        Vector3 pos = _player != null ? _player.position : Vector3.zero;
+        GoldManager.Instance.Add(bonus, pos);
+
+        if (_clearBonusUI != null)
+            _clearBonusUI.Show(CurrentWave, bonus);
     }
 
     // 루프 관리
