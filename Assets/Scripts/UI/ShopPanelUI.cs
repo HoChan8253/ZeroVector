@@ -55,7 +55,10 @@ public class ShopPanelUI : MonoBehaviour
         }
 
         if (_input.CancelPressedThisFrame && _shopPanel != null && _shopPanel.activeSelf)
+        {
+            _input.CancelConsumed = true;
             CloseShop();
+        }
     }
 
     private void TryOpenShop()

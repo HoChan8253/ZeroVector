@@ -60,7 +60,6 @@ public class OptionsUI : MonoBehaviour
     private Image _graphicTabImage;
     private Image _audioTabImage;
     private Image _controlTabImage;
-    private ShopPanelUI _shopPanelUI;
 
     private void Awake()
     {
@@ -109,9 +108,6 @@ public class OptionsUI : MonoBehaviour
         InitResolutionDropdown();
         RefreshUI();
         SwitchTab(0); // 항상 Graphic 탭으로 시작
-
-        if (_isIngame)
-            _shopPanelUI = FindFirstObjectByType<ShopPanelUI>();
     }
 
     private void Update()
@@ -119,13 +115,9 @@ public class OptionsUI : MonoBehaviour
         if (!_isIngame) return;
         if (_input == null) return;
 
-        if (_input.CancelPressedThisFrame)
+        if (_input.CancelPressedThisFrame && !_input.CancelConsumed)
         {
-            if (ShopPanelUI.IsOpen)
-            {
-                _shopPanelUI?.CloseShop();
-                return;
-            }
+            if (ShopPanelUI.IsOpen) return;
             Toggle();
         }
     }

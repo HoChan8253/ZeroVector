@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerInputHub : MonoBehaviour
@@ -18,6 +17,7 @@ public class PlayerInputHub : MonoBehaviour
     public bool SprintHeld { get; private set; }
     public bool ShopPressedThisFrame { get; private set; }
     public bool CancelPressedThisFrame { get; private set; }
+    public bool CancelConsumed { get; set; }
     public bool JumpPressedThisFrame { get; private set; }
 
     // 테스트용
@@ -92,6 +92,7 @@ public class PlayerInputHub : MonoBehaviour
         Weapon3PressedThisFrame = false;
         ShopPressedThisFrame = false;
         CancelPressedThisFrame = false;
+        CancelConsumed = false;
         JumpPressedThisFrame = false;
 
         // 테스트용
