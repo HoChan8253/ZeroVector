@@ -22,4 +22,4 @@ MonoBehaviour:
   thirdPrices: 2c010000f4010000bc020000e8030000780500006c070000c4090000800c0000a00f000024130000
   powerPerLevel: 5
   magPerLevel: 2
-  thirdPerLevel: 1
+  thirdPerLevel: 2
