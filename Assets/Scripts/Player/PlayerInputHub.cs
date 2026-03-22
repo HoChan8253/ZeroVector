@@ -50,6 +50,7 @@ public class PlayerInputHub : MonoBehaviour
         _input.Player.Shop.performed += OnShop;
         _input.Menu.Cancel.performed += OnCancel;
         _input.Player.Jump.performed += OnJump;
+        _input.Menu.Enable();
 
         // 테스트용
         _input.Debug.ToggleDayNight.performed += OnToggleDayNight;
@@ -74,6 +75,7 @@ public class PlayerInputHub : MonoBehaviour
         _input.Player.Shop.performed -= OnShop;
         _input.Menu.Cancel.performed -= OnCancel;
         _input.Player.Jump.performed -= OnJump;
+        _input.Menu.Disable();
 
         // 테스트용
         _input.Debug.ToggleDayNight.performed -= OnToggleDayNight;

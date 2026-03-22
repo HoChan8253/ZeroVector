@@ -33,7 +33,12 @@ public class DayNightManager : MonoBehaviour
         if (_input == null) _input = FindFirstObjectByType<PlayerInputHub>();
     }
 
-    private void Start() => StartCoroutine(CoDelayedStart());
+    private void Start()
+    {
+        BgmManager.Instance?.SubscribeDayNight();
+
+        StartCoroutine(CoDelayedStart());
+    }
 
     private void Update()
     {

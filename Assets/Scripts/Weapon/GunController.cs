@@ -178,6 +178,8 @@ public class GunController : MonoBehaviour
 
         if (ShopPanelUI.IsOpen) return;
 
+        if (OptionsUI.IsOptionsOpen) return;
+
         bool isSprinting = _input.SprintHeld && _input.Move.sqrMagnitude > 0.01f;
         if (isSprinting) return;
         if (_state.isReloading) return;

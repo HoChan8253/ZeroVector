@@ -42,9 +42,6 @@ public class TitleLightning : MonoBehaviour
         {
             float intensity = Random.Range(_minIntensity, _maxIntensity);
 
-            // 디버그
-            Debug.Log($"[Lightning] postExposure ON: {intensity} / colorAdj:{_colorAdjustments != null}");
-
             if (_colorAdjustments != null)
                 _colorAdjustments.postExposure.Override(intensity);
 
@@ -52,8 +49,6 @@ public class TitleLightning : MonoBehaviour
 
             if (_colorAdjustments != null)
                 _colorAdjustments.postExposure.Override(0f);
-
-            Debug.Log("[Lightning] postExposure OFF");
 
             yield return new WaitForSeconds(Random.Range(0.05f, 0.15f));
         }

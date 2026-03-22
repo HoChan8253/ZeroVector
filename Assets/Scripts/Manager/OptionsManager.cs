@@ -9,7 +9,7 @@ public class OptionsManager : MonoBehaviour
     [SerializeField] private AudioMixer _audioMixer;
 
     // 설정값
-    public float BgmVolume { get; private set; } = 0.2f;
+    public float BgmVolume { get; private set; } = 0.1f;
     public float SfxVolume { get; private set; } = 1f;
     public float MouseSensitivity { get; private set; } = 0.08f;
     public Color CrosshairColor { get; private set; } = Color.white;
@@ -125,7 +125,7 @@ public class OptionsManager : MonoBehaviour
     private void Load()
     {
         MasterVolume = PlayerPrefs.GetFloat("Master", 1f);
-        BgmVolume = PlayerPrefs.GetFloat("BGM", 0.2f);
+        BgmVolume = PlayerPrefs.GetFloat("BGM", 0.1f);
         SfxVolume = PlayerPrefs.GetFloat("SFX", 1f);
         UiVolume = PlayerPrefs.GetFloat("UI", 1f);
         MouseSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", 0.08f);
