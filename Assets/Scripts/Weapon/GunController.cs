@@ -44,6 +44,9 @@ public class GunController : MonoBehaviour
 
     [SerializeField] private WeaponState _state = new WeaponState();
 
+    [Header("Raycast")]
+    [SerializeField] private LayerMask _shootMask = ~0;
+
     // 캐시
     private float _fireRate;
     private float _range;
@@ -282,7 +285,7 @@ public class GunController : MonoBehaviour
 
     private void FireRay(Ray ray, float damage, bool spawnImpactFx)
     {
-        if (!Physics.Raycast(ray, out RaycastHit hit, _range)) return;
+        if (!Physics.Raycast(ray, out RaycastHit hit, _range, _shootMask)) return;
 
         Debug.DrawLine(ray.origin, hit.point, Color.red, 0.2f);
 
