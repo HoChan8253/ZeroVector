@@ -26,7 +26,7 @@ public class WeaponSwapManager : MonoBehaviour
 
     [SerializeField] private float _swapTimeout = 2.0f;
     [SerializeField] private string _holsterStateName = "Holster";
-    [SerializeField] private string _equipStateName = "Equip";
+    
     private bool _isSwapping;
     private float _swapDeadline;
 
@@ -59,7 +59,6 @@ public class WeaponSwapManager : MonoBehaviour
     {
         if (_isSwapping && Time.time > _swapDeadline)
         {
-            Debug.LogWarning("[WeaponSwap] Swap timeout -> Force unlock");
             _isSwapping = false;
             _pending = null;
             if (_currentGun != null) _currentGun.OnEquipAnimEnd();
@@ -177,8 +176,6 @@ public class WeaponSwapManager : MonoBehaviour
         StartCoroutine(CoEquipFromHolstered());
 
         _pending = null;
-
-        Debug.Log("HolsterEnd called");
     }
 
     private IEnumerator CoEquipFromHolstered()
@@ -214,7 +211,5 @@ public class WeaponSwapManager : MonoBehaviour
             _currentGun.OnEquipAnimEnd();
             _currentGun.ForceNotifyAmmo();
         }
-
-        Debug.Log("EquipEnd called");
     }
 }

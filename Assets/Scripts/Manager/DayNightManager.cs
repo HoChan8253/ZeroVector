@@ -12,7 +12,6 @@ public class DayNightManager : MonoBehaviour
 
     [Header("Debug")]
     [SerializeField] private PlayerInputHub _input;
-    [SerializeField] private bool _showDebugLog = true;
 
     public bool IsNight { get; private set; }
     public float CurrentPhaseDuration => IsNight ? _nightDuration : _dayDuration;
