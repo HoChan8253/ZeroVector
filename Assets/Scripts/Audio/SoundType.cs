@@ -16,6 +16,7 @@
     // 플레이어
     PlayerHit,
     PlayerDead,
+    PlayerFootstep,
 
     // 아이템
     ItemPickup_Ammo,

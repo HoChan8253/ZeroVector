@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36ca72d72981a7348b262aeec2f864c1, type: 3}
+  m_Name: SoundsSO
+  m_EditorClassIdentifier: Assembly-CSharp::SoundsSO
+  sounds:
+  - name: GunShot_Pistol
+    volume: 1
+    mixer: {fileID: 0}
+    sounds: []
+  - name: GunShot_Rifle
+    volume: 1
+    mixer: {fileID: 0}
+    sounds: []
+  - name: GunShot_Shotgun
+    volume: 1
+    mixer: {fileID: 0}
+    sounds: []
+  - name: Reload_Pistol
+    volume: 1
+    mixer: {fileID: 0}
+    sounds: []
+  - name: Reload_Rifle
+    volume: 1
+    mixer: {fileID: 0}
+    sounds: []
+  - name: Reload_Shotgun
+    volume: 1
+    mixer: {fileID: 0}
+    sounds: []
+  - name: EnemyHit
+    volume: 1
+    mixer: {fileID: 0}
+    sounds: []
+  - name: EnemyDead
+    volume: 1
+    mixer: {fileID: 0}
+    sounds: []
+  - name: EnemyDead_MiniBoss
+    volume: 1
+    mixer: {fileID: 0}
+    sounds: []
+  - name: PlayerHit
+    volume: 1
+    mixer: {fileID: 0}
+    sounds: []
+  - name: PlayerDead
+    volume: 1
+    mixer: {fileID: 0}
+    sounds: []
+  - name: PlayerFootstep
+    volume: 1
+    mixer: {fileID: 0}
+    sounds:
+    - {fileID: 8300000, guid: 8ace0a7be7c3d1a468bb6f875bf13c4c, type: 3}
+    - {fileID: 8300000, guid: 95daa8597713c7d41aca9136b8a21bab, type: 3}
+    - {fileID: 8300000, guid: c62dfaf7026e38a47bffeed0019ddfae, type: 3}
+    - {fileID: 8300000, guid: 23cde6ddc962e4543899f4ff27905854, type: 3}
+    - {fileID: 8300000, guid: c67775904d5284245b3fe5c86f0dd5f6, type: 3}
+    - {fileID: 8300000, guid: 6d9141d24735efc44bde7e488ca19851, type: 3}
+  - name: ItemPickup_Ammo
+    volume: 1
+    mixer: {fileID: 0}
+    sounds: []
+  - name: ItemPickup_MedKit
+    volume: 1
+    mixer: {fileID: 0}
+    sounds: []
+  - name: ItemPickup_EnergyDrink
+    volume: 1
+    mixer: {fileID: 0}
+    sounds: []
+  - name: ItemPickup_Gold
+    volume: 1
+    mixer: {fileID: 0}
+    sounds: []
+  - name: UI_Click
+    volume: 1
+    mixer: {fileID: 0}
+    sounds: []
+  - name: UI_Upgrade
+    volume: 1
+    mixer: {fileID: 0}
+    sounds: []
+  - name: UI_GoldEarn
+    volume: 1
+    mixer: {fileID: 0}
+    sounds: []
