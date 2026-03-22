@@ -57,6 +57,11 @@ public class BgmManager : MonoBehaviour
         DayNightManager.Instance.OnNightStart -= OnNightStart;
         DayNightManager.Instance.OnDayStart += OnDayStart;
         DayNightManager.Instance.OnNightStart += OnNightStart;
+
+        if (!DayNightManager.Instance.IsNight)
+            OnDayStart();
+        else
+            OnNightStart();
     }
 
     private void OnDayStart()
