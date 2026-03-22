@@ -7,7 +7,6 @@ public class PlayerInputHub : MonoBehaviour
     public Vector2 Look { get; private set; }
 
     public bool FireHeld { get; private set; }
-
     public bool AimHeld { get; private set; }
     public bool FirePressedThisFrame { get; private set; }
     public bool ReloadPressedThisFrame { get; private set; }
@@ -19,9 +18,6 @@ public class PlayerInputHub : MonoBehaviour
     public bool CancelPressedThisFrame { get; private set; }
     public bool CancelConsumed { get; set; }
     public bool JumpPressedThisFrame { get; private set; }
-
-    // 테스트용
-    public bool ToggleDayNightPressedThisFrame { get; private set; }
 
     private PlayerControls _input;
 
@@ -48,12 +44,9 @@ public class PlayerInputHub : MonoBehaviour
         _input.Player.Weapon2.performed += OnWeapon2;
         _input.Player.Weapon3.performed += OnWeapon3;
         _input.Player.Shop.performed += OnShop;
-        _input.Menu.Cancel.performed += OnCancel;
         _input.Player.Jump.performed += OnJump;
+        _input.Menu.Cancel.performed += OnCancel;
         _input.Menu.Enable();
-
-        // 테스트용
-        _input.Debug.ToggleDayNight.performed += OnToggleDayNight;
     }
 
     private void OnDisable()
@@ -73,13 +66,9 @@ public class PlayerInputHub : MonoBehaviour
         _input.Player.Weapon2.performed -= OnWeapon2;
         _input.Player.Weapon3.performed -= OnWeapon3;
         _input.Player.Shop.performed -= OnShop;
-        _input.Menu.Cancel.performed -= OnCancel;
         _input.Player.Jump.performed -= OnJump;
+        _input.Menu.Cancel.performed -= OnCancel;
         _input.Menu.Disable();
-
-        // 테스트용
-        _input.Debug.ToggleDayNight.performed -= OnToggleDayNight;
-
         _input.Disable();
     }
 
@@ -94,9 +83,6 @@ public class PlayerInputHub : MonoBehaviour
         CancelPressedThisFrame = false;
         CancelConsumed = false;
         JumpPressedThisFrame = false;
-
-        // 테스트용
-        ToggleDayNightPressedThisFrame = false;
     }
 
     private void OnMove(InputAction.CallbackContext ctx) => Move = ctx.ReadValue<Vector2>();
@@ -142,11 +128,5 @@ public class PlayerInputHub : MonoBehaviour
     private void OnJump(InputAction.CallbackContext ctx)
     {
         if (ctx.performed) JumpPressedThisFrame = true;
-    }
-
-    // 테스트용
-    private void OnToggleDayNight(InputAction.CallbackContext ctx)
-    {
-        if (ctx.performed) ToggleDayNightPressedThisFrame = true;
     }
 }
