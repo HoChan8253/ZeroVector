@@ -59,7 +59,7 @@ MonoBehaviour:
     sounds: []
   - name: PlayerFootstep
     volume: 1
-    mixer: {fileID: 0}
+    mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
     sounds:
     - {fileID: 8300000, guid: 8ace0a7be7c3d1a468bb6f875bf13c4c, type: 3}
     - {fileID: 8300000, guid: 95daa8597713c7d41aca9136b8a21bab, type: 3}

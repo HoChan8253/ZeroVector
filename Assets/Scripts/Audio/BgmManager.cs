@@ -86,43 +86,30 @@ public class BgmManager : MonoBehaviour
     {
         if (clips == null || clips.Length == 0) yield break;
 
-        // 현재 재생 중이면 페이드 아웃
         if (_audioSource.isPlaying)
             yield return StartCoroutine(CoFade(0f));
 
         while (true)
         {
-            // 랜덤 선택 (이전 곡 연속 방지)
             int index;
-            if (clips.Length == 1)
-            {
-                index = 0;
-            }
-            else
-            {
-                do { index = Random.Range(0, clips.Length); }
-                while (index == _lastIndex);
-            }
+            if (clips.Length == 1) index = 0;
+            else do { index = Random.Range(0, clips.Length); } while (index == _lastIndex);
             _lastIndex = index;
 
             _audioSource.clip = clips[index];
             _audioSource.Play();
 
-            // 페이드 인
             yield return StartCoroutine(CoFade(1f));
 
-            // 곡이 끝나기 fadeDuration 전에 페이드 아웃 시작
-            float waitTime = _audioSource.clip.length - _fadeDuration;
+            float waitTime = _audioSource.clip.length - _fadeDuration * 2f;
+            //float waitTime = 5f;
             if (waitTime > 0f)
-                yield return new WaitForSeconds(waitTime);
+                yield return new WaitForSecondsRealtime(waitTime);
 
-            // 페이드 아웃
             yield return StartCoroutine(CoFade(0f));
 
             _audioSource.Stop();
-
-            // 다음 곡 전 짧은 딜레이
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSecondsRealtime(0.3f);
         }
     }
 
@@ -132,7 +119,7 @@ public class BgmManager : MonoBehaviour
         float t = 0f;
         while (t < _fadeDuration)
         {
-            t += Time.deltaTime;
+            t += Time.unscaledDeltaTime;
             _audioSource.volume = Mathf.Lerp(startVolume, targetVolume, t / _fadeDuration);
             yield return null;
         }
