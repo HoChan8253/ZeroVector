@@ -25,6 +25,9 @@ public class GunController : MonoBehaviour
     [SerializeField] private PlayerInputHub _input;
     [SerializeField] private PlayerLook _look;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource _gunAudioSource;
+
     [SerializeField] private ParticleSystem _muzzleFx;
     [SerializeField] private Light _muzzleLight;
     [SerializeField] private float _muzzleLightDuration = 0.1f;
@@ -37,6 +40,8 @@ public class GunController : MonoBehaviour
 
     private readonly Queue<GameObject> _bulletHoles = new Queue<GameObject>();
     private Coroutine _muzzleLightCo;
+
+    public int ReserveAmmo => _state.reserveAmmo;
 
     public event Action<int, int> OnAmmoChanged;
 
@@ -88,6 +93,9 @@ public class GunController : MonoBehaviour
         // 업그레이드 이벤트 구독
         if (_upgradeManager != null)
             _upgradeManager.OnStatsChanged += ApplyUpgradeStats;
+
+        if (_gunAudioSource == null)
+            _gunAudioSource = GetComponent<AudioSource>();
 
         if (_data != null)
             Equip(_data);
@@ -208,6 +216,18 @@ public class GunController : MonoBehaviour
 
         bool isShotgun = (_data != null && _data.reloadType == ReloadType.PerShell);
         if (isShotgun) _pumpLocked = true;
+
+        if (_data != null)
+        {
+            SoundType shotSound = _data.weaponName switch
+            {
+                "Semi-Auto Pistol" => SoundType.GunShot_Pistol,
+                "Assault Rifle" => SoundType.GunShot_Rifle,
+                "Pump Shotgun" => SoundType.GunShot_Shotgun,
+                _ => SoundType.GunShot_Pistol
+            };
+            SFXManager.PlaySound(shotSound, _gunAudioSource);
+        }
 
         if (_muzzleFx != null)
         {
@@ -362,6 +382,14 @@ public class GunController : MonoBehaviour
         if (_data == null) return;
         if (_state.ammoInMag >= _magSize) return;
         if (!_data.infiniteReserveAmmo && _state.reserveAmmo <= 0) return;
+
+        SoundType reloadSound = _data.weaponName switch
+        {
+            "Semi-Auto Pistol" => SoundType.Reload_Pistol,
+            "Assault Rifle" => SoundType.Reload_Rifle,
+            _ => SoundType.Reload_Pistol
+        };
+        SFXManager.PlaySound(reloadSound, _gunAudioSource);
 
         _state.isReloading = true;
         _state.nextFireTime = Time.time;
@@ -531,7 +559,20 @@ public class GunController : MonoBehaviour
         _anim.SetTrigger(AnimEquip);
     }
 
-    public void OnPumpEnd() => _pumpLocked = false;
+    public void OnPumpEnd()
+    {
+        _pumpLocked = false;
+    }
+
+    public void OnPumpSound()
+    {
+        SFXManager.PlaySound(SoundType.Shotgun_Pump, _gunAudioSource);
+    }
+
+    public void OnShellInsertSound()
+    {
+        SFXManager.PlaySound(SoundType.Shotgun_ShellInsert, _gunAudioSource);
+    }
 
     private void SafeSetBool(int hash, bool value)
     {

@@ -6,7 +6,8 @@
     GunShot_Shotgun,
     Reload_Pistol,
     Reload_Rifle,
-    Reload_Shotgun,
+    Shotgun_ShellInsert,
+    Shotgun_Pump,
 
     // 적
     EnemyHit,
