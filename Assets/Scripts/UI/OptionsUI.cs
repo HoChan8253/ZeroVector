@@ -54,7 +54,7 @@ public class OptionsUI : MonoBehaviour
 
     public bool IsOpen => _optionsPanel != null && _optionsPanel.activeSelf;
 
-    public static bool IsOptionsOpen { get; private set; }
+    public static bool IsOptionsOpen { get; set; }
 
     private bool _isIngame;
     private Image _graphicTabImage;

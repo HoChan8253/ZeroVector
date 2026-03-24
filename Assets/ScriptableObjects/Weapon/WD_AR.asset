@@ -26,9 +26,9 @@ MonoBehaviour:
   infiniteReserveAmmo: 0
   reloadDuration: 3.7
   reloadType: 0
-  perShellTime: 1.667
-  reloadStartTime: 1
-  reloadEndTime: 0.917
+  perShellTime: 0
+  reloadStartTime: 0
+  reloadEndTime: 0
   recoilPitchAmount: 2.5
   recoilYawAmount: 1.5
   spreadAmount: 0.02

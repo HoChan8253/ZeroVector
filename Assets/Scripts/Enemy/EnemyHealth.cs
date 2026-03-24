@@ -101,6 +101,8 @@ public class EnemyHealth : MonoBehaviour, IDamageable
             GiveGoldReward();
             OnDead?.Invoke();
             _ai?.Die();
+
+            GameStatsManager.Instance?.AddKill();
         }
     }
 
@@ -147,6 +149,29 @@ public class EnemyHealth : MonoBehaviour, IDamageable
             GoldManager.Instance.Add(amount, transform.position);
 
         ItemDropSpawner.Instance?.TrySpawn(transform.position);
+
+        SoundType deathSound = TryGetComponent<MiniBossAI>(out _)
+        ? SoundType.EnemyDead_MiniBoss
+        : SoundType.EnemyDead;
+        PlaySfxAtPosition(deathSound);
+    }
+
+    private void PlaySfxAtPosition(SoundType sound)
+    {
+        if (SFXManager.Instance == null) return;
+
+        GameObject tempGO = new GameObject("TempAudio");
+        tempGO.transform.position = transform.position;
+
+        AudioSource source = tempGO.AddComponent<AudioSource>();
+        source.spatialBlend = 1f; // 3D
+        source.rolloffMode = AudioRolloffMode.Linear;
+        source.minDistance = 5f;
+        source.maxDistance = 30f;
+
+        SFXManager.PlaySound(sound, source);
+
+        Destroy(tempGO, 3f);
     }
 
     // 외부 호출

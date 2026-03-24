@@ -37,7 +37,7 @@ MonoBehaviour:
     volume: 1
     mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
     sounds:
-    - {fileID: 8300000, guid: dad7ab1527ebb44429735bb68e0aeace, type: 3}
+    - {fileID: 8300000, guid: 5161113d9580b4141804558dbecfd2ba, type: 3}
   - name: Shotgun_ShellInsert
     volume: 1
     mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
@@ -53,13 +53,15 @@ MonoBehaviour:
     mixer: {fileID: 0}
     sounds: []
   - name: EnemyDead
-    volume: 1
-    mixer: {fileID: 0}
-    sounds: []
+    volume: 0.6
+    mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
+    sounds:
+    - {fileID: 8300000, guid: df0b3ca68769dab42a29c3e67f36d6b0, type: 3}
   - name: EnemyDead_MiniBoss
-    volume: 1
-    mixer: {fileID: 0}
-    sounds: []
+    volume: 0.8
+    mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
+    sounds:
+    - {fileID: 8300000, guid: df0b3ca68769dab42a29c3e67f36d6b0, type: 3}
   - name: PlayerHit
     volume: 1
     mixer: {fileID: 0}
@@ -95,7 +97,7 @@ MonoBehaviour:
     mixer: {fileID: 0}
     sounds: []
   - name: UI_Click
-    volume: 1
+    volume: 0.5
     mixer: {fileID: -4134177498589383919, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
     sounds:
     - {fileID: 8300000, guid: dc34f6b1086fc4b41bdfa155eb6184c7, type: 3}
