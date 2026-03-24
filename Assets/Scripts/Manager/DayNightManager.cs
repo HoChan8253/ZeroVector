@@ -10,10 +10,6 @@ public class DayNightManager : MonoBehaviour
     [SerializeField] private float _dayDuration = 90f;
     [SerializeField] private float _nightDuration = 90f;
 
-    [Header("Debug")]
-    [SerializeField] private PlayerInputHub _input;
-    [SerializeField] private bool _showDebugLog = true;
-
     public bool IsNight { get; private set; }
     public float CurrentPhaseDuration => IsNight ? _nightDuration : _dayDuration;
     public float PhaseTimeRemaining { get; private set; }
@@ -30,21 +26,17 @@ public class DayNightManager : MonoBehaviour
     {
         if (Instance != null) { Destroy(gameObject); return; }
         Instance = this;
-        if (_input == null) _input = FindFirstObjectByType<PlayerInputHub>();
     }
 
-    private void Start() => StartCoroutine(CoDelayedStart());
+    private void Start()
+    {
+        BgmManager.Instance?.SubscribeDayNight();
+
+        StartCoroutine(CoDelayedStart());
+    }
 
     private void Update()
     {
-        // 디버그 토글
-        if (_input != null && _input.ToggleDayNightPressedThisFrame)
-        {
-            if (IsNight) RequestEnterDay();
-            else EnterNight();
-            return;
-        }
-
         // Cleanup 대기 중이면 타이머 진행 안 함
         if (_waitingForCleanup) return;
 

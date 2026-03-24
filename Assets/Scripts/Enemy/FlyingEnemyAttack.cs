@@ -16,7 +16,6 @@ public class FlyingEnemyAttack : MonoBehaviour
     [Header("Visual")]
     [SerializeField] private ParticleSystem _muzzleFxPrefab;
     [SerializeField] private GameObject _impactFxPrefab;
-    [SerializeField] private float _impactFxLife = 2f;
 
     // Runtime
     private EnemyData _data;

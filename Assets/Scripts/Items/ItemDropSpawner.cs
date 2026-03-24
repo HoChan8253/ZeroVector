@@ -23,21 +23,30 @@ public class ItemDropSpawner : MonoBehaviour
 
     public void TrySpawn(Vector3 position)
     {
-        TrySpawnByChance(_gold, position);
+        // 드랍 후보 목록 우선순위 순서
+        ItemDropData[] candidates = new ItemDropData[]
+        {
+        _medKit,
+        _ammoAR,
+        _ammoShotgun,
+        _energyDrink,
+        _gold
+        };
 
-        // AR 탄약 - 언락 시에만
-        if (_arUpgradeManager != null && _arUpgradeManager.IsOwned)
-            TrySpawnByChance(_ammoAR, position);
+        // 후보 중 하나만 드랍
+        foreach (var data in candidates)
+        {
+            if (data == null) continue;
 
-        // 샷건 탄약 - 언락 시에만
-        if (_shotgunUpgradeManager != null && _shotgunUpgradeManager.IsOwned)
-            TrySpawnByChance(_ammoShotgun, position);
+            if (data == _ammoAR && (_arUpgradeManager == null || !_arUpgradeManager.IsOwned)) continue;
+            if (data == _ammoShotgun && (_shotgunUpgradeManager == null || !_shotgunUpgradeManager.IsOwned)) continue;
 
-        // 에너지 드링크
-        TrySpawnByChance(_energyDrink, position);
-
-        // 구급 상자
-        TrySpawnByChance(_medKit, position);
+            if (Random.value <= data.dropChance)
+            {
+                SpawnItem(data, position);
+                return;
+            }
+        }
     }
 
     private void TrySpawnByChance(ItemDropData data, Vector3 position)

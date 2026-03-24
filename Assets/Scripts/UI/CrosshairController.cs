@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class CrosshairController : MonoBehaviour
 {
@@ -8,18 +9,18 @@ public class CrosshairController : MonoBehaviour
     [SerializeField] private RectTransform _left;
     [SerializeField] private RectTransform _right;
 
+    private Image _topImage;
+    private Image _bottomImage;
+    private Image _leftImage;
+    private Image _rightImage;
+
     [Header("Refs")]
     [SerializeField] private GunController _gun;
     [SerializeField] private PlayerMoveCC _playerMove;
 
     [Header("Spread Settings")]
-    [Tooltip("spread 0일 때 크로스헤어 중심에서의 기본 거리")]
     [SerializeField] private float _baseOffset = 20f;
-
-    [Tooltip("maxSpread일 때 추가로 벌어지는 최대 거리")]
     [SerializeField] private float _maxSpreadOffset = 80f;
-
-    [Tooltip("크로스헤어가 벌어지고 좁혀지는 보간 속도")]
     [SerializeField] private float _lerpSpeed = 12f;
 
     [Header("WeaponData")]
@@ -27,21 +28,49 @@ public class CrosshairController : MonoBehaviour
 
     private float _currentOffset;
 
+    private void Awake()
+    {
+        if (_top) _topImage = _top.GetComponent<Image>();
+        if (_bottom) _bottomImage = _bottom.GetComponent<Image>();
+        if (_left) _leftImage = _left.GetComponent<Image>();
+        if (_right) _rightImage = _right.GetComponent<Image>();
+    }
+
+    private void OnEnable()
+    {
+        if (OptionsManager.Instance != null)
+            OptionsManager.Instance.OnSettingsChanged += ApplyCrosshairColor;
+        ApplyCrosshairColor();
+    }
+
+    private void OnDisable()
+    {
+        if (OptionsManager.Instance != null)
+            OptionsManager.Instance.OnSettingsChanged -= ApplyCrosshairColor;
+    }
+
+    private void ApplyCrosshairColor()
+    {
+        if (OptionsManager.Instance == null) return;
+        Color c = OptionsManager.Instance.CrosshairColor;
+        if (_topImage) _topImage.color = c;
+        if (_bottomImage) _bottomImage.color = c;
+        if (_leftImage) _leftImage.color = c;
+        if (_rightImage) _rightImage.color = c;
+    }
+
     private void Update()
     {
         float spread = 0f;
         float maxSpread = 1f;
         if (_gun != null && _gun._data != null)
             maxSpread = Mathf.Max(_gun._data.maxSpread, 0.001f);
-
         spread = _gun != null ? _gun.CurrentSpread : 0f;
         float normalizedSpread = Mathf.Clamp01(spread / maxSpread);
-
         bool isAirborne = _playerMove != null && !_playerMove.IsGrounded;
         float targetOffset = isAirborne
             ? _baseOffset + _maxSpreadOffset
             : _baseOffset + normalizedSpread * _maxSpreadOffset;
-
         _currentOffset = Mathf.Lerp(_currentOffset, targetOffset, _lerpSpeed * Time.deltaTime);
         ApplyOffset(_currentOffset);
     }
@@ -51,7 +80,6 @@ public class CrosshairController : MonoBehaviour
         _gun = gun;
     }
 
-    // GunController에서 직접 spread 값을 넘겨받을 때 호출
     public void SetSpread(float spread, float maxSpread)
     {
         float normalized = Mathf.Clamp01(spread / Mathf.Max(maxSpread, 0.001f));

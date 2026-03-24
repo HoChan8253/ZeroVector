@@ -46,16 +46,20 @@ public class OptionsUI : MonoBehaviour
     [SerializeField] private Button _closeBtn;
     [SerializeField] private Button _backToTitleBtn;
 
+    [Header("Refs")]
+    [SerializeField] private PlayerInputHub _input;
+
     [Header("씬 이름")]
     [SerializeField] private string _titleSceneName = "Title";
 
     public bool IsOpen => _optionsPanel != null && _optionsPanel.activeSelf;
 
+    public static bool IsOptionsOpen { get; set; }
+
     private bool _isIngame;
     private Image _graphicTabImage;
     private Image _audioTabImage;
     private Image _controlTabImage;
-    private ShopPanelUI _shopPanelUI;
 
     private void Awake()
     {
@@ -92,6 +96,9 @@ public class OptionsUI : MonoBehaviour
         _crosshairG?.onValueChanged.AddListener(_ => OnCrosshairColorChanged());
         _crosshairB?.onValueChanged.AddListener(_ => OnCrosshairColorChanged());
 
+        if (_isIngame && _input == null)
+            _input = FindFirstObjectByType<PlayerInputHub>();
+
         // Display Mode 옵션 설정
         InitDisplayModeDropdown();
     }
@@ -101,20 +108,16 @@ public class OptionsUI : MonoBehaviour
         InitResolutionDropdown();
         RefreshUI();
         SwitchTab(0); // 항상 Graphic 탭으로 시작
-
-        if (_isIngame)
-            _shopPanelUI = FindFirstObjectByType<ShopPanelUI>();
     }
 
     private void Update()
     {
-        if (_isIngame && Input.GetKeyDown(KeyCode.Escape))
+        if (!_isIngame) return;
+        if (_input == null) return;
+
+        if (_input.CancelPressedThisFrame && !_input.CancelConsumed)
         {
-            if (ShopPanelUI.IsOpen)
-            {
-                _shopPanelUI?.CloseShop();
-                return;
-            }
+            if (ShopPanelUI.IsOpen) return;
             Toggle();
         }
     }
@@ -135,6 +138,7 @@ public class OptionsUI : MonoBehaviour
     // 열기/닫기
     public void Open()
     {
+        IsOptionsOpen = true;
         _optionsPanel?.SetActive(true);
         SwitchTab(0);
 
@@ -148,6 +152,7 @@ public class OptionsUI : MonoBehaviour
 
     public void Close()
     {
+        IsOptionsOpen = false;
         _optionsPanel?.SetActive(false);
 
         if (!_isIngame)
@@ -174,6 +179,10 @@ public class OptionsUI : MonoBehaviour
         Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
+        IsOptionsOpen = false;
+
+        BgmManager.Instance?.Stop();
         SceneManager.LoadScene(_titleSceneName);
     }
 

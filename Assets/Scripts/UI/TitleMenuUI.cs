@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class TitleMenuUI : MonoBehaviour
 {
@@ -25,6 +26,29 @@ public class TitleMenuUI : MonoBehaviour
         _optionsBtn?.onClick.AddListener(OnOptions);
         _creditsBtn?.onClick.AddListener(OnCredits);
         _quitBtn?.onClick.AddListener(OnQuit);
+    }
+
+    private void Update()
+    {
+        if (!Keyboard.current.escapeKey.wasPressedThisFrame) return;
+
+        if (_howToPlayUI != null && _howToPlayUI.IsOpen)
+        {
+            _howToPlayUI.Close();
+            return;
+        }
+
+        if (_creditsUI != null && _creditsUI.IsOpen)
+        {
+            _creditsUI.Close();
+            return;
+        }
+
+        if (_optionsUI != null && _optionsUI.IsOpen)
+        {
+            _optionsUI.Close();
+            return;
+        }
     }
 
     private void OnGameStart()
