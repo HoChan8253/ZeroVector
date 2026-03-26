@@ -27,6 +27,9 @@ public class SafeZoneManager : MonoBehaviour
     [SerializeField] private Transform _player;
     [SerializeField] private IDamageable _playerDamageable;
 
+    [Header("Beacon")]
+    [SerializeField] private ZoneBeacon _beacon;
+
     private Vector3 _nextCenter;
     private float _currentRadius;
     private bool _isActive;
@@ -61,7 +64,7 @@ public class SafeZoneManager : MonoBehaviour
     private void OnNightStart()
     {
         _currentRadius = _startRadius;
-
+        
         // 후보 중 랜덤 선택
         _nextCenter = _zone.Length > 0
             ? _zone[Random.Range(0, _zone.Length)].position
@@ -70,7 +73,9 @@ public class SafeZoneManager : MonoBehaviour
 
         _isActive = true;
         DrawCircle(_nextCenter, _currentRadius);
-        ShowText("안전 구역 축소 중", 3f);
+
+        // 비콘 표시
+        _beacon?.Show(_nextCenter);
 
         StopAllCoroutines();
         StartCoroutine(CoShrink());
@@ -96,11 +101,13 @@ public class SafeZoneManager : MonoBehaviour
             elapsed += _warningInterval;
         }
 
+        // 축소 시작 전 비콘 숨김
+        _beacon?.Hide();
+
         ShowText("다음 구역으로 이동하세요", _textDisplayTime);
 
         _isShrinking = true;
         float shrinkElapsed = 0f;
-
         while (shrinkElapsed < _shrinkDuration)
         {
             shrinkElapsed += Time.deltaTime;
