@@ -64,6 +64,9 @@ public class GameOverUI : MonoBehaviour
 
     private IEnumerator CoShow()
     {
+        BgmManager.Instance?.Stop();
+        BgmManager.Instance?.PlayGameOver();
+
         GameStatsManager.Instance?.StopTracking();
 
         Time.timeScale = 0f;

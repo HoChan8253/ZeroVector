@@ -31067,8 +31067,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64bc904e7d57016459edca0ef5d563f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SafeZone
-  _zone: []
-  _startRadius: 100
+  _zone:
+  - {fileID: 2096198419}
+  - {fileID: 99267623}
+  - {fileID: 2009234331}
+  - {fileID: 23733028}
+  - {fileID: 216826410}
+  _startRadius: 150
   _endRadius: 32.5
   _shrinkDelay: 30
   _shrinkDuration: 40
@@ -33636,6 +33641,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: fea63efc485ef1149bafd9f37b044825, type: 3}
   - {fileID: 8300000, guid: 9e0139c0e307f2346a6719ff9cda0498, type: 3}
   - {fileID: 8300000, guid: 95574bb41bd3f7e40a00d95a9e8dfd42, type: 3}
+  _gameOverBgm: {fileID: 8300000, guid: f8e5f03fe57b8404292751d961362d31, type: 3}
   _bgmMixerGroup: {fileID: 3613944575854817220, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
   _audioSource: {fileID: 0}
   _fadeDuration: 1.5
