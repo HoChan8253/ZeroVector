@@ -6,8 +6,8 @@ public class SafeZoneManager : MonoBehaviour
 {
     [Header("Zone Config")]
     [SerializeField] private Transform[] _zone; // 후보 지점들
-    [SerializeField] private float _startRadius = 200f;
-    [SerializeField] private float _endRadius = 65f;
+    [SerializeField] private float _startRadius = 100f;
+    [SerializeField] private float _endRadius = 32.5f;
     [SerializeField] private float _shrinkDelay = 30f; // 축소 시작까지 대기
     [SerializeField] private float _shrinkDuration = 40f; // 축소에 걸리는 시간
     [SerializeField] private float _damagePerSecond = 5f;
@@ -21,6 +21,7 @@ public class SafeZoneManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _statusText;
     [SerializeField] private CanvasGroup _statusGroup;
     [SerializeField] private float _textDisplayTime = 3f;
+    [SerializeField] private float _warningInterval = 5f;
 
     [Header("Refs")]
     [SerializeField] private Transform _player;
@@ -87,19 +88,23 @@ public class SafeZoneManager : MonoBehaviour
 
     private IEnumerator CoShrink()
     {
-        // 축소 전 대기
-        ShowText("안전 구역 축소 중", _textDisplayTime);
-        yield return new WaitForSeconds(_shrinkDelay);
+        float elapsed = 0f;
+        while (elapsed < _shrinkDelay)
+        {
+            ShowText("안전 구역 축소 중", _textDisplayTime);
+            yield return new WaitForSeconds(_warningInterval);
+            elapsed += _warningInterval;
+        }
 
         ShowText("다음 구역으로 이동하세요", _textDisplayTime);
 
         _isShrinking = true;
-        float elapsed = 0f;
+        float shrinkElapsed = 0f;
 
-        while (elapsed < _shrinkDuration)
+        while (shrinkElapsed < _shrinkDuration)
         {
-            elapsed += Time.deltaTime;
-            float t = elapsed / _shrinkDuration;
+            shrinkElapsed += Time.deltaTime;
+            float t = shrinkElapsed / _shrinkDuration;
             _currentRadius = Mathf.Lerp(_startRadius, _endRadius, t);
             DrawCircle(_nextCenter, _currentRadius);
             yield return null;

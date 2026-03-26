@@ -26104,14 +26104,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64bc904e7d57016459edca0ef5d563f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SafeZone
-  _zoneCandidates:
-  - {fileID: 2096198419}
-  - {fileID: 99267623}
-  - {fileID: 2009234331}
-  - {fileID: 23733028}
-  - {fileID: 216826410}
-  _startRadius: 200
-  _endRadius: 65
+  _zone: []
+  _startRadius: 100
+  _endRadius: 32.5
   _shrinkDelay: 30
   _shrinkDuration: 40
   _damagePerSecond: 5
@@ -26121,6 +26116,7 @@ MonoBehaviour:
   _statusText: {fileID: 1717669002}
   _statusGroup: {fileID: 1717669004}
   _textDisplayTime: 3
+  _warningInterval: 5
   _player: {fileID: 0}
 --- !u!4 &1842076373
 Transform:
@@ -29146,7 +29142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b7de60eb5ffbb84c90190d44321425d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DayNightManager
-  _dayDuration: 150
+  _dayDuration: 10
   _nightDuration: 90
 --- !u!4 &2034174957
 Transform:
@@ -37375,6 +37371,10 @@ PrefabInstance:
       propertyPath: _stats
       value: 
       objectReference: {fileID: 3661382856248163749}
+    - target: {fileID: 8501635509016417241, guid: 603c508539369bf4a9bd1134b51fe206, type: 3}
+      propertyPath: _upgradeManager
+      value: 
+      objectReference: {fileID: 369951112}
     - target: {fileID: 8501635509016417241, guid: 603c508539369bf4a9bd1134b51fe206, type: 3}
       propertyPath: _shieldCanvasGroup
       value: 
