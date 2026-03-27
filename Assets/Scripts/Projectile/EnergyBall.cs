@@ -52,6 +52,8 @@ public class EnergyBall : MonoBehaviour
         if (other.GetComponentInParent<EnergyBall>() != null) return;
         if (_owner != null && other.transform.IsChildOf(_owner)) return;
 
+        if (other.GetComponentInParent<EnemyHealth>() != null) return;
+
         var dmg = other.GetComponentInParent<IDamageable>();
         if (dmg != null)
         {
@@ -59,7 +61,6 @@ public class EnergyBall : MonoBehaviour
             Despawn();
             return;
         }
-
         Despawn();
     }
 
