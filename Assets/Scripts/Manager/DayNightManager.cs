@@ -19,8 +19,10 @@ public class DayNightManager : MonoBehaviour
     public event Action OnDayStart;
     public event Action OnNightStart;
 
-    // 밤 타이머가 끝났지만 아직 낮으로 못 넘어간 상태
+    public bool IsInfiniteNight => _infiniteNight;
+
     private bool _waitingForCleanup;
+    private bool _infiniteNight;
 
     private void Awake()
     {
@@ -39,6 +41,7 @@ public class DayNightManager : MonoBehaviour
     {
         // Cleanup 대기 중이면 타이머 진행 안 함
         if (_waitingForCleanup) return;
+        if (_infiniteNight) return;
 
         PhaseTimeRemaining -= Time.deltaTime;
 
@@ -90,5 +93,10 @@ public class DayNightManager : MonoBehaviour
     {
         yield return null;
         EnterDay();
+    }
+
+    public void SetInfiniteNight(bool infinite)
+    {
+        _infiniteNight = infinite;
     }
 }

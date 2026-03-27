@@ -78,6 +78,12 @@ public class GameInfoUI : MonoBehaviour
     {
         if (DayNightManager.Instance == null) return;
 
+        if (DayNightManager.Instance.IsInfiniteNight)
+        {
+            _timerText.text = "";
+            return;
+        }
+
         if (_isCleanupPhase)
         {
             _timerText.text = "";

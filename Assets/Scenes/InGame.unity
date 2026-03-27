@@ -1229,8 +1229,8 @@ MonoBehaviour:
   _bossPrefab: {fileID: 3917068803458261653, guid: 49c440834d2d30547b1b4c4112b28566, type: 3}
   _bossSpawnPoint: {fileID: 496632169}
   _bossHealthUI: {fileID: 603438901}
-  _clearPanelUI: {fileID: 0}
-  _safeZone: {fileID: 0}
+  _clearPanelUI: {fileID: 148496694}
+  _safeZone: {fileID: 1842076372}
   _showDebugLog: 1
 --- !u!4 &123895201
 Transform:
@@ -40819,6 +40819,22 @@ PrefabInstance:
     - target: {fileID: 6668847488981866806, guid: 52fb95cc3b7ec59479cf43564d42d2b0, type: 3}
       propertyPath: m_LocalScale.y
       value: 2.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6691314709832156713, guid: 52fb95cc3b7ec59479cf43564d42d2b0, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6691314709832156713, guid: 52fb95cc3b7ec59479cf43564d42d2b0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -11.83
+      objectReference: {fileID: 0}
+    - target: {fileID: 6691314709832156713, guid: 52fb95cc3b7ec59479cf43564d42d2b0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.34
+      objectReference: {fileID: 0}
+    - target: {fileID: 6691314709832156713, guid: 52fb95cc3b7ec59479cf43564d42d2b0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 13.25
       objectReference: {fileID: 0}
     - target: {fileID: 6925416371138115129, guid: 52fb95cc3b7ec59479cf43564d42d2b0, type: 3}
       propertyPath: m_Bidirectional

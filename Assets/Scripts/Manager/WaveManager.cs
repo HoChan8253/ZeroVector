@@ -159,19 +159,23 @@ public class WaveManager : MonoBehaviour
         _bossPhase = true;
         IsWaveActive = true;
 
+        DayNightManager.Instance?.SetInfiniteNight(true);
+
         if (_safeZone != null)
             _safeZone.SetBossPhase(true);
 
-        KillAllEnemies();
+        // KillAllEnemies();
 
         var go = Instantiate(_bossPrefab, _bossSpawnPoint.position, _bossSpawnPoint.rotation);
         _bossAI = go.GetComponent<BossAI>();
 
-        if (_bossHealthUI != null && go.TryGetComponent<EnemyHealth>(out var bossHealth))
+        if (go.TryGetComponent<EnemyHealth>(out var bossHealth))
+            bossHealth.OnDead += OnBossDead;
+
+        if (_bossHealthUI != null)
         {
             _bossHealthUI.Bind(bossHealth);
             _bossHealthUI.gameObject.SetActive(true);
-            bossHealth.OnDead += OnBossDead;
         }
     }
 
@@ -184,6 +188,8 @@ public class WaveManager : MonoBehaviour
     private IEnumerator CoAfterBossDeath()
     {
         yield return new WaitForSeconds(4.5f);
+
+        DayNightManager.Instance?.SetInfiniteNight(false);
 
         _bossHealthUI?.gameObject.SetActive(false);
         KillAllEnemies();
