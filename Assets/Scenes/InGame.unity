@@ -124,6 +124,52 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 438742902870496600, guid: 603c508539369bf4a9bd1134b51fe206, type: 3}
   m_PrefabInstance: {fileID: 5348772564590194437}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &22954752
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 22954754}
+  - component: {fileID: 22954753}
+  m_Layer: 0
+  m_Name: CheatManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &22954753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 22954752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c90e5b1adf2ded42979a206eccd4fde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CheatManager
+  _goldAmount: 100000
+  _waveManager: {fileID: 123895200}
+--- !u!4 &22954754
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 22954752}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &23733027
 GameObject:
   m_ObjectHideFlags: 0
@@ -1184,6 +1230,7 @@ MonoBehaviour:
   _bossSpawnPoint: {fileID: 496632169}
   _bossHealthUI: {fileID: 603438901}
   _clearPanelUI: {fileID: 0}
+  _safeZone: {fileID: 0}
   _showDebugLog: 1
 --- !u!4 &123895201
 Transform:
@@ -17204,7 +17251,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &920677235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27932,7 +27979,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0000016689, y: 324.87}
+  m_AnchoredPosition: {x: 2.1934, y: -412.07}
   m_SizeDelta: {x: 700, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1717669002
@@ -31087,6 +31134,7 @@ MonoBehaviour:
   _warningInterval: 5
   _player: {fileID: 0}
   _beacon: {fileID: 1858217668}
+  _bossZoneCenter: {fileID: 2096198419}
 --- !u!4 &1842076373
 Transform:
   m_ObjectHideFlags: 0
@@ -33637,10 +33685,16 @@ MonoBehaviour:
   - {fileID: 8300000, guid: b923b852cf032e44888eaf777ac31baf, type: 3}
   - {fileID: 8300000, guid: f8b3df4da3fde0045b30c4bf245a526a, type: 3}
   - {fileID: 8300000, guid: c7885c3840394dd448847c8e8a0fbf91, type: 3}
+  - {fileID: 8300000, guid: d1054527dba03fc4ca8b9cdade0fe14e, type: 3}
+  - {fileID: 8300000, guid: d993f9f59726b364e8e272b708aa38bb, type: 3}
+  - {fileID: 8300000, guid: 1c706f0233c85224799675225fe21e94, type: 3}
   _nightBgms:
   - {fileID: 8300000, guid: fea63efc485ef1149bafd9f37b044825, type: 3}
   - {fileID: 8300000, guid: 9e0139c0e307f2346a6719ff9cda0498, type: 3}
   - {fileID: 8300000, guid: 95574bb41bd3f7e40a00d95a9e8dfd42, type: 3}
+  - {fileID: 8300000, guid: 4e6f28367dead2949b2e118dc88a8760, type: 3}
+  - {fileID: 8300000, guid: 463bee628f4b4be429a905e68376e4a1, type: 3}
+  - {fileID: 8300000, guid: 3f72d6605df3e8b47a9d7e08edc6fcb9, type: 3}
   _gameOverBgm: {fileID: 8300000, guid: f8e5f03fe57b8404292751d961362d31, type: 3}
   _bgmMixerGroup: {fileID: 3613944575854817220, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
   _audioSource: {fileID: 0}
@@ -36321,7 +36375,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8918423651517905187, guid: dffdc8ad5d63c4b41aa80b11b77e8601, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -47651,5 +47705,6 @@ SceneRoots:
   - {fileID: 1858217667}
   - {fileID: 378953780}
   - {fileID: 1786794207}
+  - {fileID: 22954754}
   - {fileID: 920677236}
   - {fileID: 149747834}

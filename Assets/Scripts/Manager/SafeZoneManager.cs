@@ -30,6 +30,10 @@ public class SafeZoneManager : MonoBehaviour
     [Header("Beacon")]
     [SerializeField] private ZoneBeacon _beacon;
 
+    [Header("Boss Zone")]
+    [SerializeField] private Transform _bossZoneCenter;
+    private bool _isBossPhase;
+
     private Vector3 _nextCenter;
     private float _currentRadius;
     private bool _isActive;
@@ -52,6 +56,9 @@ public class SafeZoneManager : MonoBehaviour
 
         DayNightManager.Instance.OnNightStart += OnNightStart;
         DayNightManager.Instance.OnDayStart += OnDayEnd;
+
+        if (!DayNightManager.Instance.IsNight)
+            OnDayEnd();
     }
 
     private void OnDestroy()
@@ -64,7 +71,16 @@ public class SafeZoneManager : MonoBehaviour
     private void OnNightStart()
     {
         _currentRadius = _startRadius;
-        
+
+        if (_isBossPhase && _bossZoneCenter != null)
+            _nextCenter = _bossZoneCenter.position;
+        else
+            _nextCenter = _zone.Length > 0
+                ? _zone[Random.Range(0, _zone.Length)].position
+                : transform.position;
+
+        _nextCenter.y = 0f;
+
         // 후보 중 랜덤 선택
         _nextCenter = _zone.Length > 0
             ? _zone[Random.Range(0, _zone.Length)].position
@@ -168,5 +184,10 @@ public class SafeZoneManager : MonoBehaviour
         _statusGroup.alpha = 1f;
         yield return new WaitForSeconds(duration);
         _statusGroup.alpha = 0f;
+    }
+
+    public void SetBossPhase(bool isBoss)
+    {
+        _isBossPhase = isBoss;
     }
 }

@@ -62,6 +62,10 @@ public class BossHealthUI : MonoBehaviour
         {
             _bossHealth.OnHpChanged += OnHpChanged;
             _bossHealth.OnDead += OnDead;
+
+            foreach (Transform child in GetComponentsInChildren<Transform>(true))
+                child.gameObject.SetActive(true);
+
             ForceRefresh();
         }
     }
