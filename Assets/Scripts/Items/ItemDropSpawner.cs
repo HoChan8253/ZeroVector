@@ -59,8 +59,14 @@ public class ItemDropSpawner : MonoBehaviour
     private void SpawnItem(ItemDropData data, Vector3 position)
     {
         if (data?.prefab == null) return;
-        Vector3 spawnPos = position + Vector3.up * 0.5f
+
+        Vector3 groundPos = position;
+        if (Physics.Raycast(position, Vector3.down, out var hit, 50f))
+            groundPos = hit.point;
+
+        Vector3 spawnPos = groundPos + Vector3.up * 0.5f
             + new Vector3(Random.Range(-0.5f, 0.5f), 0f, Random.Range(-0.5f, 0.5f));
+
         var go = Instantiate(data.prefab, spawnPos, Quaternion.identity);
         var behaviour = go.GetComponent<ItemDrop>();
         if (behaviour != null)

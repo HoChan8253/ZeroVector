@@ -141,7 +141,7 @@ MonoBehaviour:
   _data: {fileID: 0}
   _renderers: []
   _detectRadius: 4
-  _magnetSpeed: 5
+  _magnetSpeed: 8
   _collectRadius: 0.6
   _rotateSpeed: 90
 --- !u!1 &2375079103468043882
