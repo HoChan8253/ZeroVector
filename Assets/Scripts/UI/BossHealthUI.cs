@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class BossHealthUI : MonoBehaviour
 {
@@ -46,5 +47,29 @@ public class BossHealthUI : MonoBehaviour
     private void OnDead()
     {
         _hpAnim?.Set01(0f);
+    }
+
+    public void Bind(EnemyHealth health)
+    {
+        if (_bossHealth != null)
+        {
+            _bossHealth.OnHpChanged -= OnHpChanged;
+            _bossHealth.OnDead -= OnDead;
+        }
+
+        _bossHealth = health;
+
+        if (_bossHealth != null)
+        {
+            _bossHealth.OnHpChanged += OnHpChanged;
+            _bossHealth.OnDead += OnDead;
+            StartCoroutine(CoLateRefresh());
+        }
+    }
+
+    private IEnumerator CoLateRefresh()
+    {
+        yield return null;
+        ForceRefresh();
     }
 }

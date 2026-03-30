@@ -107,7 +107,7 @@ public class ItemDrop : MonoBehaviour
         var guns = _player.GetComponentsInChildren<GunController>(true);
         foreach (var gun in guns)
         {
-            if (gun._data != null && gun._data.weaponName == "AR")
+            if (gun._data != null && gun._data.weaponName == "Assault Rifle")
             {
                 gun.FillReserveAmmo(_data.ammoAmount);
                 break;
@@ -120,7 +120,7 @@ public class ItemDrop : MonoBehaviour
         var guns = _player.GetComponentsInChildren<GunController>(true);
         foreach (var gun in guns)
         {
-            if (gun._data != null && gun._data.weaponName == "Shotgun")
+            if (gun._data != null && gun._data.weaponName == "Pump Shotgun")
             {
                 gun.FillReserveAmmo(_data.ammoAmount);
                 break;

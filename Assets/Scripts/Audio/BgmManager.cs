@@ -10,6 +10,9 @@ public class BgmManager : MonoBehaviour
     [SerializeField] private AudioClip[] _dayBgms;
     [SerializeField] private AudioClip[] _nightBgms;
 
+    [Header("Game Over BGM")]
+    [SerializeField] private AudioClip _gameOverBgm;
+
     [Header("Audio")]
     [SerializeField] private AudioMixerGroup _bgmMixerGroup;
     [SerializeField] private AudioSource _audioSource;
@@ -76,6 +79,23 @@ public class BgmManager : MonoBehaviour
         PlayBgmList(_nightBgms);
     }
 
+    public void PlayGameOver()
+    {
+        if (_playCoroutine != null) StopCoroutine(_playCoroutine);
+        _playCoroutine = StartCoroutine(CoPlayGameOver());
+    }
+
+    private IEnumerator CoPlayGameOver()
+    {
+        if (_audioSource.isPlaying)
+            yield return StartCoroutine(CoFade(0f));
+
+        _audioSource.clip = _gameOverBgm;
+        _audioSource.loop = true;
+        _audioSource.Play();
+        yield return StartCoroutine(CoFade(1f));
+    }
+
     private void PlayBgmList(AudioClip[] clips)
     {
         if (_playCoroutine != null) StopCoroutine(_playCoroutine);
@@ -133,6 +153,7 @@ public class BgmManager : MonoBehaviour
             StopCoroutine(_playCoroutine);
             _playCoroutine = null;
         }
+        _audioSource.loop = false;
         _audioSource.Stop();
         _audioSource.volume = 1f;
     }

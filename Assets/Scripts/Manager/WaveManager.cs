@@ -27,8 +27,20 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private Transform _player;
     [SerializeField] private WaveClearBonusUI _clearBonusUI;
 
+    [Header("Boss")]
+    [SerializeField] private GameObject _bossPrefab;
+    [SerializeField] private Transform _bossSpawnPoint;
+    [SerializeField] private BossHealthUI _bossHealthUI;
+    [SerializeField] private ClearUI _clearPanelUI;
+
+    [Header("Boss")]
+    [SerializeField] private SafeZoneManager _safeZone;
+
     [Header("Debug")]
     [SerializeField] private bool _showDebugLog = true;
+
+    private BossAI _bossAI;
+    private bool _bossPhase;
 
     public int CurrentWave { get; private set; }
     public bool IsWaveActive { get; private set; }
@@ -97,9 +109,14 @@ public class WaveManager : MonoBehaviour
 
     private void HandleNightStart()
     {
+        if (CurrentWave >= _totalWaves)
+        {
+            StartBossPhase();
+            return;
+        }
+
         _phase = Phase.Night;
         IsWaveActive = true;
-
         ActivateAllEnemies();
         StartFieldLoop(CoNightRegenLoop());
     }
@@ -136,6 +153,59 @@ public class WaveManager : MonoBehaviour
             FinishWave();
     }
 
+    private void StartBossPhase()
+    {
+        _phase = Phase.Night;
+        _bossPhase = true;
+        IsWaveActive = true;
+
+        DayNightManager.Instance?.SetInfiniteNight(true);
+
+        if (_safeZone != null)
+            _safeZone.SetBossPhase(true);
+
+        // KillAllEnemies();
+
+        var go = Instantiate(_bossPrefab, _bossSpawnPoint.position, _bossSpawnPoint.rotation);
+        _bossAI = go.GetComponent<BossAI>();
+
+        if (go.TryGetComponent<EnemyHealth>(out var bossHealth))
+            bossHealth.OnDead += OnBossDead;
+
+        if (_bossHealthUI != null)
+        {
+            _bossHealthUI.Bind(bossHealth);
+            _bossHealthUI.gameObject.SetActive(true);
+        }
+    }
+
+    private void OnBossDead()
+    {
+        // Death 이펙트가 끝날 때까지 잠깐 기다린 후 정리
+        StartCoroutine(CoAfterBossDeath());
+    }
+
+    private IEnumerator CoAfterBossDeath()
+    {
+        yield return new WaitForSeconds(4.5f);
+
+        DayNightManager.Instance?.SetInfiniteNight(false);
+
+        _bossHealthUI?.gameObject.SetActive(false);
+        KillAllEnemies();
+
+        yield return new WaitForSeconds(1f);
+
+        _bossPhase = false;
+        IsWaveActive = false;
+
+        DayNightManager.Instance?.RequestEnterDay();
+
+        yield return new WaitForSeconds(2f); // 낮 전환 연출 후
+
+        _clearPanelUI?.Show();
+    }
+
     private void OnEnemyDead(GameObject enemy)
     {
         _aliveEnemies.Remove(enemy);
@@ -143,6 +213,20 @@ public class WaveManager : MonoBehaviour
 
         if (_phase == Phase.Cleanup && _aliveEnemies.Count == 0)
             FinishWave();
+    }
+
+    private void KillAllEnemies()
+    {
+        var enemies = new List<GameObject>(_aliveEnemies);
+        foreach (var go in enemies)
+        {
+            if (go == null) continue;
+            if (go.TryGetComponent<EnemyHealth>(out var h))
+                h.TakeDamage(999999);
+            else
+                Destroy(go);
+        }
+        _aliveEnemies.Clear();
     }
 
     private void FinishWave()
@@ -237,5 +321,17 @@ public class WaveManager : MonoBehaviour
             if (wd != null && wd.waveNumber == wave)
                 return wd;
         return null;
+    }
+
+    public void CheatToLastWave()
+    {
+        // 현재 진행 중인 루프 정지
+        StopFieldLoop();
+
+        // 살아있는 적 전부 제거
+        KillAllEnemies();
+
+        CurrentWave = _totalWaves - 1;
+        DayNightManager.Instance?.RequestEnterDay();
     }
 }
