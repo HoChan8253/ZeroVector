@@ -314,12 +314,8 @@ public class GunController : MonoBehaviour
         {
             bool headshot = hit.collider.CompareTag("EnemyHead");
 
-            // 치명타 판정
             bool isCrit = _critChance > 0f && UnityEngine.Random.value < _critChance;
             float finalDamage = isCrit ? damage * 2f : damage;
-
-            if (isCrit)
-                Debug.Log($"[GunController] 치명타! {damage:F1} → {finalDamage:F1}");
 
             enemy.TakeDamage((int)finalDamage, headshot, hit.point, hit.normal);
             return;

@@ -45093,6 +45093,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7594220105218783932, guid: 5750cb4fcb74b9741995a80ad3a6f303, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 7961987717699232256, guid: 5750cb4fcb74b9741995a80ad3a6f303, type: 3}
       propertyPath: _upgradeManager
       value: 
