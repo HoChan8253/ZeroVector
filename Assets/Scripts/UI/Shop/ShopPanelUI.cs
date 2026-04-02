@@ -83,6 +83,8 @@ public class ShopPanelUI : MonoBehaviour
         Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
+        SFXManager.Instance?.Pause();
     }
 
     public void CloseShop()
@@ -92,6 +94,8 @@ public class ShopPanelUI : MonoBehaviour
         Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        SFXManager.Instance?.Unpause();
     }
 
     // 밤 경고 문구

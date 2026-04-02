@@ -39,4 +39,16 @@ public class SFXManager : MonoBehaviour
             Instance._audioSource.PlayOneShot(randomClip, volume * soundList.volume);
         }
     }
+
+    public void Pause()
+    {
+        if (_audioSource.isPlaying)
+            _audioSource.Pause();
+    }
+
+    public void Unpause()
+    {
+        if (_audioSource.clip != null && !_audioSource.isPlaying)
+            _audioSource.UnPause();
+    }
 }
