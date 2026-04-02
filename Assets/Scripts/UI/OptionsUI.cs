@@ -42,6 +42,9 @@ public class OptionsUI : MonoBehaviour
     [SerializeField] private Slider _crosshairB;
     [SerializeField] private Image _crosshairColorPreview;
 
+    [Header("Debug Console")]
+    [SerializeField] private Toggle _debugConsoleToggle;
+
     [Header("버튼")]
     [SerializeField] private Button _closeBtn;
     [SerializeField] private Button _backToTitleBtn;
@@ -95,6 +98,9 @@ public class OptionsUI : MonoBehaviour
         _crosshairR?.onValueChanged.AddListener(_ => OnCrosshairColorChanged());
         _crosshairG?.onValueChanged.AddListener(_ => OnCrosshairColorChanged());
         _crosshairB?.onValueChanged.AddListener(_ => OnCrosshairColorChanged());
+
+        // DebugConsole
+        _debugConsoleToggle?.onValueChanged.AddListener(OnDebugConsoleToggle);
 
         if (_isIngame && _input == null)
             _input = FindFirstObjectByType<PlayerInputHub>();
@@ -242,6 +248,12 @@ public class OptionsUI : MonoBehaviour
             _crosshairColorPreview.color = c;
     }
 
+    // DebugConsole
+    private void OnDebugConsoleToggle(bool value)
+    {
+        DebugConsoleUI.Instance?.SetEnabled(value);
+    }
+
     // UI 갱신
     private void RefreshUI()
     {
@@ -261,5 +273,8 @@ public class OptionsUI : MonoBehaviour
 
         if (_displayModeDropdown)
             _displayModeDropdown.value = OptionsManager.Instance.DisplayModeIndex;
+
+        if (_debugConsoleToggle && DebugConsoleUI.Instance != null)
+            _debugConsoleToggle.isOn = DebugConsoleUI.Instance.gameObject.activeSelf;
     }
 }

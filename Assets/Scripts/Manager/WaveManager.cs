@@ -334,4 +334,16 @@ public class WaveManager : MonoBehaviour
         CurrentWave = _totalWaves - 1;
         DayNightManager.Instance?.RequestEnterDay();
     }
+
+    public void CheatToWave(int targetWave)
+    {
+        targetWave = Mathf.Clamp(targetWave, 1, _totalWaves);
+
+        StopFieldLoop();
+        KillAllEnemies();
+
+        CurrentWave = targetWave - 1;
+
+        DayNightManager.Instance?.RequestEnterDay();
+    }
 }
