@@ -153,10 +153,9 @@ public class OptionsUI : MonoBehaviour
         if (_isIngame)
         {
             Time.timeScale = 0f;
+            AudioListener.pause = true;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-
-            SFXManager.Instance?.Pause();
         }
     }
 
@@ -170,10 +169,9 @@ public class OptionsUI : MonoBehaviour
         else
         {
             Time.timeScale = 1f;
+            AudioListener.pause = false;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-
-            SFXManager.Instance?.Unpause();
         }
     }
 

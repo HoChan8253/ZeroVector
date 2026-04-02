@@ -81,10 +81,9 @@ public class ShopPanelUI : MonoBehaviour
         IsOpen = true;
         _shopPanel?.SetActive(true);
         Time.timeScale = 0f;
+        AudioListener.pause = true;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-
-        SFXManager.Instance?.Pause();
     }
 
     public void CloseShop()
@@ -92,10 +91,9 @@ public class ShopPanelUI : MonoBehaviour
         IsOpen = false;
         _shopPanel?.SetActive(false);
         Time.timeScale = 1f;
+        AudioListener.pause = false;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
-        SFXManager.Instance?.Unpause();
     }
 
     // 밤 경고 문구

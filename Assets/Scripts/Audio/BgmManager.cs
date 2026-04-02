@@ -34,6 +34,8 @@ public class BgmManager : MonoBehaviour
 
         if (_bgmMixerGroup != null)
             _audioSource.outputAudioMixerGroup = _bgmMixerGroup;
+
+        _audioSource.ignoreListenerPause = true;
     }
 
     private void Start()
