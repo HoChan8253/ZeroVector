@@ -211,7 +211,7 @@ public class WaveManager : MonoBehaviour
         _aliveEnemies.Remove(enemy);
         if (_showDebugLog) Debug.Log($"[Wave] 적 처치 - 남은 수: {_aliveEnemies.Count} / Phase: {_phase}");
 
-        if (_phase == Phase.Cleanup && _aliveEnemies.Count == 0)
+        if (_phase == Phase.Cleanup && _aliveEnemies.Count == 0 && !_bossPhase)
             FinishWave();
     }
 
