@@ -29,6 +29,19 @@ public class OptionsManager : MonoBehaviour
         Load();
     }
 
+    private void Start()
+    {
+        ApplyAudioSettings();
+    }
+
+    private void ApplyAudioSettings()
+    {
+        SetMasterVolume(MasterVolume);
+        SetBgmVolume(BgmVolume);
+        SetSfxVolume(SfxVolume);
+        SetUiVolume(UiVolume);
+    }
+
     // Master Volume
     public void SetMasterVolume(float value)
     {
@@ -127,6 +140,7 @@ public class OptionsManager : MonoBehaviour
         SfxVolume = PlayerPrefs.GetFloat("SFX", 1f);
         UiVolume = PlayerPrefs.GetFloat("UI", 1f);
         MouseSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", 0.08f);
+
         int defaultResIndex = 0;
         var resolutions = Screen.resolutions;
         for (int i = 0; i < resolutions.Length; i++)
@@ -145,12 +159,6 @@ public class OptionsManager : MonoBehaviour
             PlayerPrefs.GetFloat("CrosshairR", 1f),
             PlayerPrefs.GetFloat("CrosshairG", 1f),
             PlayerPrefs.GetFloat("CrosshairB", 1f));
-
-        // 적용
-        SetMasterVolume(MasterVolume);
-        SetBgmVolume(BgmVolume);
-        SetSfxVolume(SfxVolume);
-        SetUiVolume(UiVolume);
 
         var res = Screen.resolutions;
         if (ResolutionIndex >= 0 && ResolutionIndex < res.Length)
