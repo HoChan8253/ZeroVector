@@ -64,6 +64,8 @@ public class OptionsUI : MonoBehaviour
     private Image _audioTabImage;
     private Image _controlTabImage;
 
+    private Resolution[] _filteredResolutions;
+
     private void Awake()
     {
         _isIngame = SceneManager.GetActiveScene().name != _titleSceneName;
@@ -202,14 +204,26 @@ public class OptionsUI : MonoBehaviour
         if (_resolutionDropdown == null) return;
         _resolutionDropdown.ClearOptions();
 
-        var resolutions = Screen.resolutions;
+        var allResolutions = Screen.resolutions;
         var options = new System.Collections.Generic.List<string>();
-        foreach (var r in resolutions)
-            options.Add($"{r.width} x {r.height}");
+        var filtered = new System.Collections.Generic.List<Resolution>();
+        var seen = new System.Collections.Generic.HashSet<string>();
+
+        foreach (var r in allResolutions)
+        {
+            string label = $"{r.width} x {r.height}";
+            if (seen.Add(label))
+            {
+                options.Add(label);
+                filtered.Add(r);
+            }
+        }
+
+        _filteredResolutions = filtered.ToArray();
         _resolutionDropdown.AddOptions(options);
 
-        int saved = OptionsManager.Instance?.ResolutionIndex ?? resolutions.Length - 1;
-        _resolutionDropdown.value = Mathf.Clamp(saved, 0, resolutions.Length - 1);
+        int saved = OptionsManager.Instance?.ResolutionIndex ?? options.Count - 1;
+        _resolutionDropdown.value = Mathf.Clamp(saved, 0, options.Count - 1);
         _resolutionDropdown.RefreshShownValue();
     }
 
@@ -227,7 +241,9 @@ public class OptionsUI : MonoBehaviour
 
     private void OnResolutionChanged(int index)
     {
-        OptionsManager.Instance?.SetResolution(index);
+        if (_filteredResolutions == null || index >= _filteredResolutions.Length) return;
+        var r = _filteredResolutions[index];
+        OptionsManager.Instance?.SetResolution(index, r.width, r.height);
     }
 
     private void OnDisplayModeChanged(int index)

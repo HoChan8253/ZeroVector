@@ -20,7 +20,7 @@ public class BossAI : MonoBehaviour, IEnemyAI
     [SerializeField] private BossData _data;
     [SerializeField] private BossAnimCtrl _animCtrl;
     [SerializeField] private BossAttackCtrl _attackCtrl;
-    [SerializeField] private Transform _slamCenter;    // 반피 Slam 위치
+    [SerializeField] private Transform _slamCenter;
     [SerializeField] private Transform _player;
 
     public int MaxHp => _data != null ? _data.maxHp : 3000;
@@ -290,8 +290,8 @@ public class BossAI : MonoBehaviour, IEnemyAI
     // Slam 투사체 발사 완료 후 BossAttackCtrl 에서 호출
     public void OnSlamFired()
     {
-        // TODO: 잡몹 스폰
-        Debug.Log("[BossAI] Slam 완료 → 잡몹 스폰");
+        // 잡몹 스폰
+        //Debug.Log("[BossAI] Slam 완료 → 잡몹 스폰");
     }
 
     // Death 연출
@@ -299,7 +299,6 @@ public class BossAI : MonoBehaviour, IEnemyAI
     {
         var renderers = GetComponentsInChildren<Renderer>(true);
 
-        // 재질 인스턴스화
         foreach (var r in renderers)
         {
             var mats = r.materials;
@@ -320,11 +319,10 @@ public class BossAI : MonoBehaviour, IEnemyAI
             {
                 Vector3 randomPos = transform.position
                     + new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(0f, 1.5f), Random.Range(-0.5f, 0.5f));
-                // TODO: ObjectPoolManager.Instance.Spawn(PoolKey.Explosion, randomPos, Quaternion.identity);
+                // ObjectPoolManager.Instance.Spawn(PoolKey.Explosion, randomPos, Quaternion.identity);
                 Debug.Log("[BossAI] 폭발 연출");
             }
 
-            // 몸 색상을 붉게 물들이기
             float redRatio = Mathf.Clamp01(t / explodeTime);
             foreach (var r in renderers)
                 foreach (var m in r.materials)

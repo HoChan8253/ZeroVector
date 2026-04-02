@@ -88,12 +88,10 @@ public class OptionsManager : MonoBehaviour
     }
 
     // 해상도
-    public void SetResolution(int index)
+    public void SetResolution(int index, int width, int height)
     {
         ResolutionIndex = index;
-        var resolutions = Screen.resolutions;
-        if (index >= 0 && index < resolutions.Length)
-            Screen.SetResolution(resolutions[index].width, resolutions[index].height, IsFullscreen);
+        Screen.SetResolution(width, height, Screen.fullScreenMode);
         PlayerPrefs.SetInt("ResolutionIndex", index);
         OnSettingsChanged?.Invoke();
     }
@@ -153,7 +151,9 @@ public class OptionsManager : MonoBehaviour
         SetBgmVolume(BgmVolume);
         SetSfxVolume(SfxVolume);
         SetUiVolume(UiVolume);
-        SetResolution(ResolutionIndex);
-        Screen.fullScreen = IsFullscreen;
+
+        var res = Screen.resolutions;
+        if (ResolutionIndex >= 0 && ResolutionIndex < res.Length)
+            Screen.SetResolution(res[ResolutionIndex].width, res[ResolutionIndex].height, Screen.fullScreenMode);
     }
 }
