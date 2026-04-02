@@ -26,8 +26,7 @@ public class OptionsUI : MonoBehaviour
     [SerializeField] private GameObject _controlPanel;
 
     [Header("Graphic")]
-    [SerializeField] private TMP_Dropdown _resolutionDropdown;
-    [SerializeField] private TMP_Dropdown _displayModeDropdown;
+    [SerializeField] private DisplayOptionsView _displayOptionsView;
 
     [Header("Audio")]
     [SerializeField] private Slider _masterSlider;
@@ -64,8 +63,6 @@ public class OptionsUI : MonoBehaviour
     private Image _audioTabImage;
     private Image _controlTabImage;
 
-    private Resolution[] _filteredResolutions;
-
     private void Awake()
     {
         _isIngame = SceneManager.GetActiveScene().name != _titleSceneName;
@@ -85,10 +82,6 @@ public class OptionsUI : MonoBehaviour
         _closeBtn?.onClick.AddListener(Close);
         _backToTitleBtn?.onClick.AddListener(OnBackToTitle);
 
-        // Graphic
-        _resolutionDropdown?.onValueChanged.AddListener(OnResolutionChanged);
-        _displayModeDropdown?.onValueChanged.AddListener(OnDisplayModeChanged);
-
         // Audio
         _masterSlider?.onValueChanged.AddListener(v => OptionsManager.Instance?.SetMasterVolume(v));
         _bgmSlider?.onValueChanged.AddListener(v => OptionsManager.Instance?.SetBgmVolume(v));
@@ -106,14 +99,10 @@ public class OptionsUI : MonoBehaviour
 
         if (_isIngame && _input == null)
             _input = FindFirstObjectByType<PlayerInputHub>();
-
-        // Display Mode 옵션 설정
-        InitDisplayModeDropdown();
     }
 
     private void Start()
     {
-        InitResolutionDropdown();
         RefreshUI();
         SwitchTab(0); // 항상 Graphic 탭으로 시작
     }
@@ -196,66 +185,6 @@ public class OptionsUI : MonoBehaviour
         SceneManager.LoadScene(_titleSceneName);
     }
 
-    // Graphic
-    private void InitResolutionDropdown()
-    {
-        if (_resolutionDropdown == null) return;
-        _resolutionDropdown.ClearOptions();
-
-        var allResolutions = Screen.resolutions;
-        var options = new System.Collections.Generic.List<string>();
-        var filtered = new System.Collections.Generic.List<Resolution>();
-        var seen = new System.Collections.Generic.HashSet<string>();
-
-        foreach (var r in allResolutions)
-        {
-            string label = $"{r.width} x {r.height}";
-            if (seen.Add(label))
-            {
-                options.Add(label);
-                filtered.Add(r);
-            }
-        }
-
-        _filteredResolutions = filtered.ToArray();
-        _resolutionDropdown.AddOptions(options);
-
-        int saved = OptionsManager.Instance?.ResolutionIndex ?? options.Count - 1;
-        _resolutionDropdown.value = Mathf.Clamp(saved, 0, options.Count - 1);
-        _resolutionDropdown.RefreshShownValue();
-    }
-
-    private void InitDisplayModeDropdown()
-    {
-        if (_displayModeDropdown == null) return;
-        _displayModeDropdown.ClearOptions();
-        _displayModeDropdown.AddOptions(new System.Collections.Generic.List<string>
-        {
-            "전체화면",
-            "창모드 (테두리 없음)",
-            "창모드"
-        });
-    }
-
-    private void OnResolutionChanged(int index)
-    {
-        if (_filteredResolutions == null || index >= _filteredResolutions.Length) return;
-        var r = _filteredResolutions[index];
-        OptionsManager.Instance?.SetResolution(index, r.width, r.height);
-    }
-
-    private void OnDisplayModeChanged(int index)
-    {
-        FullScreenMode mode = index switch
-        {
-            0 => FullScreenMode.ExclusiveFullScreen,
-            1 => FullScreenMode.FullScreenWindow,
-            2 => FullScreenMode.Windowed,
-            _ => FullScreenMode.ExclusiveFullScreen
-        };
-        OptionsManager.Instance?.SetDisplayMode(mode);
-    }
-
     // Control
     private void OnCrosshairColorChanged()
     {
@@ -288,9 +217,6 @@ public class OptionsUI : MonoBehaviour
         if (_crosshairG) _crosshairG.value = c.g;
         if (_crosshairB) _crosshairB.value = c.b;
         if (_crosshairColorPreview) _crosshairColorPreview.color = c;
-
-        if (_displayModeDropdown)
-            _displayModeDropdown.value = OptionsManager.Instance.DisplayModeIndex;
 
         if (_debugConsoleToggle && DebugConsoleUI.Instance != null)
             _debugConsoleToggle.isOn = DebugConsoleUI.Instance.gameObject.activeSelf;
