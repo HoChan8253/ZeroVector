@@ -211,7 +211,7 @@ public class WaveManager : MonoBehaviour
         _aliveEnemies.Remove(enemy);
         if (_showDebugLog) Debug.Log($"[Wave] 적 처치 - 남은 수: {_aliveEnemies.Count} / Phase: {_phase}");
 
-        if (_phase == Phase.Cleanup && _aliveEnemies.Count == 0)
+        if (_phase == Phase.Cleanup && _aliveEnemies.Count == 0 && !_bossPhase)
             FinishWave();
     }
 
@@ -332,6 +332,18 @@ public class WaveManager : MonoBehaviour
         KillAllEnemies();
 
         CurrentWave = _totalWaves - 1;
+        DayNightManager.Instance?.RequestEnterDay();
+    }
+
+    public void CheatToWave(int targetWave)
+    {
+        targetWave = Mathf.Clamp(targetWave, 1, _totalWaves);
+
+        StopFieldLoop();
+        KillAllEnemies();
+
+        CurrentWave = targetWave - 1;
+
         DayNightManager.Instance?.RequestEnterDay();
     }
 }

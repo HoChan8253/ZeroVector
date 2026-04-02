@@ -13,11 +13,8 @@ public class OptionsManager : MonoBehaviour
     public float SfxVolume { get; private set; } = 1f;
     public float MouseSensitivity { get; private set; } = 0.08f;
     public Color CrosshairColor { get; private set; } = Color.white;
-    public int ResolutionIndex { get; private set; } = 0;
-    public bool IsFullscreen { get; private set; } = true;
     public float MasterVolume { get; private set; } = 1f;
     public float UiVolume { get; private set; } = 1f;
-    public int DisplayModeIndex { get; private set; } = 0;
 
     public event System.Action OnSettingsChanged;
 
@@ -27,6 +24,19 @@ public class OptionsManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
         Load();
+    }
+
+    private void Start()
+    {
+        ApplyAudioSettings();
+    }
+
+    private void ApplyAudioSettings()
+    {
+        SetMasterVolume(MasterVolume);
+        SetBgmVolume(BgmVolume);
+        SetSfxVolume(SfxVolume);
+        SetUiVolume(UiVolume);
     }
 
     // Master Volume
@@ -87,40 +97,6 @@ public class OptionsManager : MonoBehaviour
         OnSettingsChanged?.Invoke();
     }
 
-    // 해상도
-    public void SetResolution(int index)
-    {
-        ResolutionIndex = index;
-        var resolutions = Screen.resolutions;
-        if (index >= 0 && index < resolutions.Length)
-            Screen.SetResolution(resolutions[index].width, resolutions[index].height, IsFullscreen);
-        PlayerPrefs.SetInt("ResolutionIndex", index);
-        OnSettingsChanged?.Invoke();
-    }
-
-    // 전체화면
-    public void SetFullscreen(bool isFullscreen)
-    {
-        IsFullscreen = isFullscreen;
-        Screen.fullScreen = isFullscreen;
-        PlayerPrefs.SetInt("Fullscreen", isFullscreen ? 1 : 0);
-        OnSettingsChanged?.Invoke();
-    }
-
-    public void SetDisplayMode(FullScreenMode mode)
-    {
-        DisplayModeIndex = mode switch
-        {
-            FullScreenMode.ExclusiveFullScreen => 0,
-            FullScreenMode.FullScreenWindow => 1,
-            FullScreenMode.Windowed => 2,
-            _ => 0
-        };
-        Screen.fullScreenMode = mode;
-        PlayerPrefs.SetInt("DisplayMode", DisplayModeIndex);
-        OnSettingsChanged?.Invoke();
-    }
-
     // 저장된 설정 불러오기
     private void Load()
     {
@@ -129,31 +105,15 @@ public class OptionsManager : MonoBehaviour
         SfxVolume = PlayerPrefs.GetFloat("SFX", 1f);
         UiVolume = PlayerPrefs.GetFloat("UI", 1f);
         MouseSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", 0.08f);
-        int defaultResIndex = 0;
-        var resolutions = Screen.resolutions;
-        for (int i = 0; i < resolutions.Length; i++)
-        {
-            if (resolutions[i].width == 1920 && resolutions[i].height == 1080)
-            {
-                defaultResIndex = i;
-                break;
-            }
-        }
-        ResolutionIndex = PlayerPrefs.GetInt("ResolutionIndex", defaultResIndex);
-        DisplayModeIndex = PlayerPrefs.GetInt("DisplayMode", 0);
-        IsFullscreen = PlayerPrefs.GetInt("Fullscreen", 1) == 1;
-
         CrosshairColor = new Color(
             PlayerPrefs.GetFloat("CrosshairR", 1f),
             PlayerPrefs.GetFloat("CrosshairG", 1f),
             PlayerPrefs.GetFloat("CrosshairB", 1f));
 
-        // 적용
+        // 오디오 적용
         SetMasterVolume(MasterVolume);
         SetBgmVolume(BgmVolume);
         SetSfxVolume(SfxVolume);
         SetUiVolume(UiVolume);
-        SetResolution(ResolutionIndex);
-        Screen.fullScreen = IsFullscreen;
     }
 }

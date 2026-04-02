@@ -39,6 +39,8 @@ public class PlayerStats : MonoBehaviour, IDamageable
     private float _staminaBoostMultiplier = 1f;
     private Coroutine _staminaBoostCo;
 
+    private bool _isInvincible = false;
+
     private void Awake()
     {
         Hp = _maxHp;
@@ -107,6 +109,7 @@ public class PlayerStats : MonoBehaviour, IDamageable
     public void TakeDamage(float damage)
     {
         if (IsDead) return;
+        if (_isInvincible) return;
         if (damage <= 0f) return;
 
         _shieldRegenResumeTime = Time.time + _shieldRegenDelay;
@@ -164,6 +167,11 @@ public class PlayerStats : MonoBehaviour, IDamageable
     {
         if (_staminaBoostCo != null) StopCoroutine(_staminaBoostCo);
         _staminaBoostCo = StartCoroutine(CoStaminaBoost(multiplier, duration));
+    }
+
+    public void SetInvincible(bool value)
+    {
+        _isInvincible = value;
     }
 
     private IEnumerator CoStaminaBoost(float multiplier, float duration)

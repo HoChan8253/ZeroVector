@@ -26,8 +26,7 @@ public class OptionsUI : MonoBehaviour
     [SerializeField] private GameObject _controlPanel;
 
     [Header("Graphic")]
-    [SerializeField] private TMP_Dropdown _resolutionDropdown;
-    [SerializeField] private TMP_Dropdown _displayModeDropdown;
+    [SerializeField] private DisplayOptionsView _displayOptionsView;
 
     [Header("Audio")]
     [SerializeField] private Slider _masterSlider;
@@ -41,6 +40,9 @@ public class OptionsUI : MonoBehaviour
     [SerializeField] private Slider _crosshairG;
     [SerializeField] private Slider _crosshairB;
     [SerializeField] private Image _crosshairColorPreview;
+
+    [Header("Debug Console")]
+    [SerializeField] private Toggle _debugConsoleToggle;
 
     [Header("버튼")]
     [SerializeField] private Button _closeBtn;
@@ -80,10 +82,6 @@ public class OptionsUI : MonoBehaviour
         _closeBtn?.onClick.AddListener(Close);
         _backToTitleBtn?.onClick.AddListener(OnBackToTitle);
 
-        // Graphic
-        _resolutionDropdown?.onValueChanged.AddListener(OnResolutionChanged);
-        _displayModeDropdown?.onValueChanged.AddListener(OnDisplayModeChanged);
-
         // Audio
         _masterSlider?.onValueChanged.AddListener(v => OptionsManager.Instance?.SetMasterVolume(v));
         _bgmSlider?.onValueChanged.AddListener(v => OptionsManager.Instance?.SetBgmVolume(v));
@@ -96,16 +94,15 @@ public class OptionsUI : MonoBehaviour
         _crosshairG?.onValueChanged.AddListener(_ => OnCrosshairColorChanged());
         _crosshairB?.onValueChanged.AddListener(_ => OnCrosshairColorChanged());
 
+        // DebugConsole
+        _debugConsoleToggle?.onValueChanged.AddListener(OnDebugConsoleToggle);
+
         if (_isIngame && _input == null)
             _input = FindFirstObjectByType<PlayerInputHub>();
-
-        // Display Mode 옵션 설정
-        InitDisplayModeDropdown();
     }
 
     private void Start()
     {
-        InitResolutionDropdown();
         RefreshUI();
         SwitchTab(0); // 항상 Graphic 탭으로 시작
     }
@@ -145,6 +142,7 @@ public class OptionsUI : MonoBehaviour
         if (_isIngame)
         {
             Time.timeScale = 0f;
+            AudioListener.pause = true;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
@@ -160,6 +158,7 @@ public class OptionsUI : MonoBehaviour
         else
         {
             Time.timeScale = 1f;
+            AudioListener.pause = false;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
@@ -186,52 +185,6 @@ public class OptionsUI : MonoBehaviour
         SceneManager.LoadScene(_titleSceneName);
     }
 
-    // Graphic
-    private void InitResolutionDropdown()
-    {
-        if (_resolutionDropdown == null) return;
-        _resolutionDropdown.ClearOptions();
-
-        var resolutions = Screen.resolutions;
-        var options = new System.Collections.Generic.List<string>();
-        foreach (var r in resolutions)
-            options.Add($"{r.width} x {r.height}");
-        _resolutionDropdown.AddOptions(options);
-
-        int saved = OptionsManager.Instance?.ResolutionIndex ?? resolutions.Length - 1;
-        _resolutionDropdown.value = Mathf.Clamp(saved, 0, resolutions.Length - 1);
-        _resolutionDropdown.RefreshShownValue();
-    }
-
-    private void InitDisplayModeDropdown()
-    {
-        if (_displayModeDropdown == null) return;
-        _displayModeDropdown.ClearOptions();
-        _displayModeDropdown.AddOptions(new System.Collections.Generic.List<string>
-        {
-            "전체화면",
-            "창모드 (테두리 없음)",
-            "창모드"
-        });
-    }
-
-    private void OnResolutionChanged(int index)
-    {
-        OptionsManager.Instance?.SetResolution(index);
-    }
-
-    private void OnDisplayModeChanged(int index)
-    {
-        FullScreenMode mode = index switch
-        {
-            0 => FullScreenMode.ExclusiveFullScreen,
-            1 => FullScreenMode.FullScreenWindow,
-            2 => FullScreenMode.Windowed,
-            _ => FullScreenMode.ExclusiveFullScreen
-        };
-        OptionsManager.Instance?.SetDisplayMode(mode);
-    }
-
     // Control
     private void OnCrosshairColorChanged()
     {
@@ -240,6 +193,12 @@ public class OptionsUI : MonoBehaviour
         OptionsManager.Instance?.SetCrosshairColor(c);
         if (_crosshairColorPreview != null)
             _crosshairColorPreview.color = c;
+    }
+
+    // DebugConsole
+    private void OnDebugConsoleToggle(bool value)
+    {
+        DebugConsoleUI.Instance?.SetEnabled(value);
     }
 
     // UI 갱신
@@ -259,7 +218,7 @@ public class OptionsUI : MonoBehaviour
         if (_crosshairB) _crosshairB.value = c.b;
         if (_crosshairColorPreview) _crosshairColorPreview.color = c;
 
-        if (_displayModeDropdown)
-            _displayModeDropdown.value = OptionsManager.Instance.DisplayModeIndex;
+        if (_debugConsoleToggle && DebugConsoleUI.Instance != null)
+            _debugConsoleToggle.isOn = DebugConsoleUI.Instance.gameObject.activeSelf;
     }
 }

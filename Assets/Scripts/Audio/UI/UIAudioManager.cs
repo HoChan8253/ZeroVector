@@ -13,6 +13,8 @@ public class UIAudioManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
         _audioSource = GetComponent<AudioSource>();
+
+        _audioSource.ignoreListenerPause = true;
     }
 
     public static void PlaySound(SoundType sound, float volume = 1f)

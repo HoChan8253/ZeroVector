@@ -150,7 +150,8 @@ public class SafeZoneManager : MonoBehaviour
 
             if (dist > _currentRadius)
             {
-                ShowText("구역 밖입니다!", 2f);
+                string msg = _isShrinking ? "구역이 축소 중입니다!" : "구역 밖입니다!";
+                ShowText(msg, 2f);
                 _playerDamageable?.TakeDamage((int)(_damagePerSecond * _damageInterval));
             }
         }
