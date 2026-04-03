@@ -223,6 +223,19 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         }
     }
 
+    public void ForceKill()
+    {
+        if (_ai != null && _ai.IsDead) return;
+        _shield = 0;
+        RefreshShieldVisual();
+        _hp = 0;
+        OnHpChanged?.Invoke(_hp, MaxHp);
+        GiveGoldReward();
+        OnDead?.Invoke();
+        _ai?.Die();
+        GameStatsManager.Instance?.AddKill();
+    }
+
     private IEnumerator CoDespawnFx(PoolKey key, GameObject obj, float delay)
     {
         yield return new WaitForSeconds(delay);

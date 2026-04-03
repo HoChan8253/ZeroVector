@@ -80,7 +80,7 @@ public static class DebugConsoleCommands
         {
             if (e != null && e.Hp > 0)
             {
-                e.TakeDamage(999999, false, e.transform.position, Vector3.up);
+                e.ForceKill();
                 count++;
             }
         }
