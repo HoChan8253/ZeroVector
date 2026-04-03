@@ -16,6 +16,7 @@
     EnemyHit,
     EnemyDead,
     EnemyDead_MiniBoss,
+    BossAttack_Shoot,
 
     // 플레이어
     PlayerHit,

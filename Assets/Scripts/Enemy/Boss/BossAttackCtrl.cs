@@ -42,6 +42,7 @@ public class BossAttackCtrl : MonoBehaviour
     public void AE_ShootFire()
     {
         if (_target == null || ObjectPoolManager.Instance == null) return;
+        SFXManager.PlaySound(_data.shootSoundType);
         Vector3 origin = _muzzle != null ? _muzzle.position : transform.position + Vector3.up * 1.5f;
         Vector3 dir = (_target.position + Vector3.up * 0.5f - origin).normalized;
 
@@ -58,6 +59,7 @@ public class BossAttackCtrl : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             if (ObjectPoolManager.Instance == null) yield break;
+            SFXManager.PlaySound(_data.shootSoundType);
             Vector3 origin = _muzzle != null ? _muzzle.position : transform.position + Vector3.up * 1.5f;
 
             var obj = ObjectPoolManager.Instance.Spawn(

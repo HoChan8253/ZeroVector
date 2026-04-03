@@ -89,6 +89,15 @@ MonoBehaviour:
     mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
     sounds:
     - {fileID: 8300000, guid: df0b3ca68769dab42a29c3e67f36d6b0, type: 3}
+  - name: BossAttack_Shoot
+    volume: 0.5
+    mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
+    sounds:
+    - {fileID: 8300000, guid: 3dacc58863419ab4c963d8d34f66104b, type: 3}
+    - {fileID: 8300000, guid: 1d0b599649358204cb1ebdb2e0a67e0c, type: 3}
+    - {fileID: 8300000, guid: c93062cdf63f9804d893bc8b39724b44, type: 3}
+    - {fileID: 8300000, guid: 3ce0719d3d00081499b3b47a289dd53b, type: 3}
+    - {fileID: 8300000, guid: e1ab608951e9b8941a505050c651b7cd, type: 3}
   - name: PlayerHit
     volume: 1
     mixer: {fileID: 0}

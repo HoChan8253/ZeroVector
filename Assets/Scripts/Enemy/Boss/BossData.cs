@@ -6,6 +6,9 @@ public class BossData : ScriptableObject
     [Header("Core")]
     public int maxHp = 3000;
 
+    [Header("Audio")]
+    public SoundType shootSoundType = SoundType.BossAttack_Shoot;
+
     [Header("Movement")]
     public float chaseSpeed = 4f;
     public float aimMoveSpeed = 2.5f; // Run_Aim 이동 속도
