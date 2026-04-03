@@ -37797,7 +37797,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Price : 8000'
+  m_text: 'Price : 10000'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -42333,9 +42333,33 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 24491620385318232, guid: 52fb95cc3b7ec59479cf43564d42d2b0, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3544110355168653652, guid: 52fb95cc3b7ec59479cf43564d42d2b0, type: 3}
+      propertyPath: m_NavMeshData
+      value: 
+      objectReference: {fileID: 23800000, guid: 27a61f3aa9e60994691d2bf9f5c4fa8e, type: 2}
     - target: {fileID: 5230022622652756876, guid: 52fb95cc3b7ec59479cf43564d42d2b0, type: 3}
       propertyPath: m_Name
       value: Desert
+      objectReference: {fileID: 0}
+    - target: {fileID: 5513630313048227395, guid: 52fb95cc3b7ec59479cf43564d42d2b0, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5513630313048227395, guid: 52fb95cc3b7ec59479cf43564d42d2b0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 30.41
+      objectReference: {fileID: 0}
+    - target: {fileID: 5513630313048227395, guid: 52fb95cc3b7ec59479cf43564d42d2b0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.61
+      objectReference: {fileID: 0}
+    - target: {fileID: 5513630313048227395, guid: 52fb95cc3b7ec59479cf43564d42d2b0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -11.98
       objectReference: {fileID: 0}
     - target: {fileID: 8785086482399249982, guid: 52fb95cc3b7ec59479cf43564d42d2b0, type: 3}
       propertyPath: m_LocalPosition.x

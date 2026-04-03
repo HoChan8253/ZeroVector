@@ -29,7 +29,7 @@
 5. 밤이 끝난 뒤 남은 적을 모두 정리하면 다음 웨이브로 넘어갑니다.
 6. 10웨이브 보스를 처치하고 남은 적까지 모두 제거하면 게임을 클리어합니다.
 
-**시연 영상** : 링크 추가 예정
+**시연 영상** : https://www.youtube.com/watch?v=qA0Crnq-0lk&lc=UgxA3xoRyK6bmaU8JOt4AaABAg
 
 ---
 
