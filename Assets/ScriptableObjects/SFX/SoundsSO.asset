@@ -14,17 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SoundsSO
   sounds:
   - name: GunShot_Pistol
-    volume: 0.2
+    volume: 0.4
     mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
     sounds:
     - {fileID: 8300000, guid: b9a7d07ef3aee3e4293c4637f755f758, type: 3}
   - name: GunShot_Rifle
-    volume: 0.2
+    volume: 0.4
     mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
     sounds:
     - {fileID: 8300000, guid: ded754d347f1c1b43bf8e94c43ff4849, type: 3}
   - name: GunShot_Shotgun
-    volume: 0.2
+    volume: 0.4
     mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
     sounds:
     - {fileID: 8300000, guid: 3db88fd5aa9e8b546a3843ded4a94f77, type: 3}
@@ -44,12 +44,12 @@ MonoBehaviour:
     sounds:
     - {fileID: 8300000, guid: 3a4258a9dbed86e4c97702091c043206, type: 3}
   - name: Shotgun_Pump
-    volume: 0.3
+    volume: 0.4
     mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
     sounds:
     - {fileID: 8300000, guid: 308bb6919c4eaee41bf860cf2b7e2c43, type: 3}
   - name: EnemyAttack_Melee
-    volume: 0.7
+    volume: 0.8
     mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
     sounds:
     - {fileID: 8300000, guid: d3d41ae9d38b4b5439bd6fa6778dfb0f, type: 3}
@@ -60,7 +60,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 4efbf456f7ec03e4d870c86df609845e, type: 3}
     - {fileID: 8300000, guid: 2e9d2611ed94d094bb3db42fd1cca3d4, type: 3}
   - name: EnemyAttack_Ranged1
-    volume: 0.5
+    volume: 0.7
     mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
     sounds:
     - {fileID: 8300000, guid: cc89d81025f6cc740be84f5dafad4fcb, type: 3}
@@ -69,7 +69,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 3a724f1b3455cf34a97fd79c24a33e7d, type: 3}
     - {fileID: 8300000, guid: 687f8a9e69254d84d81f307952791a30, type: 3}
   - name: EnemyAttack_Ranged2
-    volume: 0.5
+    volume: 0.7
     mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
     sounds:
     - {fileID: 8300000, guid: 5f57cd1a715596b4387c902469491cfb, type: 3}
@@ -87,7 +87,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 8094010e498e92e49ad4ed41d9b17272, type: 3}
     - {fileID: 8300000, guid: 54af55b53dc8372449c014b6b1687605, type: 3}
   - name: EnemyAttack_Flying
-    volume: 0.5
+    volume: 0.7
     mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
     sounds:
     - {fileID: 8300000, guid: 993f4501750f727478473e9415b8af5f, type: 3}
@@ -96,7 +96,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: b715a7a454d2794479d4d223d367c99a, type: 3}
     - {fileID: 8300000, guid: a9d4f5c51551466429be647848ee294a, type: 3}
   - name: EnemyDead
-    volume: 0.6
+    volume: 0.8
     mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
     sounds:
     - {fileID: 8300000, guid: df0b3ca68769dab42a29c3e67f36d6b0, type: 3}
@@ -106,7 +106,7 @@ MonoBehaviour:
     sounds:
     - {fileID: 8300000, guid: df0b3ca68769dab42a29c3e67f36d6b0, type: 3}
   - name: BossAttack_Shoot
-    volume: 0.5
+    volume: 0.7
     mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
     sounds:
     - {fileID: 8300000, guid: 3dacc58863419ab4c963d8d34f66104b, type: 3}
@@ -115,7 +115,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 3ce0719d3d00081499b3b47a289dd53b, type: 3}
     - {fileID: 8300000, guid: e1ab608951e9b8941a505050c651b7cd, type: 3}
   - name: PlayerHit
-    volume: 0.5
+    volume: 0.6
     mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
     sounds:
     - {fileID: 8300000, guid: d063bd21959f90d4386146291985da08, type: 3}
@@ -123,7 +123,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: d3d35329feb4bfd42b92ef686c844e0a, type: 3}
     - {fileID: 8300000, guid: 3befb068a6a196c45bdc2a560513a9bd, type: 3}
   - name: PlayerDead
-    volume: 0.5
+    volume: 0.6
     mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
     sounds:
     - {fileID: 8300000, guid: 3a565b9806c104342bed04151b80d0b1, type: 3}
