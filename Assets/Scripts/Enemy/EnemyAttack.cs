@@ -177,6 +177,7 @@ public class EnemyAttack : MonoBehaviour
         drop.Init(start, targetPos, dropTime, () =>
         {
             if (indicator != null) Destroy(indicator.gameObject);
+            SFXManager.PlaySound(SoundType.EnemyAttack_AoeImpact);
             SpawnImpactFx(targetPos);
             DealImpactDamage(targetPos, aoeRadius);
         });

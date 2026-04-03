@@ -12,8 +12,8 @@
     // 적
     EnemyAttack_Ranged1,
     EnemyAttack_Ranged2,
+    EnemyAttack_AoeImpact,
     EnemyAttack_Flying,
-    EnemyHit,
     EnemyDead,
     EnemyDead_MiniBoss,
     BossAttack_Shoot,

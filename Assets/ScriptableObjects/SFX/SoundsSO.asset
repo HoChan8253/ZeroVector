@@ -66,6 +66,15 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 883ad865a37d1b44e94a769c068a341a, type: 3}
     - {fileID: 8300000, guid: bc77d27ad9ae82e46a1abbf7c60a629f, type: 3}
     - {fileID: 8300000, guid: 990b1c1eae713f84db0d1f08d7a8db5b, type: 3}
+  - name: EnemyAttack_AoeImpact
+    volume: 1
+    mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
+    sounds:
+    - {fileID: 8300000, guid: 0c0222a6752481e4197e166504f423f2, type: 3}
+    - {fileID: 8300000, guid: f75df84c27a93394cac20c88a6197f03, type: 3}
+    - {fileID: 8300000, guid: 41a426af5458b3c4f8d5a62c0ab4bb52, type: 3}
+    - {fileID: 8300000, guid: 8094010e498e92e49ad4ed41d9b17272, type: 3}
+    - {fileID: 8300000, guid: 54af55b53dc8372449c014b6b1687605, type: 3}
   - name: EnemyAttack_Flying
     volume: 0.5
     mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
@@ -75,10 +84,6 @@ MonoBehaviour:
     - {fileID: 8300000, guid: e28e4ec384b4c914da0784f1f331650b, type: 3}
     - {fileID: 8300000, guid: b715a7a454d2794479d4d223d367c99a, type: 3}
     - {fileID: 8300000, guid: a9d4f5c51551466429be647848ee294a, type: 3}
-  - name: EnemyHit
-    volume: 1
-    mixer: {fileID: 0}
-    sounds: []
   - name: EnemyDead
     volume: 0.6
     mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
