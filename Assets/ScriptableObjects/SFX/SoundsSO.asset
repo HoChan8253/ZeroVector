@@ -48,6 +48,33 @@ MonoBehaviour:
     mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
     sounds:
     - {fileID: 8300000, guid: 308bb6919c4eaee41bf860cf2b7e2c43, type: 3}
+  - name: EnemyAttack_Ranged1
+    volume: 0.5
+    mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
+    sounds:
+    - {fileID: 8300000, guid: cc89d81025f6cc740be84f5dafad4fcb, type: 3}
+    - {fileID: 8300000, guid: 5d7f2661272cbc34b9bb1a57da183d8b, type: 3}
+    - {fileID: 8300000, guid: 8a2b612f0bd02b649bd9b3e1cdcf2b95, type: 3}
+    - {fileID: 8300000, guid: 3a724f1b3455cf34a97fd79c24a33e7d, type: 3}
+    - {fileID: 8300000, guid: 687f8a9e69254d84d81f307952791a30, type: 3}
+  - name: EnemyAttack_Ranged2
+    volume: 0.5
+    mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
+    sounds:
+    - {fileID: 8300000, guid: 5f57cd1a715596b4387c902469491cfb, type: 3}
+    - {fileID: 8300000, guid: 7f64f78bab1f29c4c9b9af838417c802, type: 3}
+    - {fileID: 8300000, guid: 883ad865a37d1b44e94a769c068a341a, type: 3}
+    - {fileID: 8300000, guid: bc77d27ad9ae82e46a1abbf7c60a629f, type: 3}
+    - {fileID: 8300000, guid: 990b1c1eae713f84db0d1f08d7a8db5b, type: 3}
+  - name: EnemyAttack_Flying
+    volume: 0.5
+    mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
+    sounds:
+    - {fileID: 8300000, guid: 993f4501750f727478473e9415b8af5f, type: 3}
+    - {fileID: 8300000, guid: a9ffda6d25732f84a86423b0a34aae6e, type: 3}
+    - {fileID: 8300000, guid: e28e4ec384b4c914da0784f1f331650b, type: 3}
+    - {fileID: 8300000, guid: b715a7a454d2794479d4d223d367c99a, type: 3}
+    - {fileID: 8300000, guid: a9d4f5c51551466429be647848ee294a, type: 3}
   - name: EnemyHit
     volume: 1
     mixer: {fileID: 0}

@@ -55,11 +55,13 @@ public class EnemyAttack : MonoBehaviour
                 break;
 
             case EnemyAttackType.Ranged:
+                SFXManager.PlaySound(_data.attackSoundType);
                 PlayMuzzleFx();
                 FireEnergyBallTriple();
                 break;
 
             case EnemyAttackType.RangedAoe:
+                SFXManager.PlaySound(_data.attackSoundType);
                 StartCoroutine(CoAoeTwoPhase());
                 break;
         }

@@ -34,6 +34,7 @@ MonoBehaviour:
   flyingHeight: 4.5
   flyingMoveSpeed: 3.5
   turnSpeed: 8
+  attackSoundType: 9
   attackRange: 8
   attackCooldown: 1.5
   attackDamage: 6
@@ -48,3 +49,4 @@ MonoBehaviour:
   aoeRadius: 0
   canStun: 0
   stunTime: 0
+  headshotMultiplier: 1.5

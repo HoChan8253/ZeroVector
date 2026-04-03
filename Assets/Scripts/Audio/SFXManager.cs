@@ -23,19 +23,17 @@ public class SFXManager : MonoBehaviour
         if (clips == null || clips.Length == 0) return;
         AudioClip randomClip = clips[Random.Range(0, clips.Length)];
 
+        float finalVolume = volume * soundList.volume;
+
         if (source != null)
         {
             source.outputAudioMixerGroup = soundList.mixer;
-            source.clip = randomClip;
-            source.volume = volume * soundList.volume;
-            source.Play();
+            source.PlayOneShot(randomClip, finalVolume);
         }
         else
         {
             Instance._audioSource.outputAudioMixerGroup = soundList.mixer;
-            Instance._audioSource.clip = randomClip;
-            Instance._audioSource.volume = volume * soundList.volume;
-            Instance._audioSource.Play();
+            Instance._audioSource.PlayOneShot(randomClip, finalVolume);
         }
     }
 }
