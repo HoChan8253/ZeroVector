@@ -49,13 +49,6 @@ public class ItemDropSpawner : MonoBehaviour
         }
     }
 
-    private void TrySpawnByChance(ItemDropData data, Vector3 position)
-    {
-        if (data == null) return;
-        if (Random.value <= data.dropChance)
-            SpawnItem(data, position);
-    }
-
     private void SpawnItem(ItemDropData data, Vector3 position)
     {
         if (data?.prefab == null) return;

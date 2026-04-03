@@ -30,7 +30,5 @@
     ItemPickup_Gold,
 
     // UI
-    UI_Click,
-    UI_Upgrade,
-    UI_GoldEarn,
+    UI_Click
 }

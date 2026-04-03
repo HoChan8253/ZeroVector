@@ -56,20 +56,7 @@ public class BossHealthUI : MonoBehaviour
             _bossHealth.OnHpChanged -= OnHpChanged;
             _bossHealth.OnDead -= OnDead;
         }
-
         _bossHealth = health;
-
-        if (_bossHealth != null)
-        {
-            _bossHealth.OnHpChanged += OnHpChanged;
-            _bossHealth.OnDead += OnDead;
-            StartCoroutine(CoLateRefresh());
-        }
-    }
-
-    private IEnumerator CoLateRefresh()
-    {
-        yield return null;
-        ForceRefresh();
+        gameObject.SetActive(true);
     }
 }
