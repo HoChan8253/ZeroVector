@@ -88,6 +88,7 @@ public class FlyingEnemyAttack : MonoBehaviour
         var proj = obj.GetComponent<EnergyBall>();
         proj?.Init(PoolKey.EnergyBall, transform, dir, speed, damage, life);
 
+        SFXManager.PlaySound(_data != null ? _data.attackSoundType : SoundType.EnemyAttack_Flying);
         PlayMuzzleFx();
     }
 

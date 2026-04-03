@@ -55,11 +55,13 @@ public class EnemyAttack : MonoBehaviour
                 break;
 
             case EnemyAttackType.Ranged:
+                SFXManager.PlaySound(_data.attackSoundType);
                 PlayMuzzleFx();
                 FireEnergyBallTriple();
                 break;
 
             case EnemyAttackType.RangedAoe:
+                SFXManager.PlaySound(_data.attackSoundType);
                 StartCoroutine(CoAoeTwoPhase());
                 break;
         }
@@ -69,6 +71,7 @@ public class EnemyAttack : MonoBehaviour
     public void AE_MeleeHit()
     {
         if (_data != null && _data.attackType != EnemyAttackType.Melee) return;
+        SFXManager.PlaySound(SoundType.EnemyAttack_Melee);
         TryMeleeHit();
     }
 
@@ -175,6 +178,7 @@ public class EnemyAttack : MonoBehaviour
         drop.Init(start, targetPos, dropTime, () =>
         {
             if (indicator != null) Destroy(indicator.gameObject);
+            SFXManager.PlaySound(SoundType.EnemyAttack_AoeImpact);
             SpawnImpactFx(targetPos);
             DealImpactDamage(targetPos, aoeRadius);
         });

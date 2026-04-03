@@ -10,9 +10,14 @@
     Shotgun_Pump,
 
     // 적
-    EnemyHit,
+    EnemyAttack_Melee,
+    EnemyAttack_Ranged1,
+    EnemyAttack_Ranged2,
+    EnemyAttack_AoeImpact,
+    EnemyAttack_Flying,
     EnemyDead,
     EnemyDead_MiniBoss,
+    BossAttack_Shoot,
 
     // 플레이어
     PlayerHit,
@@ -26,7 +31,5 @@
     ItemPickup_Gold,
 
     // UI
-    UI_Click,
-    UI_Upgrade,
-    UI_GoldEarn,
+    UI_Click
 }

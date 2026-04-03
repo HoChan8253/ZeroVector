@@ -48,6 +48,9 @@ public class EnemyData : ScriptableObject
     public float flyingMoveSpeed = 3.5f; // 공중 이동 속도
     public float turnSpeed = 8f; // 플레이어를 바라보는 회전 속도
 
+    [Header("Audio")]
+    public SoundType attackSoundType = SoundType.EnemyAttack_Ranged1;
+
     [Header("Combat")]
     public float attackRange = 2.0f;
     public float attackCooldown = 1.2f;

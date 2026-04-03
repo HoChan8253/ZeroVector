@@ -43,20 +43,16 @@ public sealed class DisplayOptionsView : MonoBehaviour
     private void BuildModeOptions()
     {
         _modeList.Clear();
-
         _modeList.Add(FullScreenMode.Windowed);
-        _modeList.Add(FullScreenMode.FullScreenWindow);
         _modeList.Add(FullScreenMode.ExclusiveFullScreen);
 
         if (_screenModeDropdown == null) return;
-
         _screenModeDropdown.ClearOptions();
         _screenModeDropdown.AddOptions(new List<string>
-        {
-            "창모드",
-            "전체화면 (테두리 없음)",
-            "전체화면"
-        });
+    {
+        "창모드",
+        "전체화면"
+    });
     }
 
     private void BuildResolutionOptions16By9()

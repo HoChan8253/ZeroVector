@@ -82,18 +82,23 @@ public class ItemDrop : MonoBehaviour
         switch (_data.dropType)
         {
             case ItemDropType.AmmoAR:
+                SFXManager.PlaySound(SoundType.ItemPickup_Ammo);
                 CollectAmmoAR();
                 break;
             case ItemDropType.AmmoShotgun:
+                SFXManager.PlaySound(SoundType.ItemPickup_Ammo);
                 CollectAmmoShotgun();
                 break;
             case ItemDropType.EnergyDrink:
+                SFXManager.PlaySound(SoundType.ItemPickup_EnergyDrink);
                 CollectEnergyDrink();
                 break;
             case ItemDropType.MedKit:
+                SFXManager.PlaySound(SoundType.ItemPickup_MedKit);
                 CollectMedKit();
                 break;
             case ItemDropType.Gold:
+                SFXManager.PlaySound(SoundType.ItemPickup_Gold);
                 CollectGold();
                 break;
         }

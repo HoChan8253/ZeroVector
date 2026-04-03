@@ -131,7 +131,14 @@ public class PlayerStats : MonoBehaviour, IDamageable
             OnHpChanged?.Invoke(Hp, _maxHp);
 
             if (Hp <= 0f)
+            {
+                SFXManager.PlaySound(SoundType.PlayerDead);
                 OnDie?.Invoke();
+            }
+            else
+            {
+                SFXManager.PlaySound(SoundType.PlayerHit);
+            }
         }
     }
 
