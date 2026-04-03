@@ -48,6 +48,17 @@ MonoBehaviour:
     mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
     sounds:
     - {fileID: 8300000, guid: 308bb6919c4eaee41bf860cf2b7e2c43, type: 3}
+  - name: EnemyAttack_Melee
+    volume: 0.7
+    mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}
+    sounds:
+    - {fileID: 8300000, guid: d3d41ae9d38b4b5439bd6fa6778dfb0f, type: 3}
+    - {fileID: 8300000, guid: bf284588b43ade34ea7acbeaebee1f91, type: 3}
+    - {fileID: 8300000, guid: a2cf526cd3e1089419a4deab0aa084dd, type: 3}
+    - {fileID: 8300000, guid: 00347b134c3fd354785961c52a02b396, type: 3}
+    - {fileID: 8300000, guid: a24376c238a0dc94cb153c1cbdf7ef6c, type: 3}
+    - {fileID: 8300000, guid: 4efbf456f7ec03e4d870c86df609845e, type: 3}
+    - {fileID: 8300000, guid: 2e9d2611ed94d094bb3db42fd1cca3d4, type: 3}
   - name: EnemyAttack_Ranged1
     volume: 0.5
     mixer: {fileID: 404543684691685201, guid: d7ad3a3e651bb04439ff8a71f9a0a64a, type: 2}

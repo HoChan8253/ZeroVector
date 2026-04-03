@@ -10,6 +10,7 @@
     Shotgun_Pump,
 
     // 적
+    EnemyAttack_Melee,
     EnemyAttack_Ranged1,
     EnemyAttack_Ranged2,
     EnemyAttack_AoeImpact,

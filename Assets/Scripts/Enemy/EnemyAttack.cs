@@ -71,6 +71,7 @@ public class EnemyAttack : MonoBehaviour
     public void AE_MeleeHit()
     {
         if (_data != null && _data.attackType != EnemyAttackType.Melee) return;
+        SFXManager.PlaySound(SoundType.EnemyAttack_Melee);
         TryMeleeHit();
     }
 
